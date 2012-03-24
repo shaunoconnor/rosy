@@ -1,6 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 // Google Analytics Tracking
-/* ga.tracking.js */ 
+/* ga.tracking.js */
 
 // ## Local Namespace
 var red = red || {};
@@ -15,7 +15,7 @@ var _gaq = _gaq || [];
  * Omniture and GA tracking event wrappers
  */
 (function () {
-	
+
 	red.module.tracking.GA = (function () {
 
 		return red.Module.extend({
@@ -30,7 +30,7 @@ var _gaq = _gaq || [];
 			},
 
 			track : function (e, eData) {
-				
+
 				var el = $(e.currentTarget),
 				data = eData || el.data();
 

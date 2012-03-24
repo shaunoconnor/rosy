@@ -15,9 +15,9 @@ red.module = red.module || {};
  * Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
 red.module.Social = (function () {
-	
+
 	return red.Module.extend({
-		
+
 		models : {},
 
 		init : function (networks) {
@@ -32,5 +32,5 @@ red.module.Social = (function () {
 			}
 		}
 	});
-	
+
 }.call(red));

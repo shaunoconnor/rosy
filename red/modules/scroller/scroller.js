@@ -11,33 +11,33 @@ red.module = red.module || {};
 
 // ## red.Scroller
 // Creates a countdown scroller.
-// 
+//
 // Usage:
-// 
+//
 //  var scroller = new red.module.Scroller({
 //      target : $('#scrollable')
 //  });
-// 
+//
 //  scroller.bind("touchstart", function () {
 //      // on touch start
 //  });
-// 
+//
 //  scroller.bind("touchmove", function () {
 //      // on touch move
 //  });
-// 
+//
 //  scroller.bind("touchend", function () {
 //      // on touch end
 //  });
-// 
+//
 //  scroller.bind("touchinertia", function () {
 //      // on touch inertia
 //  });
 red.module.Scroller = (function () {
-	
+
 	// Extends red.Module
 	return red.Module.extend({
-		
+
 		vars : {},
 
 		init : function (vars) {
@@ -119,7 +119,7 @@ red.module.Scroller = (function () {
 
 			}
 		},
-		
+
 		setupScroller : function () {
 			var container = this.vars.target,
 				content = container.getElementsByTagName("*")[0],
@@ -230,5 +230,5 @@ red.module.Scroller = (function () {
 			}
 		}
 	});
-	
+
 }.call(red));

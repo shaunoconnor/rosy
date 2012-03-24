@@ -9,31 +9,31 @@ red.module = red.module || {};
 
 // ## red.module.Ticker
 // Creates a countdown ticker.
-// 
+//
 // Usage:
-// 
+//
 //  var ticker = new red.module.Ticker({
 //      now : new Date(),
 //      start : "Sun Jun 12 11:25:00 2011",
 //      end : "Mon Jun 13 11:45:00 2011"
 //  });
-// 
+//
 //  ticker.bind("start", function () {
 //      // on start
 //  });
-// 
+//
 //  ticker.bind("tick", function (hours, minutes, seconds) {
 //      console.log(hours, minutes, seconds);
 //  });
-// 
+//
 //  ticker.bind("complete", function () {
 //      // on complete
 //  });
 red.module.Ticker = (function () {
-	
+
 	// Extends red.Module
 	return red.Module.extend({
-		
+
 		// now, start & end should be [Date-parseable formats](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date).
 		vars : {
 			now : null,
@@ -44,7 +44,7 @@ red.module.Ticker = (function () {
 		init : function (vars) {
 			this.setupTicker();
 		},
-		
+
 		// Parse initial dates, start the ticker
 		setupTicker : function () {
 			this.vars.currentTime = this.parseTime(this.vars.now);
@@ -57,13 +57,13 @@ red.module.Ticker = (function () {
 		},
 
 		// Runs every second. Updates the ticker based on source/destination dates.
-		
+
 		// If time has run out, stop the ticker.
-		
+
 		// Else if current time is greater than or equal to start time, tick.
 		updateTicker : function () {
 			this.vars.time = this.getPrettyTime();
-			
+
 			if (Math.max.apply(this, this.vars.time) <= 0) {
 				this.stopTicker("complete");
 			} else if (this.vars.currentTime >= this.vars.startTime) {
@@ -71,7 +71,7 @@ red.module.Ticker = (function () {
 					this.trigger("start");
 					this.vars.startFired = true;
 				}
-				
+
 				this.trigger("tick", this.vars.time);
 			}
 		},
@@ -82,9 +82,9 @@ red.module.Ticker = (function () {
 		},
 
 		// Format time in a human readable array.
-		// 
+		//
 		// Ex:
-		// 
+		//
 		//  ["01", "13", "52"] // 1:13:52 remaining
 		getPrettyTime : function () {
 			var hours, minutes, seconds;
@@ -122,9 +122,9 @@ red.module.Ticker = (function () {
 				window.clearInterval(this.vars.ticker);
 				delete this.vars.ticker;
 			}
-			
+
 			this.trigger(event);
 		}
 	});
-	
+
 }.call(red));

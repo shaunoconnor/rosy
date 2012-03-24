@@ -13,14 +13,14 @@ red.module.social = red.module.social || {};
  *	Requires DOM elements:
  *		<link rel="media_url">
  *		<meta property="og:app_id">
- *	Optional DOM elements: 
+ *	Optional DOM elements:
  *	<div id="fb-root"> // added for you if it doesn't exist
  *	data-custom-post="facebook" // fires customFacebookPost
  *
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
 (function () {
-	
+
 	var NAME = "Facebook";
 
 	red.module.social[NAME] = (function () {
@@ -34,14 +34,14 @@ red.module.social = red.module.social || {};
 		return red.Module.extend({
 
 			vars : {},
-			
+
 			_media_url: null, // <link rel="media-url"' content="{{STATIC_URL}}" />
 			_app_id : null, // <meta property="og:app_id" content="{{ FACEBOOK_APP_ID }} " />
 
 			init : function () {
 
 				pakage[NAME].EVENT = EVENT;
-				
+
 				this.loadJSDK();
 
 				$('[data-custom-social="facebook"]').live("click", $.proxy(this.customFacebookPost, this));
@@ -57,15 +57,15 @@ red.module.social = red.module.social || {};
 			},
 
 			onSesionChange : function (e) {
-				console.log("fb-onSesionChange", e);	
+				console.log("fb-onSesionChange", e);
 			},
 
 			onStatusChange : function (e) {
-				console.log("fb-onStatusChange", e);	
+				console.log("fb-onStatusChange", e);
 			},
 
 			onLogin : function (e) {
-				console.log("fb-onLogin", e);	
+				console.log("fb-onLogin", e);
 			},
 
 			// parse the URL to run like-specific callbacks
@@ -81,7 +81,7 @@ red.module.social = red.module.social || {};
 			},
 
 			onRender : function () {
-				console.log("fb-onRender");	
+				console.log("fb-onRender");
 				//FB.Event.unsubscribe('xfbml.render',this.onRender); // unregister
 			},
 
@@ -91,7 +91,7 @@ red.module.social = red.module.social || {};
 			//	EXAMPLE
 			//	<a
 			//		data-custom-social-="facebook"						// REQUIRED
-			//		data-origin="http://example.com"					// optional 
+			//		data-origin="http://example.com"					// optional
 			//		data-method="stream.publish"						// optional
 			//		data-attachment-name="Some Name"					// optional
 			//		data-attachment-caption="Some Caption"				// optional
@@ -109,7 +109,7 @@ red.module.social = red.module.social || {};
 			//	$("body").trigger("custom-facebook-post", {origin:"http://example.com", attachmentName : "Some Name"})
 			//
 			customFacebookPost : function (e, eData) {
-				
+
 				var el = $(e.currentTarget),
 					data = eData || el.data(),
 					publishObj = this.getPublishObj(data);
@@ -161,7 +161,7 @@ red.module.social = red.module.social || {};
 
 
 			loadJSDK : function () {
-				
+
 				if (!$("#fb-root").length) {
 					$("body .scripts").append($('<div id="fb-root">'));
 				}
@@ -182,12 +182,12 @@ red.module.social = red.module.social || {};
 
 				// Load the SDK Asynchronously
 				(function (d) {
-					var js, 
-						id = 'facebook-jssdk'; 
+					var js,
+						id = 'facebook-jssdk';
 					if (d.getElementById(id)) {
 						return;
 					}
-					js = d.createElement('script'); 
+					js = d.createElement('script');
 					js.id = id;
 					js.async = true;
 					js.src = "//connect.facebook.net/en_US/all.js";
@@ -196,6 +196,6 @@ red.module.social = red.module.social || {};
 			}
 
 		});
-		
+
 	}.call(red.module.social));
 }());

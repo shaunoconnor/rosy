@@ -11,17 +11,17 @@
 var example = example || {};
 
 example.Page = (function () {
-	
+
 	return example.Class.extend({
-		
+
 		// Over-writeable vars, ex: new Page({x:10});
 		vars : {
 			// example for inheriting and overwriting vars
 			x : 1
 		},
-		
+
 		// Default page level functionality
 		init : function () {}
-		
+
 	});
 }.call(example));

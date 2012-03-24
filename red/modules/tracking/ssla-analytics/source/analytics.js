@@ -1,4 +1,4 @@
-//==============================================================================  
+//==============================================================================
 // Contents
 //
 // ssla.analytics.Omniture
@@ -66,7 +66,7 @@ ssla.net.NetInfo.getSiteId = function()
 {
     var id;
     var query = window.location.search;
-    
+
     if (query == null || query == "" ) {
         id = "";
     } else {
@@ -121,7 +121,7 @@ ssla.analytics.omniture.Accounts.prototype.next = function(){
 ssla.analytics.omniture.Accounts.prototype.hasNext = function(){
 	if(this._count < this._data.length){
 		return true;
-	} 
+	}
 	return false;
 }
 
@@ -131,7 +131,7 @@ ssla.analytics.omniture.Accounts.prototype.addAccount = function($accountName,$a
 
 /**
 * Static method to get account to be tracked to.
-* @param $accounts - Accounts object if null it is assumed the project will live on 
+* @param $accounts - Accounts object if null it is assumed the project will live on
 * t.com
 */
 ssla.analytics.omniture.Accounts.prototype.getAccount = function()
@@ -170,10 +170,10 @@ Tracker
 
 **********************************************************/
 
-/** 
+/**
 Tracker
 @param $library - library object
-@param $s - omniture s_code object 
+@param $s - omniture s_code object
 */
 ssla.analytics.Omniture = function($library,$s){
 	// on objects containing key value pairs of object to be sent to omniture
@@ -185,8 +185,8 @@ ssla.analytics.Omniture = function($library,$s){
 ssla.analytics.Omniture.prototype.constructor = ssla.analytics.Omniture;
 
 
-/** 
-Clear the s_code object. 
+/**
+Clear the s_code object.
 */
 ssla.analytics.Omniture.prototype.clear = function()
 {
@@ -194,7 +194,7 @@ ssla.analytics.Omniture.prototype.clear = function()
         this.s['prop' + i] = "";
         this.s['eVar' + i] = "";
     }
-    
+
     this.s['pageName'] = "";
 
     this.s['channel'] = "";
@@ -221,16 +221,16 @@ ssla.analytics.Omniture.prototype.sendId = function($id){
 
 /**
 * Retrieve item from item array
-*/ 
+*/
 ssla.analytics.Omniture.prototype.getItem = function($id){
-	 
+
 	 var obj = this.library[$id];
 	 if(obj == undefined){
 	 	throw new Error("[Omniture] Item doesn't exist");
 	 } else {
 	 	return obj;
 	 }
-	 
+
 }
 
 /**
@@ -250,7 +250,7 @@ ssla.analytics.Omniture.prototype.send = function($obj)
 	} else {
 		this._track();
 	}
-	
+
 	// clear values from this.s
 	this.clear();
 }
@@ -267,30 +267,30 @@ ssla.analytics.Omniture.prototype._getJSFunction=function($obj)
 {
 	var func = "";
 	var ltv = ""; // linkTrackVars string
-	
+
 	var method = this._getMethod($obj);
-	
+
 	// attach all the properties
 	for (var i in $obj) {
-		
-		// skip pev2|name|type|method properties 
+
+		// skip pev2|name|type|method properties
 		if(!i.match(/(pev2|type|method)/i) && i !== "name"){
-			
+
 			func = func.concat("s.").concat(i).concat("='").concat($obj[i]).concat("';");
-			
+
 			// add all property names for linkTrackVars
 			ltv += i + ",";
 		}
 	}
-	
+
 	// create the linkTrackVars string if it's a trackLink event
 	if(ltv.length > 0 && method.toLowerCase() == "tracklink" ){
 		ltv = ltv.substring(0,ltv.length-1);
 		func = func.concat("s.linkTrackVars='" + ltv + "';");
 	}
-		
+
 	var fn = new Function(func);
-	
+
 	return fn;
 }
 /**
@@ -300,7 +300,7 @@ ssla.analytics.Omniture.prototype._getJSFunction=function($obj)
 
 ssla.analytics.Omniture.prototype._getMethod = function($obj){
 	var method = "";
-	
+
 	// get the method
 	if($obj.method == undefined){
 		if($obj.pageName != undefined){
@@ -313,7 +313,7 @@ ssla.analytics.Omniture.prototype._getMethod = function($obj){
 			if($obj.pev2 == undefined && $obj.name == undefined){
 				throw new Error("[Tracker] trackLink is assumed, a \"name\" or \"pev2\" must be added to library item.");
 			}
-			
+
 			if($obj.type == undefined){
 				throw new Error("[Tracker] trackLink is assumed, a \"type\" must be added to library item.");
 			}
