@@ -43,18 +43,18 @@ function s_doPlugins(s) {
 	s.campaign=s.getValOnce(s.campaign,"s_campaign_gvo",0);
 	s.server=s.getQueryParam('s_van');
 
-	
+
 	if(s.prop19=="0"){
 		s.eVar5="null: "+ s.prop18;
-	}	
+	}
 
 	//Zip code cleanup
 	if(s.prop7 && s.prop7.indexOf("Zip")>=0){
 		s.prop7="";
-	}	
+	}
 
 	//Copy values
-	s.eVar4=s.prop18;	
+	s.eVar4=s.prop18;
 	if (s.prop7) s.eVar15=s.prop7;
 	s.eVar18=s.prop3;
 	s.eVar19=s.prop4;
@@ -63,7 +63,7 @@ function s_doPlugins(s) {
 	s.prop36 = s.eVar36 = s.getClientTimePart();
 
 	s.partnerDFACheck("dfa_cookie","siteid");
-	
+
 }
 s.doPlugins=s_doPlugins
 

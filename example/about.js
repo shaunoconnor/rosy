@@ -10,14 +10,14 @@ var example = example || {};
 
 // Page namespace
 example.page = example.page || {};
-	
+
 // About specific instance
 example.page.About = (function () {
-	
+
 	return example.Page.extend({
-		
+
 		// Over-writeable vars, ex:
-		// 
+		//
 		//  var foo = new Page({
 		//      x : 10
 		//  });
@@ -27,9 +27,9 @@ example.page.About = (function () {
 			y : 3,
 			z : 4
 		},
-		
+
 		// About  page level functionality
 		init : function (vars) {}
-		
+
 	});
 }.call(example));

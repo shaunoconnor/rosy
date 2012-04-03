@@ -12,7 +12,7 @@ red.module = red.module || {};
  *
  * EXAMPLE:
 	var MyTracking = new red.module.Tracking([
-		{	
+		{
 			className:"Omniture",  // configure to use omniture
 			config : [
 				["tmsdevtoyota","ec2devtoyotashareathon1.toyota.com"],
@@ -26,13 +26,13 @@ red.module = red.module || {};
 
  */
 (function () {
-	
+
 	red.module.Tracking = (function () {
 
 		var pakage = this; // "package" is reserved so using "pakage"
-		
+
 		return red.Module.extend({
-			
+
 			models : {},
 
 			init : function (trackers) {

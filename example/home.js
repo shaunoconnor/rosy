@@ -10,15 +10,15 @@ var example = example || {};
 
 // Page namespace
 example.page = example.page || {};
-	
+
 // Home specific instance
 example.page.Home = (function () {
-	
+
 	// Extends example.Page
 	return example.Page.extend({
-		
+
 		// Over-writeable vars, ex:
-		// 
+		//
 		//  var foo = new Page({
 		//      x : 10
 		//  });
@@ -26,9 +26,9 @@ example.page.Home = (function () {
 			// Results in `{ x : 1, y : 2 }` by inheriting from `example.Page`
 			z : 3
 		},
-		
+
 		// Home  page level functionality
 		init : function () {}
-		
+
 	});
 }.call(example));

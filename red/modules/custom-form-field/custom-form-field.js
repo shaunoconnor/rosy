@@ -6,19 +6,19 @@ var red = red || {};
 
 // Module namespace
 red.module = red.module || {};
-	
+
 red.module.CustomFormField = (function () {
-	
+
 	// Extends red.Module
 	return red.Module.extend({
-		
+
 		vars : {
 			namespace : "customfield",
 			field : null,
 			customSelect : true,
 			showForMobile : false
 		},
-		
+
 		// Home  page level functionality
 		init : function (vars) {
 			this.setDOMReferences();
@@ -115,7 +115,7 @@ red.module.CustomFormField = (function () {
 		setupCheckbox : function () {
 			var field = this.vars.field,
 				checked = this.vars.namespace + "-checked";
-			
+
 			if (this.vars.field.is(":checked")) {
 				this.vars.wrap.addClass(checked);
 			}
@@ -169,7 +169,7 @@ red.module.CustomFormField = (function () {
 				options = select.find("option"),
 				index = select[0].selectedIndex,
 				active = options.eq(index);
-			
+
 			this.vars.current = $('<span></span>').addClass(this.vars.namespace + "-current");
 			this.vars.current.appendTo(this.vars.wrap);
 
@@ -186,7 +186,7 @@ red.module.CustomFormField = (function () {
 			var wrap = this.vars.wrap,
 				html = select.html(),
 				list = $('<ul></ul>');
-			
+
 			html = html.replace(/option/mg, "li");
 			html = html.replace(/value/mg, "data-value");
 			html = html.replace(/selected/mg, "data-selected");

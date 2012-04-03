@@ -9,27 +9,27 @@ red.module = red.module || {};
 
 // ## red.module.PageControl
 // An iOS-style Page Control.
-// 
+//
 // Usage:
-// 
+//
 //  var control = new red.module.PageControl({
 //      parent : $("#controller"),
 //      list : $("#controller > ul"), // optional, assumes parent child as list
 //      items : $("#controller > ul > li") // optional, assumes list children as items
 //  });
-//  
+//
 //  control.bind("paginate", function (e) {
 //      console.log(e);
 //  });
-//  
+//
 //  control.bind("touchend", function (e) {
 //      console.log(e);
 //  });
 red.module.PageControl = (function () {
-	
+
 	// Extends red.Module
 	return red.Module.extend({
-		
+
 		vars : {
 			className : "page-control",
 			parent : null,
@@ -62,24 +62,24 @@ red.module.PageControl = (function () {
 		// Returns the target element matrix
 		getMatrix : function (el) {
 			el = el[0] || el;
-			
+
 			var transform = window.getComputedStyle(el, null).webkitTransform,
 				matrix = new window.WebKitCSSMatrix(transform);
 
 			return matrix;
 		},
-		
+
 		// Setup page control functionality
 		setupPageControl : function () {
 			this.vars.list = this.vars.list || this.vars.parent.children();
 			this.vars.items = this.vars.items || this.vars.list.children();
-			
+
 			if (this.vars.items.length < 2) {
 				return;
 			}
-			
+
 			this.vars.icons = this.createPageIndicators();
-			
+
 			this.prepForTransforms();
 			this.setupTouchEvents();
 			this.sizeToFit();
@@ -98,7 +98,7 @@ red.module.PageControl = (function () {
 		// Where the magic happens.
 		// Sets up touch event listeners for swipe handling.
 		setupTouchEvents : function () {
-			
+
 			// Shared variables
 			var control = this.vars.parent,
 				list = this.vars.list,
@@ -107,9 +107,9 @@ red.module.PageControl = (function () {
 				directionX, oldX, touchMoveFired, touchEndFired, activeElement,
 				elementWidth, elementThreshold, lockHorizontal,
 				controlRect, listRect;
-			
+
 			list.bind({
-				
+
 				// - Reset shared variables on touchstart.
 				// - Reset transition duration to 350ms.
 				// - Reset transform values.
@@ -119,18 +119,18 @@ red.module.PageControl = (function () {
 						e.stopPropagation();
 						e.preventDefault();
 					}
-					
+
 					activeElement = this.getActiveElement(list, e.target);
 
 					if (!activeElement || !activeElement.length) {
 						return;
 					}
-	
+
 					matrix = this.getMatrix(list);
-				
+
 					this.resetTransition(list, 350);
 					this.setTransform(list, matrix.translate(0, 0, 0));
-					
+
 					touchEndFired = false;
 					lockHorizontal = false;
 
@@ -150,7 +150,7 @@ red.module.PageControl = (function () {
 					elementWidth = elementWidth || activeElement.outerWidth(true);
 					elementThreshold = elementThreshold || elementWidth / 4;
 				}, this),
-				
+
 				// - Detect if user is swiping horizontally
 				// - Lock x-axis, track user swipe
 				// - Set CSS transform based on user movement
@@ -178,23 +178,23 @@ red.module.PageControl = (function () {
 						lockHorizontal = true;
 						e.preventDefault();
 					}
-					
+
 					listRect = list[0].getBoundingClientRect();
 					controlRect = control[0].getBoundingClientRect();
-					
+
 					if (listRect.left >= controlRect.left || listRect.right <= controlRect.right) {
 						diffX *= 0.5;
 					}
 
 					this.setTransform(list, matrix.translate(diffX, 0, 0));
-					
+
 					if (!touchMoveFired) {
 						this.resetTransition(list, 0);
 					}
-					
+
 					touchMoveFired = true;
 				}, this),
-				
+
 				// - Calculate total user movement
 				// - If movement threshold is reached, snap to prev/next sibling
 				// - Else snap to current element
@@ -214,13 +214,13 @@ red.module.PageControl = (function () {
 					if (getSibling) {
 						element = this.findSibling(activeElement, diffX < 0);
 					}
-					
+
 					this.flagActiveItem(element);
 					this.animateTo(element, control, list);
-					
+
 					this.trigger("touchend");
 				}, this),
-				
+
 				// A safety catcher for CSS transitions.
 				// Nutshell: in some cases transitions are offset by ~1px.
 				// This listener fires at the end of a transition event and makes sure the values end on a round number.
@@ -239,11 +239,11 @@ red.module.PageControl = (function () {
 		// Prevents accidental event delegation.
 		getActiveElement : function (list, target) {
 			var parent = list.get(0);
-			
+
 			while (target && target.parentNode !== parent) {
 				target = target.parentNode;
 			}
-			
+
 			return $(target);
 		},
 
@@ -255,19 +255,19 @@ red.module.PageControl = (function () {
 			var width = 0,
 				items = this.vars.items,
 				i, j, el, itemWidth;
-			
+
 			this.vars.parent.css("overflow", "hidden");
-			
+
 			for (i = 0, j = items.length; i < j; i++) {
 				el = $(items[i]);
 				itemWidth = el.width();
-				
+
 				el.css("float", "left");
 				el.width(el.width());
-				
+
 				width += itemWidth;
 			}
-			
+
 			this.vars.list.width(width);
 		},
 
@@ -281,20 +281,20 @@ red.module.PageControl = (function () {
 
 			for (i = 0, j = items.length; i < j; i++) {
 				icon = $('<li></li>');
-				
+
 				if (i === 0) {
 					icon.addClass(this.vars.className + "-active");
 				}
-				
+
 				controlList.append(icon);
 			}
-			
+
 			controller.append(controlList);
 			control.append(controller);
-			
+
 			return controlList.children();
 		},
-		
+
 		// Finds prev/next available sibling element.
 		// Defaults to current element if none found.
 		findSibling : function (element, next) {
@@ -314,7 +314,7 @@ red.module.PageControl = (function () {
 		// - Animates to destination.
 		animateTo : function (element, control, list) {
 			element = element[0] || element;
-			
+
 			var matrix = this.getMatrix(list),
 				elementOffset = element.getBoundingClientRect().left - control.offset().left;
 
@@ -330,16 +330,16 @@ red.module.PageControl = (function () {
 				var el = $(e.currentTarget),
 					matrix = this.getMatrix(el),
 					key;
-			
+
 				for (key in matrix) {
 					if (typeof matrix[key] === "number") {
 						matrix[key] = Math.floor(matrix[key]);
 					}
 				}
-			
+
 				this.resetTransition(el, 0);
 				this.setTransform(el, matrix);
-				
+
 				this.trigger("paginate");
 			}
 		},
@@ -348,11 +348,11 @@ red.module.PageControl = (function () {
 		// Removes active class name from siblings.
 		flagActiveItem : function (element) {
 			element = element || this.vars.items.first();
-			
+
 			var items = this.vars.items,
 				icons = this.vars.icons,
 				index = items.index(element);
-			
+
 			if (icons.get(index)) {
 				icons.removeClass(this.vars.className + "-active");
 				icons.eq(index).addClass(this.vars.className + "-active").siblings();
@@ -364,10 +364,10 @@ red.module.PageControl = (function () {
 		enable : function () {
 			this.vars.list.addClass(this.vars.className + "-list");
 			this.vars.items.addClass(this.vars.className + "-items");
-			
+
 			this.vars.parent.addClass(this.vars.className);
 			this.vars.parent.addClass(this.vars.className + "-enabled");
 		}
 	});
-	
+
 }.call(red));

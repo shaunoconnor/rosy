@@ -13,11 +13,11 @@ red.module.tracking = red.module.tracking || {};
  * Omniture and GA tracking event wrappers
  */
 (function () {
-	
+
 	red.module.tracking.Omniture = (function () {
 
 		return red.Module.extend({
-			
+
 
 			_tracker : null,
 

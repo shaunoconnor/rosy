@@ -1,4 +1,4 @@
-<!doctype html> 
+<!doctype html>
 <html lang="en">
 <head>
 <title>Omniture Example</title>
@@ -22,9 +22,9 @@ var tracker = new ssla.analytics.Omniture(library,s);
 
 
 jQuery(document).ready(function(){
-	
+
 	tracker.sendId("track");
-	
+
 	$("a[omni]").click(
 		function(){
 			var id = $(this).attr("omni");
@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
 					var prop46 = obj.prop46;
 					obj.prop46 = prop46.split("[section]").join(section);
 					var n = obj.name;
-					obj.name = n.split("[section]").join(section.toLowerCase()); 
+					obj.name = n.split("[section]").join(section.toLowerCase());
 					tracker.send(obj);
 					break;
 				default:

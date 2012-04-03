@@ -20,9 +20,9 @@ red.module.social = red.module.social || {};
  *	add [data-custom-social="twitter"] to automatically fire customTweet()
  *
  *	EXAMPLE
- *	<a 
+ *	<a
  *		data-custom-social-="twitter"						// REQUIRED
- *		data-url="http://example.com"						// optional 
+ *		data-url="http://example.com"						// optional
  *		data-text="Some tweet you are sending"				// optional
  *	>Twitter</a>
  *
@@ -42,12 +42,12 @@ red.module.social = red.module.social || {};
 			EVENT = {
 				POST : "custom-twitter-post"
 			};
-		
+
 		return red.Module.extend({
 
 			_twitter_url : "https://twitter.com/share?",
 
-			
+
 			init : function () {
 
 				pakage[NAME].EVENT = EVENT;
@@ -75,7 +75,7 @@ red.module.social = red.module.social || {};
 					data = eData || el.data(),
 					url = this._twitter_url,
 					i;
-				
+
 				data.url = data.url || window.location.href;
 				data.text = data.text || document.title;
 
@@ -93,7 +93,7 @@ red.module.social = red.module.social || {};
 			},
 
 			loadJSDK : function () {
-				
+
 				////////////////////////////////////////////////////////////
 				/////// TWITTER SHARING and tracking
 				// Load G+1
@@ -106,11 +106,11 @@ red.module.social = red.module.social || {};
 				$(e).load($.proxy(function () {
 					if (window.twttr) {
 						window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
-						window.twttr.events.bind('follow', $.proxy(this.onFollow, this));	
+						window.twttr.events.bind('follow', $.proxy(this.onFollow, this));
 					}
 				}, this));
 			}
 		});
-		
+
 	}.call(red.module.social));
 }());
