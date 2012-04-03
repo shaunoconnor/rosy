@@ -26,7 +26,7 @@
 		initializing = false;
 
 		// Copy the properties over onto the new prototype
-		for (name in prop) {			
+		for (name in prop) {
 			if (prop.hasOwnProperty(name)) {
 				func = prop[name];
 
