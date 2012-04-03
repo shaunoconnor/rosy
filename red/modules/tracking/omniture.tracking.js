@@ -11,26 +11,42 @@ red.module.tracking = red.module.tracking || {};
 
 /**
  * Omniture and GA tracking event wrappers
+ * REQUIRES 
+	- ssla-analytics/  (this file loads ssla-analytics/analytics.min.js)
+	
  */
 (function () {
-
+	
 	red.module.tracking.Omniture = (function () {
 
 		return red.Module.extend({
-
+			
 
 			_tracker : null,
 
 			vars : {
+				debug : true, // set to false for production
 				media_url : null //defaults to <link rel="media-url"' content="{{STATIC_URL}}" />
 			},
 
+			log : function () {
+				if (this.vars.debug) {
+					try {
+						console.log(arguments);
+					} catch (e) {}
+				}
+			},
+
+
 			init : function () {
 				this.loadJSDK();
+
+				$.subscribe("track", $.proxy(this.track, this));
 			},
 
 			track : function (e, data) {
-				console.log("Tracking: Omniture::", e, data);
+				this.log("o track is not setup yet =(", data.type, data);
+
 			},
 
 			onReady : function () {
@@ -63,6 +79,13 @@ red.module.tracking = red.module.tracking || {};
 					],
 					complete : $.proxy(this.onReady, this)
 				}]);
+			},
+
+			destroy : function () {
+				$.unsubscribe("track", $.proxy(this.track, this));
+				
+				this.tracker = null;
+				this.vars = null;
 			}
 
 		});
