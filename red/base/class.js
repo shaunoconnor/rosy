@@ -14,7 +14,7 @@
 	this.Class = function () {};
 
 	// Create a new Class that inherits from this class
-	Class.extend = function extend(prop) {
+	Class.extend = function extend(prop, events) {
 		var sup = this.prototype,
 			This = this,
 			prototype, name, tmp, ret, func;
@@ -26,7 +26,7 @@
 		initializing = false;
 
 		// Copy the properties over onto the new prototype
-		for (name in prop) {
+		for (name in prop) {			
 			if (prop.hasOwnProperty(name)) {
 				func = prop[name];
 
@@ -56,7 +56,7 @@
 		function Class(vars) {
 
 			this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
-
+			
 			// All construction is actually done in the init method
 			if (!initializing && this.init) {
 				this.init.apply(this, arguments);
@@ -71,6 +71,10 @@
 
 		// And make this class extendable
 		Class.extend = extend;
+
+		if (typeof events === 'object') {
+			$.extend(Class, events);
+		}
 
 		return Class;
 	};
