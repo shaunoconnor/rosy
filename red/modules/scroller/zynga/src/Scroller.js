@@ -483,7 +483,7 @@ var Scroller;
 		*
 		* @param left {Number?null} Horizontal scroll position, keeps current if value is <code>null</code>
 		* @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
-		* @param animate {Boolean?false} Whether the scrolling should happen using an animation
+		* @param animate {Number?false} Milliseconds in duration the scrolling should happen using an animation
 		* @param zoom {Number?null} Zoom level to go to
 		*/
 		scrollTo: function (left, top, animate, zoom) {
@@ -551,6 +551,11 @@ var Scroller;
 			// that rendered position is really in-sync with internal data
 			if (left === self.__scrollLeft && top === self.__scrollTop) {
 				animate = false;
+			}
+
+			// If animate is a [true] Boolean (not a Number) then assign a default value.
+			if (animate === true) {
+				animate = 250;
 			}
 
 			// Publish new values
@@ -954,7 +959,7 @@ var Scroller;
 
 				} else {
 
-					self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+					self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping, self.__zoomLevel);
 
 					// Directly signalize deactivation (nothing todo on refresh?)
 					if (self.__refreshActive) {
