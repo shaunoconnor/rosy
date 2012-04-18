@@ -197,6 +197,9 @@ var Scroller;
 		/* {Number} Scheduled zoom level (final scale when animating) */
 		__scheduledZoom: 0,
 
+		/* {Number} Animation duration */
+		__animate: 250,
+
 
 
 		/*
@@ -555,7 +558,7 @@ var Scroller;
 
 			// If animate is a [true] Boolean (not a Number) then assign a default value.
 			if (animate === true) {
-				animate = 250;
+				animate = self.__animate;
 			}
 
 			// Publish new values
