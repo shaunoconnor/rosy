@@ -1,6 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 // Google Analytics Tracking
-/* ga.tracking.js */
+/* ga.tracking.js */ 
 
 // ## Local Namespace
 var red = red || {};
@@ -13,28 +13,42 @@ var _gaq = _gaq || [];
 
 /**
  * Omniture and GA tracking event wrappers
+ * init: new red.module.tracking.GA()
+ * publish: $.publish("track", {category:, action:, label:, value: });
  */
 (function () {
-
+	
 	red.module.tracking.GA = (function () {
 
 		return red.Module.extend({
 
 			vars : {
+				debug : true,
 				property_id : "", // init({property_id: "XXXXX"}) OR (preferably) <meta property="ga:property_id" content="XXXXX"/>
 				domain : ""
 			},
 
 			init : function () {
 				this.loadJSDK();
+
+				$.subscribe("track", $.proxy(this.track, this));
 			},
 
-			track : function (e, eData) {
+			log : function () {
+				if (this.vars.debug) {
+					try {
+						console.log(arguments);
+					} catch (e) {}
+				}
+			},
 
+			track : function (e, eData) {				
 				var el = $(e.currentTarget),
 				data = eData || el.data();
 
-				//console.log("ga.tracking", data.category, data);
+				data.type = data.type || "event"; // default to an event tracking type
+
+				this.log("ga track", data.type, data);
 
 				switch (data.type) {
 				case 'event':
@@ -65,6 +79,8 @@ var _gaq = _gaq || [];
 					throw 'tracking:GA missing DOMAIN  <meta property="ga:domain" content="xxxxx.com"/>';
 				}
 
+				this.log("ga.tracking:: " + this.vars.property_id);
+
 				_gaq.push(["_setAccount", this.vars.property_id]);
 				_gaq.push(['_setDomainName', this.vars.domain]);
 				_gaq.push(['_setAllowLinker', true]);
@@ -74,9 +90,13 @@ var _gaq = _gaq || [];
 				Modernizr.load({
 					load : ("https:" === location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js"
 				});
+			},
+
+			destroy : function () {
+				$.unsubscribe("track", $.proxy(this.track, this));
+				this.vars = null;
 			}
 
 		});
 	}.call(red.module.tracking));
-
 }());
