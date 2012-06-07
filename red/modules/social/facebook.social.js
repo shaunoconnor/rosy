@@ -271,7 +271,8 @@ red.module.social.Facebook = (function () {
 		},
 
 		destroy : function () {
-			$('[data-custom-social="facebook"]').die("click", $.proxy(this.customFacebookPost, this));
+			$(document).off("click", '[data-custom-social="facebook"]', $.proxy(this.customFacebookPost, this));
+			
 			$.unsubscribe(EVENTS.POST,  $.proxy(this.customFacebookPost, this));
 			$.unsubscribe(EVENTS.RENDER, $.proxy(this.render, this));
 		}
