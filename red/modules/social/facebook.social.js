@@ -12,7 +12,7 @@ red.module.social = red.module.social || {};
 /**
  *	Requires DOM elements:
  *		<link rel="media_url">
- *		<meta property="og:app_id">
+ *		<meta property="fb:app_id">
  *	Optional DOM elements: 
  *	<div id="fb-root"> // added for you if it doesn't exist
  *	data-custom-post="facebook" // fires customFacebookPost
@@ -25,15 +25,30 @@ red.module.social.Facebook = (function () {
 
 	var EVENTS = {
 			POST : "social/facebook/post",
-			RENDER : "social/render"
-		};
+			RENDER : "social/render",
+			LOGIN : "social/facebook/login",
+			LOGOUT : "social/facebook/logout",
+			GET_STATUS : "social/facebook/get-status",
+			GET_ME : "social/facebook/get-me",
+			SET_ACTION : "social/facebook/set-action",
+			HANDLE_ACTION : "social/facebook/handle-action",
+			HANDLE_ME : "social/facebook/handle-me",
+			HANDLE_LOGIN : "social/facebook/handle-login",
+			HANDLE_LOGOUT : "social/facebook/handle-logout"
+		},
+
+		IS_CONNECTED = false,
+		APP_ID = $('[property="fb:app_id"]').attr("content"),
+		NAMESPACE = $('[property="og:namespace"]').attr("content");
+
+
+
 
 	return red.Module.extend({
 
 		vars : {},
 		
 		_media_url: null, // <link rel="media-url"' content="{{STATIC_URL}}" />
-		_app_id : null, // <meta property="og:app_id" content="{{ FACEBOOK_APP_ID }} " />
 
 		init : function () {
 			this.loadJSDK();
@@ -148,7 +163,7 @@ red.module.social.Facebook = (function () {
 			FB.Event.subscribe('xfbml.render', $.proxy(this.onFBInit, this));
 
 			FB.init({
-				appId      : this._app_id, // App ID
+				appId      : APP_ID, // App ID
 				channelUrl : this._media_url + '/js/red/modules/social/facebook-channel.html', // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow the server to access the session
@@ -169,13 +184,12 @@ red.module.social.Facebook = (function () {
 			}
 
 			this._media_url = $('link[rel="media-url"]').attr("href");
-			this._app_id = $('meta[property="og:app_id"]').attr("content");
 
 			if (!this._media_url) {
 				throw 'red/modules/social/Facebook.js requires a rel="media-url"';
 			}
 
-			if (!this._app_id) {
+			if (!APP_ID) {
 				// Create FB developer account, create a new app, set the URL of the app to http://localhost:8000 for testing
 				throw 'red/modules/social/Facebook.js requires meta og:app_id.';
 			}
