@@ -8,18 +8,23 @@ red.module = red.module || {}; // note the use of lower case for package names n
 
 red.module.social = red.module.social || {};
 
-
 /**
- *	Requires DOM elements:
- *		<link rel="media_url">
- *		<meta property="fb:app_id">
+ *	Required DOM elements:
+ 		<link rel="media_url" href="XXXXXXX">
+ 		<meta property="fb:app_id" content="XXXXXX">
+
  *	Optional DOM elements: 
- *	<div id="fb-root"> // added for you if it doesn't exist
- *	data-custom-post="facebook" // fires customFacebookPost
- *
+ 		<div id="fb-root"> // added for you if it doesn't exist
+ 		<a data-custom-post="facebook"></a> // fires customFacebookPost
+ 
+ *	How to Use
+		var FB = new red.module.social.Facebook({debug:false}); //
+		$.publish(red.module.social.Facebook.LOGIN); // will launch authenticate-dialog (check popup blocker)
+		$.subscribe(red.module.social.Facebook.HANDLE_LOGIN, function (e, response) {}));
+
+ 
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
-
 
 red.module.social.Facebook = (function () {
 
@@ -42,50 +47,99 @@ red.module.social.Facebook = (function () {
 		NAMESPACE = $('[property="og:namespace"]').attr("content");
 
 
-
-
 	return red.Module.extend({
 
-		vars : {},
-		
-		_media_url: null, // <link rel="media-url"' content="{{STATIC_URL}}" />
+		vars : {
+			debug : true
+		},
 
 		init : function () {
 			this.loadJSDK();
-			$('[data-custom-social="facebook"]').live("click", $.proxy(this.customFacebookPost, this));
-			$.subscribe(EVENTS.POST,  $.proxy(this.customFacebookPost, this));
-			$.subscribe(EVENTS.RENDER, $.proxy(this.render, this));
+
+			$(document).on("click", '[data-custom-social="facebook"]', $.proxy(this.customFacebookPost, this));
 		},
 
-		onShare : function (e) {
+		// $.publish(EVENTS.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
+		setAction : function (e, options) {
+			if (IS_CONNECTED) {
+				
+				var action = options.action || (NAMESPACE + ":" + options.custom_action);
 
+				if (action && options.properties) {
+					FB.api("/me/" + action, 'post', options.properties, function (response) {
+						$.publish(EVENTS.HANDLE_ACTION, [response]);
+					});
+				} else {
+					console.log("Facebook: You're doing actions wrong");
+				}
+			}
 		},
 
-		onAddComment : function (e) {
+		getStatus : function () {
+			FB.getLoginStatus($.proxy(function (response) {
+				if (response.session || response.status === "connected") {// user has a session, make sure they are "FULLY REGSITERED"
+					IS_CONNECTED = true;
+					$.publish(EVENTS.HANDLE_LOGIN, [response]);
+				} else {
+					IS_CONNECTED = false;
+					$.publish(EVENTS.HANDLE_LOGOUT, [response]);
+				}
 
+				this.log(response);
+			}, this));
 		},
 
-		onSesionChange : function (e) {
-
+		getLogout : function () {
+			FB.logout(function (response) {
+				IS_CONNECTED = false;
+				$.publish(EVENTS.HANDLE_LOGOUT, [response]);
+				$.publish("track", [{type : "event", category: "facebook", action : "logout", label : "user logged out"}]);
+			});
 		},
 
-		onStatusChange : function (e) {
-
+		getMe : function () {
+			if (IS_CONNECTED) {
+				FB.api('/me', function(response) {
+					$.publish(EVENTS.HANDLE_ME, [response]);
+					$.publish("track", [{type : "event", category: "facebook", action : "me", label : "got user info"}]);
+				});
+			}
 		},
+
+		getLogin : function () {
+			FB.login(function (response) {
+				this.log(response);
+				if (response.authResponse) {
+					IS_CONNECTED = true;
+					$.publish(EVENTS.HANDLE_LOGIN, [response]);
+					$.publish("track", [{type : "event", category: "facebook", action : "login:accepted", label : "user connected w/ fb"}]);
+				} else {
+					$.publish("track", [{type : "event", category: "facebook", action : "login:canceled", label : "user canceled login"}]);
+				}
+			}, {scope: 'publish_actions'}); // CUSTOMIZE THIS FOR YOUR LEVEL OF NEED
+		},
+
+
+		 // stubs ment for overwriting when extending this module
+		onShare : function (e) {},
+
+		onAddComment : function (e) {},
+
+		onSesionChange : function (e) {},
+
+		onStatusChange : function (e) {},
 
 		onLogin : function (e) {
-
+			IS_CONNECTED = true;
 		},
+
+		onRender : function () {},
 
 		// parse the URL to run like-specific callbacks
 		onLike : function (URL) {
 			// tracls as facebook-like-profile or facebook-like-other (for custom page liking)
 			var action = "on-like-" + ((URL.indexOf("seed") > 0) ? "profile" : "other");
 			$.publish("track", [{type : "event", category: "facebook", action : action, label : URL}]);
-		},
-
-		onRender : function () {
-			//FB.Event.unsubscribe('xfbml.render',this.onRender); // unregister
 		},
 
 		//	add [data-custom-social="facebook"] to a link to automatically fire this
@@ -116,10 +170,7 @@ red.module.social.Facebook = (function () {
 			var el = $(e.currentTarget),
 				data = eData || el.data(),
 				publishObj = this.getPublishObj(data);
-
-
-			console.log(eData, publishObj);
-
+				
 			FB.ui(publishObj);
 
 			$.publish("track", [{type : "event", category : "facebook", action : "on-post", label : data.origin}]);
@@ -149,7 +200,17 @@ red.module.social.Facebook = (function () {
 		},
 
 		onFBInit : function () {
-			FB.Event.unsubscribe('xfbml.render', this.onFBInit); // unregister
+			FB.Event.unsubscribe('xfbml.render', this.onFBInit); // unregister, we only want to init once
+
+			$.subscribe(EVENTS.POST,  $.proxy(this.customFacebookPost, this));
+			$.subscribe(EVENTS.RENDER, $.proxy(this.render, this));
+			$.subscribe(EVENTS.LOGIN, $.proxy(this.getLogin, this));
+			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
+			$.subscribe(EVENTS.GET_STATUS, $.proxy(this.getStatus, this));
+			$.subscribe(EVENTS.GET_ME, $.proxy(this.getMe, this));
+			$.subscribe(EVENTS.SET_ACTION, $.proxy(this.setAction, this));
+
+			this.getStatus();
 		},
 
 		fbAsyncInit : function () {
@@ -164,7 +225,7 @@ red.module.social.Facebook = (function () {
 
 			FB.init({
 				appId      : APP_ID, // App ID
-				channelUrl : this._media_url + '/js/red/modules/social/facebook-channel.html', // Channel File
+				channelUrl : red.SYS.STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow the server to access the session
 				oauth      : true, // enable OAuth 2.0
@@ -183,10 +244,8 @@ red.module.social.Facebook = (function () {
 				$("body .scripts").append($('<div id="fb-root">'));
 			}
 
-			this._media_url = $('link[rel="media-url"]').attr("href");
-
-			if (!this._media_url) {
-				throw 'red/modules/social/Facebook.js requires a rel="media-url"';
+			if (!red.SYS.STATIC_URL) {
+				throw 'red/modules/social/Facebook.js requires <rel="media-url"> - usually set in site.js';
 			}
 
 			if (!APP_ID) {
