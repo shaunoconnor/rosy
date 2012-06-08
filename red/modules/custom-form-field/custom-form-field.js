@@ -16,7 +16,8 @@ red.module.CustomFormField = (function () {
 			namespace : "customfield",
 			field : null,
 			customSelect : true,
-			showForMobile : false
+			showForMobile : false,
+			isMobile : (/iP(hone|ad|od)|Android/).test(window.navigator.userAgent)
 		},
 
 		// Home  page level functionality
@@ -39,7 +40,7 @@ red.module.CustomFormField = (function () {
 		},
 
 		setupCustomFormField : function () {
-			if (!this.vars.showForMobile && (/iP(hone|ad|od)|Android/).test(window.navigator.userAgent)) {
+			if (!this.vars.showForMobile && this.vars.isMobile) {
 				$("html").addClass("mobile");
 				return;
 			}
