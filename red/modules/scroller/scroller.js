@@ -56,6 +56,7 @@ red.module.Scroller = (function () {
 				engine, vendorPrefix, undef,
 				helperElem = document.createElement("div"),
 				perspectiveProperty, transformProperty,
+				prevLeft, prevTop, prevZoom,
 				self = this;
 
 			if ("opera" in window && Object.prototype.toString.call(opera) === "[object Opera]") {
@@ -81,7 +82,11 @@ red.module.Scroller = (function () {
 			if (helperElem.style[perspectiveProperty] !== undef) {
 
 				return function (left, top, zoom) {
-					scope.style[transformProperty] = "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")";
+					if (left === prevLeft && top === prevTop && zoom === prevZoom) {
+						return;
+					}
+
+					scope.style[transformProperty] = "translate3d(" + (-left) + "px," + (-top) + "px, 0) scale(" + zoom + ")";
 
 					self.trigger("touchinertia", {
 						type: "touchinertia",
@@ -89,11 +94,19 @@ red.module.Scroller = (function () {
 						translateY: top,
 						zoom: zoom
 					});
+
+					prevLeft = left;
+					prevTop = top;
+					prevZoom = zoom;
 				};
 
 			} else if (helperElem.style[transformProperty] !== undef) {
 
 				return function (left, top, zoom) {
+					if (left === prevLeft && top === prevTop && zoom === prevZoom) {
+						return;
+					}
+
 					scope.style[transformProperty] = "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")";
 
 					self.trigger("touchinertia", {
@@ -101,11 +114,19 @@ red.module.Scroller = (function () {
 						translateY: top,
 						zoom: zoom
 					});
+
+					prevLeft = left;
+					prevTop = top;
+					prevZoom = zoom;
 				};
 
 			} else {
 
 				return function (left, top, zoom) {
+					if (left === prevLeft && top === prevTop && zoom === prevZoom) {
+						return;
+					}
+
 					scope.style.marginLeft = left ? (-left / zoom) + "px" : "";
 					scope.style.marginTop = top ? (-top / zoom) + "px" : "";
 					scope.style.zoom = zoom || "";
@@ -115,16 +136,18 @@ red.module.Scroller = (function () {
 						translateY: top,
 						zoom: zoom
 					});
+
+					prevLeft = left;
+					prevTop = top;
+					prevZoom = zoom;
 				};
 
 			}
 		},
 
 		setupScroller : function () {
-			var container = this.vars.target,
-				content = container.getElementsByTagName("*")[0],
-				scroller, rect, key,
-				self = this;
+			var content = this.vars.target.getElementsByTagName("*")[0],
+				scroller, key;
 
 			// Initialize Scroller
 			scroller = new Scroller(this.renderingEngine(content), this.vars);
@@ -135,15 +158,23 @@ red.module.Scroller = (function () {
 				}
 			}
 
+			this.vars.scroller = scroller;
+
+			this.update();
+			this.setupEvents();
+		},
+
+		update : function () {
+			var container = this.vars.target,
+				content = container.getElementsByTagName("*")[0],
+				scroller = this.vars.scroller,
+				rect = container.getBoundingClientRect();
+
 			// Setup Scroller
-			rect = container.getBoundingClientRect();
 			scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
 
 			// Update Scroller dimensions for changed content
 			scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight/* - 50*/);
-
-			this.vars.scroller = scroller;
-			this.setupEvents();
 		},
 
 		extendProp : function (key, scroller) {
