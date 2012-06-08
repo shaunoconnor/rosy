@@ -54,6 +54,8 @@ red.Site = $.extend(true, example, red, (function () {
 			// creates `Page()` based on `<div data-page-class="Home">`
 			this.setMediaURL();
 			this.createModel(pageClass);
+
+			this.models.Facebook = new example.module.social.Facebook();
 		}
 	};
 }()));
