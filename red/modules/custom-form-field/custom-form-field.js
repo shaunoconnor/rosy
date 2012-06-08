@@ -42,7 +42,10 @@ red.module.CustomFormField = (function () {
 		setupCustomFormField : function () {
 			if (!this.vars.showForMobile && this.vars.isMobile) {
 				$("html").addClass("mobile");
-				return;
+
+				if (this.vars.type === "select") {
+					return;
+				}
 			}
 
 			if (this.vars.field.is("[type='hidden']")) {
