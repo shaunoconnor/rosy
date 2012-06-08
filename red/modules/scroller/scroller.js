@@ -46,8 +46,8 @@ red.module.Scroller = (function () {
 		},
 
 		setDOMReferences : function () {
-			// No need for jQuery arrays. We're doing it vanilla-style.
 			this.vars.target = this.vars.target[0] || this.vars.target;
+			this.vars.doc = $(document);
 		},
 
 		/* DOM-based rendering (Uses 3D when available, falls back on margin when transform not available) */
@@ -187,77 +187,106 @@ red.module.Scroller = (function () {
 			this.vars.scroller.options[key] = value;
 		},
 
+		onTouchStart : function (e) {
+			var o = e.originalEvent;
+
+			// Don't react if initial down happens on a form element
+			if (o.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+
+			this.vars.scroller.doTouchStart(o.touches, o.timeStamp);
+			this.trigger(e.type, e);
+
+			e.preventDefault();
+		},
+
+		onTouchMove : function (e) {
+			var o = e.originalEvent;
+
+			this.vars.scroller.doTouchMove(o.touches, o.timeStamp, o.scale);
+			this.trigger(e.type, o);
+		},
+
+		onTouchEnd : function (e) {
+			var o = e.originalEvent;
+
+			this.vars.scroller.doTouchEnd(o.timeStamp);
+			this.trigger(e.type, o);
+		},
+
+		onMouseDown : function (e) {
+			var o = e.originalEvent;
+
+			// Don't react if initial down happens on a form element
+			if (o.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+
+			this.vars.scroller.doTouchStart([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			this.trigger("touchstart", e);
+			this.vars.mousedown = true;
+		},
+
+		onMouseMove : function (e) {
+			if (!this.vars.mousedown) {
+				return;
+			}
+
+			this.vars.scroller.doTouchMove([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			this.trigger("touchmove", e);
+			this.vars.mousedown = true;
+		},
+
+		onMouseUp : function (e) {
+			if (!this.vars.mousedown) {
+				return;
+			}
+
+			this.vars.scroller.doTouchEnd(e.timeStamp);
+
+			this.trigger("touchend", e);
+			this.vars.mousedown = false;
+		},
+
 		setupEvents : function () {
-			var container = this.vars.target,
-				scroller = this.vars.scroller,
-				mousedown,
-				self = this;
+			var container = $(this.vars.target),
+				doc = this.vars.doc;
 
 			// Event Handler
 			if ("ontouchstart" in window) {
-				container.addEventListener("touchstart", function (e) {
-					// Don't react if initial down happens on a form element
-					if (e.target.tagName.match(/input|textarea|select/i)) {
-						return;
-					}
-
-					scroller.doTouchStart(e.touches, e.timeStamp);
-					self.trigger(e.type, e);
-
-					e.preventDefault();
-				}, false);
-
-				document.addEventListener("touchmove", function (e) {
-					scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
-					self.trigger(e.type, e);
-				}, false);
-
-				document.addEventListener("touchend", function (e) {
-					scroller.doTouchEnd(e.timeStamp);
-					self.trigger(e.type, e);
-				}, false);
+				container.on("touchstart", this.proxy(this.onTouchStart));
+				doc.on("touchmove", this.proxy(this.onTouchMove));
+				doc.on("touchend", this.proxy(this.onTouchEnd));
 			} else {
-				mousedown = false;
+				container.on("mousedown", this.proxy(this.onMouseDown));
+				doc.on("mousemove", this.proxy(this.onMouseMove));
+				doc.on("mouseup", this.proxy(this.onMouseUp));
+			}
+		},
 
-				container.addEventListener("mousedown", function (e) {
-					// Don't react if initial down happens on a form element
-					if (e.target.tagName.match(/input|textarea|select/i)) {
-						return;
-					}
+		destroy : function () {
+			var container = $(this.vars.target),
+				doc = this.vars.doc;
 
-					scroller.doTouchStart([{
-						pageX: e.pageX,
-						pageY: e.pageY
-					}], e.timeStamp);
-					self.trigger("touchstart", e);
-
-					mousedown = true;
-				}, false);
-
-				document.addEventListener("mousemove", function (e) {
-					if (!mousedown) {
-						return;
-					}
-
-					scroller.doTouchMove([{
-						pageX: e.pageX,
-						pageY: e.pageY
-					}], e.timeStamp);
-					self.trigger("touchmove", e);
-
-					mousedown = true;
-				}, false);
-
-				document.addEventListener("mouseup", function (e) {
-					if (!mousedown) {
-						return;
-					}
-
-					scroller.doTouchEnd(e.timeStamp);
-					self.trigger("touchend", e);
-
-					mousedown = false;
-				}, false);
+			if (container.length && doc) {
+				if ("ontouchstart" in window) {
+					container.off("touchstart", this.onTouchStart);
+					doc.off("touchmove", this.onTouchMove);
+					doc.off("touchend", this.onTouchEnd);
+				} else {
+					container.off("mousedown", this.onMouseDown);
+					doc.off("mousemove", this.onMouseMove);
+					doc.off("mouseup", this.onMouseUp);
+				}
 			}
 		}
 	});
