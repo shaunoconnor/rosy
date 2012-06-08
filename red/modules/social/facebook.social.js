@@ -244,7 +244,7 @@ red.module.social.Facebook = (function () {
 				$("body .scripts").append($('<div id="fb-root">'));
 			}
 
-			if (!red.SYS.STATIC_URL) {
+			if (!red.SYS.MEDIA_URL) {
 				throw 'red/modules/social/Facebook.js requires <rel="media-url"> - usually set in site.js';
 			}
 
