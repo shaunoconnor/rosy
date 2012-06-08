@@ -198,15 +198,29 @@ red.module.CustomFormField = (function () {
 			list.html(html);
 			this.setupCustomSelectEvents(list);
 
+			$.extend(this.vars, {
+				list : list,
+				items : list.children()
+			});
+
 			wrap.append(list);
 			wrap.addClass(this.vars.namespace + "-custom-select");
 		},
 
 		setActiveOption : function (option) {
-			var current = this.vars.current;
+			var current = this.vars.current,
+				value = option.attr("value") || option.data("value"),
+				items = this.vars.items, relative;
 
-			current.data("value", option.attr("value") || option.data("value"));
+			current.data("value", value);
 			current.text(option.text());
+
+			if (items) {
+				relative = items.filter("[data-value='" + value + "']");
+
+				items.removeAttr("data-selected");
+				relative.attr("data-selected", "selected");
+			}
 		},
 
 		setupSelectEvents : function () {
