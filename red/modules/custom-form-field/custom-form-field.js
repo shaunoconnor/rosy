@@ -224,11 +224,11 @@ red.module.CustomFormField = (function () {
 		},
 
 		setupSelectEvents : function () {
-			this.vars.field.bind("change", $.proxy(this.onSelectChange, this));
+			this.vars.field.bind("change", this.proxy(this.onSelectChange));
 		},
 
 		setupCustomSelectEvents : function (list) {
-			$(document).bind("click", $.proxy(this.onDocumentClick, this));
+			$(document).bind("click", this.proxy(this.onDocumentClick));
 		},
 
 		onSelectChange : function (e) {
