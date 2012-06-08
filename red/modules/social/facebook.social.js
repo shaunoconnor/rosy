@@ -8,194 +8,274 @@ red.module = red.module || {}; // note the use of lower case for package names n
 
 red.module.social = red.module.social || {};
 
-
 /**
- *	Requires DOM elements:
- *		<link rel="media_url">
- *		<meta property="og:app_id">
- *	Optional DOM elements:
- *	<div id="fb-root"> // added for you if it doesn't exist
- *	data-custom-post="facebook" // fires customFacebookPost
- *
+ *	Required DOM elements:
+ 		<link rel="media_url" href="XXXXXXX">
+ 		<meta property="fb:app_id" content="XXXXXX">
+
+ *	Optional DOM elements: 
+ 		<div id="fb-root"> // added for you if it doesn't exist
+ 		<a data-custom-post="facebook"></a> // fires customFacebookPost
+ 
+ *	How to Use
+		var FB = new red.module.social.Facebook({debug:false}); //
+		$.publish(red.module.social.Facebook.LOGIN); // will launch authenticate-dialog (check popup blocker)
+		$.subscribe(red.module.social.Facebook.HANDLE_LOGIN, function (e, response) {}));
+
+ 
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
-(function () {
 
-	var NAME = "Facebook";
+red.module.social.Facebook = (function () {
 
-	red.module.social[NAME] = (function () {
+	var EVENTS = {
+			POST : "social/facebook/post",
+			RENDER : "social/render",
+			LOGIN : "social/facebook/login",
+			LOGOUT : "social/facebook/logout",
+			GET_STATUS : "social/facebook/get-status",
+			GET_ME : "social/facebook/get-me",
+			SET_ACTION : "social/facebook/set-action",
+			HANDLE_ACTION : "social/facebook/handle-action",
+			HANDLE_ME : "social/facebook/handle-me",
+			HANDLE_LOGIN : "social/facebook/handle-login",
+			HANDLE_LOGOUT : "social/facebook/handle-logout"
+		},
 
-		var pakage = this,
-			EVENT = {
-				POST : "custom-facebook-post"
-			};
+		IS_CONNECTED = false,
+		APP_ID = $('[property="fb:app_id"]').attr("content"),
+		NAMESPACE = $('[property="og:namespace"]').attr("content");
 
 
-		return red.Module.extend({
+	return red.Module.extend({
 
-			vars : {},
+		vars : {
+			debug : true
+		},
 
-			_media_url: null, // <link rel="media-url"' content="{{STATIC_URL}}" />
-			_app_id : null, // <meta property="og:app_id" content="{{ FACEBOOK_APP_ID }} " />
+		init : function () {
+			this.loadJSDK();
 
-			init : function () {
+			$(document).on("click", '[data-custom-social="facebook"]', $.proxy(this.customFacebookPost, this));
+		},
 
-				pakage[NAME].EVENT = EVENT;
+		// $.publish(EVENTS.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
+		setAction : function (e, options) {
+			if (IS_CONNECTED) {
+				
+				var action = options.action || (NAMESPACE + ":" + options.custom_action);
 
-				this.loadJSDK();
-
-				$('[data-custom-social="facebook"]').live("click", $.proxy(this.customFacebookPost, this));
-				$(document).bind(EVENT.POST,  $.proxy(this.customFacebookPost, this));
-			},
-
-			onShare : function (e) {
-				console.log("fb-onShare", e);
-			},
-
-			onAddComment : function (e) {
-				console.log("fb-onAddComment", e);
-			},
-
-			onSesionChange : function (e) {
-				console.log("fb-onSesionChange", e);
-			},
-
-			onStatusChange : function (e) {
-				console.log("fb-onStatusChange", e);
-			},
-
-			onLogin : function (e) {
-				console.log("fb-onLogin", e);
-			},
-
-			// parse the URL to run like-specific callbacks
-			onLike : function (URL) {
-				// the following is SPECIFC to toyota sharathon - no time to abstract further sorry!
-				if (URL.indexOf("seed") > 0) { // from profile page
-					// tracking
-					console.log("fb-onLike", "profile");
-				} else { // bottom of page
-					// tracking
-					console.log("fb-onLike", "other");
+				if (action && options.properties) {
+					FB.api("/me/" + action, 'post', options.properties, function (response) {
+						$.publish(EVENTS.HANDLE_ACTION, [response]);
+					});
+				} else {
+					console.log("Facebook: You're doing actions wrong");
 				}
-			},
+			}
+		},
 
-			onRender : function () {
-				console.log("fb-onRender");
-				//FB.Event.unsubscribe('xfbml.render',this.onRender); // unregister
-			},
+		getStatus : function () {
+			FB.getLoginStatus($.proxy(function (response) {
+				if (response.session || response.status === "connected") {// user has a session, make sure they are "FULLY REGSITERED"
+					IS_CONNECTED = true;
+					$.publish(EVENTS.HANDLE_LOGIN, [response]);
+				} else {
+					IS_CONNECTED = false;
+					$.publish(EVENTS.HANDLE_LOGOUT, [response]);
+				}
 
-			//	add [data-custom-social="facebook"] to a link to automatically fire this
-			//	publishobject reads from meta tags in the link and defaults to the og:meta in the <head>
-			//
-			//	EXAMPLE
-			//	<a
-			//		data-custom-social-="facebook"						// REQUIRED
-			//		data-origin="http://example.com"					// optional
-			//		data-method="stream.publish"						// optional
-			//		data-attachment-name="Some Name"					// optional
-			//		data-attachment-caption="Some Caption"				// optional
-			//		data-attachment-description="Some Description"		// optional
-			//		data-attachment-media-type="image"					// optional
-			//		data-attachment-media-src=""						// optional
-			//		data-attachment-media-href=""						// optional
-			//		data-action-text="Some ActionText"					// optional
-			//		data-action-href=""									// optional
-			//	>Facebook</a>
-			//
-			//	Also, you can $.trigger() a "custom-facebook-post" event after a click optionall run customFacebookPost
-			//
-			//	Example
-			//	$("body").trigger("custom-facebook-post", {origin:"http://example.com", attachmentName : "Some Name"})
-			//
-			customFacebookPost : function (e, eData) {
+				this.log(response);
+			}, this));
+		},
 
-				var el = $(e.currentTarget),
-					data = eData || el.data(),
-					publishObj = this.getPublishObj(data);
+		getLogout : function () {
+			FB.logout(function (response) {
+				IS_CONNECTED = false;
+				$.publish(EVENTS.HANDLE_LOGOUT, [response]);
+				$.publish("track", [{type : "event", category: "facebook", action : "logout", label : "user logged out"}]);
+			});
+		},
 
-				FB.ui(publishObj);
+		getMe : function () {
+			if (IS_CONNECTED) {
+				FB.api('/me', function(response) {
+					$.publish(EVENTS.HANDLE_ME, [response]);
+					$.publish("track", [{type : "event", category: "facebook", action : "me", label : "got user info"}]);
+				});
+			}
+		},
 
-				return data;
-			},
+		getLogin : function () {
+			FB.login(function (response) {
+				this.log(response);
+				if (response.authResponse) {
+					IS_CONNECTED = true;
+					$.publish(EVENTS.HANDLE_LOGIN, [response]);
+					$.publish("track", [{type : "event", category: "facebook", action : "login:accepted", label : "user connected w/ fb"}]);
+				} else {
+					$.publish("track", [{type : "event", category: "facebook", action : "login:canceled", label : "user canceled login"}]);
+				}
+			}, {scope: 'publish_actions'}); // CUSTOMIZE THIS FOR YOUR LEVEL OF NEED
+		},
 
-			getPublishObj : function (data) {
-				return ({
-					method : data.method || "stream.publish",
-					origin : data.origin || $('meta[property="og:url"]').attr("content"),
-					attachment : {
-						name : data.attachmentName || $('meta[property="og:title"]').attr("content"),
-						caption : data.attachmentCaption || $('meta[property="og:description"]').attr("content"),
-						description : data.attachmentDescription || "",
-						media : [{
-							type : data.attachmentMediaType || "image",
-							src : data.attachmentMediaSrc || $('meta[property="og:image"]').attr("content"),
-							href : data.attachmentMediaHref || $('meta[property="og:url"]').attr("content")
-						}]
-					},
-					action_links : [{
-						text : data.attachmentActionText || "Click Here",
-						href : data.attachmentActionText || $('meta[property="og:url"]').attr("content")
+
+		 // stubs ment for overwriting when extending this module
+		onShare : function (e) {},
+
+		onAddComment : function (e) {},
+
+		onSesionChange : function (e) {},
+
+		onStatusChange : function (e) {},
+
+		onLogin : function (e) {
+			IS_CONNECTED = true;
+		},
+
+		onRender : function () {},
+
+		// parse the URL to run like-specific callbacks
+		onLike : function (URL) {
+			// tracls as facebook-like-profile or facebook-like-other (for custom page liking)
+			var action = "on-like-" + ((URL.indexOf("seed") > 0) ? "profile" : "other");
+			$.publish("track", [{type : "event", category: "facebook", action : action, label : URL}]);
+		},
+
+		//	add [data-custom-social="facebook"] to a link to automatically fire this
+		//	publishobject reads from meta tags in the link and defaults to the og:meta in the <head>
+		//
+		//	EXAMPLE
+		//	<a
+		//		data-custom-social-="facebook"						// REQUIred
+		//		data-origin="http://example.com"					// optional 
+		//		data-method="stream.publish"						// optional
+		//		data-attachment-name="Some Name"					// optional
+		//		data-attachment-caption="Some Caption"				// optional
+		//		data-attachment-description="Some Description"		// optional
+		//		data-attachment-media-type="image"					// optional
+		//		data-attachment-media-src=""						// optional
+		//		data-attachment-media-href=""						// optional
+		//		data-action-text="Some ActionText"					// optional
+		//		data-action-href=""									// optional
+		//	>Facebook</a>
+		//
+		//	Also, you can $.trigger() a "custom-facebook-post" event after a click optionall run customFacebookPost
+		//
+		//	Example
+		//	$("body").trigger("custom-facebook-post", {origin:"http://example.com", attachmentName : "Some Name"})
+		//
+		customFacebookPost : function (e, eData) {
+			
+			var el = $(e.currentTarget),
+				data = eData || el.data(),
+				publishObj = this.getPublishObj(data);
+				
+			FB.ui(publishObj);
+
+			$.publish("track", [{type : "event", category : "facebook", action : "on-post", label : data.origin}]);
+
+			return data;
+		},
+
+		getPublishObj : function (data) {
+			return ({
+				method : data.method || "stream.publish",
+				origin : data.origin || $('meta[property="og:url"]').attr("content"),
+				attachment : {
+					name : data.attachmentName || $('meta[property="og:title"]').attr("content"),
+					caption : data.attachmentCaption || $('meta[property="og:description"]').attr("content"),
+					description : data.attachmentDescription || "",
+					media : [{
+						type : data.attachmentMediaType || "image",
+						src : data.attachmentMediaSrc || $('meta[property="og:image"]').attr("content"),
+						href : data.attachmentMediaHref || $('meta[property="og:url"]').attr("content")
 					}]
-				});
-			},
+				},
+				action_links : [{
+					text : data.attachmentActionText || "Click Here",
+					href : data.attachmentActionHref || $('meta[property="og:url"]').attr("content")
+				}]
+			});
+		},
 
-			fbAsyncInit : function () {
+		onFBInit : function () {
+			FB.Event.unsubscribe('xfbml.render', this.onFBInit); // unregister, we only want to init once
 
-				FB.Event.subscribe('comments.add', $.proxy(this.onAddComment, this));
-				FB.Event.subscribe('auth.sessionChange', $.proxy(this.onSesionChange, this));
-				FB.Event.subscribe('auth.statusChange', $.proxy(this.onStatusChange, this));
-				FB.Event.subscribe('auth.login', $.proxy(this.onLogin, this));
-				FB.Event.subscribe('edge.create', $.proxy(this.onLike, this));
-				FB.Event.subscribe('xfbml.render', $.proxy(this.onRender, this));
+			$.subscribe(EVENTS.POST,  $.proxy(this.customFacebookPost, this));
+			$.subscribe(EVENTS.RENDER, $.proxy(this.render, this));
+			$.subscribe(EVENTS.LOGIN, $.proxy(this.getLogin, this));
+			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
+			$.subscribe(EVENTS.GET_STATUS, $.proxy(this.getStatus, this));
+			$.subscribe(EVENTS.GET_ME, $.proxy(this.getMe, this));
+			$.subscribe(EVENTS.SET_ACTION, $.proxy(this.setAction, this));
 
-				FB.init({
-					appId      : this._app_id, // App ID
-					channelUrl : this._media_url + '/js/red/modules/social/facebook-channel.html', // Channel File
-					status     : true, // check login status
-					cookie     : true, // enable cookies to allow the server to access the session
-					oauth      : true, // enable OAuth 2.0
-					xfbml      : true  // parse XFBML
-				});
-			},
+			this.getStatus();
+		},
+
+		fbAsyncInit : function () {
+
+			FB.Event.subscribe('comments.add', $.proxy(this.onAddComment, this));
+			FB.Event.subscribe('auth.sessionChange', $.proxy(this.onSesionChange, this));
+			FB.Event.subscribe('auth.statusChange', $.proxy(this.onStatusChange, this));
+			FB.Event.subscribe('auth.login', $.proxy(this.onLogin, this));
+			FB.Event.subscribe('edge.create', $.proxy(this.onLike, this));
+			FB.Event.subscribe('xfbml.render', $.proxy(this.onRender, this));
+			FB.Event.subscribe('xfbml.render', $.proxy(this.onFBInit, this));
+
+			FB.init({
+				appId      : APP_ID, // App ID
+				channelUrl : red.SYS.STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
+				status     : true, // check login status
+				cookie     : true, // enable cookies to allow the server to access the session
+				oauth      : true, // enable OAuth 2.0
+				xfbml      : true  // parse XFBML
+			});
+		},
+
+		render : function () {
+			FB.XFBML.parse();
+		},
 
 
-			loadJSDK : function () {
-
-				if (!$("#fb-root").length) {
-					$("body .scripts").append($('<div id="fb-root">'));
-				}
-
-				this._media_url = $('link[rel="media-url"]').attr("href");
-				this._app_id = $('meta[property="og:app_id"]').attr("content");
-
-				if (!this._media_url) {
-					throw 'red/modules/social/Facebook.js requires a rel="media-url"';
-				}
-
-				if (!this._app_id) {
-					// Create FB developer account, create a new app, set the URL of the app to http://localhost:8000 for testing
-					throw 'red/modules/social/Facebook.js requires meta og:app_id.';
-				}
-
-				window.fbAsyncInit = $.proxy(this.fbAsyncInit, this);
-
-				// Load the SDK Asynchronously
-				(function (d) {
-					var js,
-						id = 'facebook-jssdk';
-					if (d.getElementById(id)) {
-						return;
-					}
-					js = d.createElement('script');
-					js.id = id;
-					js.async = true;
-					js.src = "//connect.facebook.net/en_US/all.js";
-					d.getElementsByTagName('head')[0].appendChild(js);
-				}(document));
+		loadJSDK : function () {
+			
+			if (!$("#fb-root").length) {
+				$("body .scripts").append($('<div id="fb-root">'));
 			}
 
-		});
+			if (!red.SYS.MEDIA_URL) {
+				throw 'red/modules/social/Facebook.js requires <rel="media-url"> - usually set in site.js';
+			}
 
-	}.call(red.module.social));
-}());
+			if (!APP_ID) {
+				// Create FB developer account, create a new app, set the URL of the app to http://localhost:8000 for testing
+				throw 'red/modules/social/Facebook.js requires meta og:app_id.';
+			}
+
+			window.fbAsyncInit = $.proxy(this.fbAsyncInit, this);
+
+			// Load the SDK Asynchronously
+			(function (d) {
+				var js, 
+					id = 'facebook-jssdk'; 
+				if (d.getElementById(id)) {
+					return;
+				}
+				js = d.createElement('script'); 
+				js.id = id;
+				js.async = true;
+				js.src = "//connect.facebook.net/en_US/all.js";
+				d.getElementsByTagName('head')[0].appendChild(js);
+			}(document));
+		},
+
+		destroy : function () {
+			$(document).off("click", '[data-custom-social="facebook"]', $.proxy(this.customFacebookPost, this));
+			
+			$.unsubscribe(EVENTS.POST,  $.proxy(this.customFacebookPost, this));
+			$.unsubscribe(EVENTS.RENDER, $.proxy(this.render, this));
+		}
+	}, EVENTS);
+
+}.call(red.module.social));

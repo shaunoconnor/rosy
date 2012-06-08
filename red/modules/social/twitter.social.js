@@ -20,97 +20,135 @@ red.module.social = red.module.social || {};
  *	add [data-custom-social="twitter"] to automatically fire customTweet()
  *
  *	EXAMPLE
- *	<a
- *		data-custom-social-="twitter"						// REQUIRED
- *		data-url="http://example.com"						// optional
+ *	<a 
+ *		data-custom-social-="twitter"						// REQUIred
+ *		data-url="http://example.com"						// optional 
  *		data-text="Some tweet you are sending"				// optional
  *	>Twitter</a>
  *
- *	Also, you can $.trigger() a "custom-twitter-post" event to fire customTweet()
+ *	Also, you can $.publish() a "custom-twitter-post" event to fire customTweet()
  *
  *	Example
- *	$("body").trigger("custom-twitter-post", {url:"http://example.com", text : "Some Tweet Message"})
+ *	$.publish("custom-twitter-post", {url:"http://example.com", text : "Some Tweet Message"})
  *
  */
-(function () {
 
-	var NAME = "Twitter";
+red.module.social.Twitter = (function () {
 
-	red.module.social[NAME] = (function () {
+	var EVENTS = {
+			POST : "custom-twitter-post",
+			RENDER : "social/render"
+		};
 
-		var pakage = this,
-			EVENT = {
-				POST : "custom-twitter-post"
-			};
+	return red.Module.extend({
 
-		return red.Module.extend({
+		_twitter_url : "https://twitter.com/share?",
 
-			_twitter_url : "https://twitter.com/share?",
+		
+		init : function () {
 
+			this.loadJSDK();
 
-			init : function () {
+			$('[data-custom-social="twitter"]').live("click", $.proxy(this.customTweet, this));
+			$.subscribe(EVENTS.POST,  $.proxy(this.customTweet, this));
+			$.subscribe(EVENTS.RENDER, $.proxy(this.render, this));
+		},
 
-				pakage[NAME].EVENT = EVENT;
-
-				this.loadJSDK();
-
-				$('[data-custom-social="twitter"]').live("click", $.proxy(this.customTweet, this));
-				$(document).bind(EVENT.POST,  $.proxy(this.customTweet, this));
-			},
-
-			onTweet: function (e, eData) {
-				var el = $(e.currentTarget),
-					data = eData || e.data();
-				console.log("onTweet", e, data); // you can use eData to set up different tracking calls
-				return data;
-			},
-
-			onFollow: function (e, eData) {
-				console.log("onFollow", e);
-			},
-
-			customTweet : function (e, eData) {
-
-				var el = $(e.currentTarget),
-					data = eData || el.data(),
-					url = this._twitter_url,
-					i;
-
-				data.url = data.url || window.location.href;
-				data.text = data.text || document.title;
-
-				for (i in data) {
-					if (typeof(data[i]) === 'string') {
-						url += "&" + i + "=" + encodeURIComponent(data[i]);
-					}
-				}
-
-				window.open(url, 'sharer', 'toolbar=0,status=0,scrollbars=1,width=575,height=338');
-
-				// fires onTweet
-				this.onTweet(e, eData);
-
-			},
-
-			loadJSDK : function () {
-
-				////////////////////////////////////////////////////////////
-				/////// TWITTER SHARING and tracking
-				// Load G+1
-				var e = document.createElement('script');
-				e.type = "text/javascript";
-				e.async = true;
-				e.src = 'http://platform.twitter.com/widgets.js';
-				document.getElementsByTagName('head')[0].appendChild(e);
-
-				$(e).load($.proxy(function () {
-					if (window.twttr) {
-						window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
-						window.twttr.events.bind('follow', $.proxy(this.onFollow, this));
-					}
-				}, this));
+		onTwitterInit : function () {
+			if (window.twttr) {
+				window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
+				window.twttr.events.bind('follow', $.proxy(this.onFollow, this));	
 			}
-		});
+		},
 
-	}.call(red.module.social));
-}());
+		querystring : function (url) { // parses query-string
+			var a = /\+/g,  // Regex for replacing addition symbol with a space
+				r = /([^&=]+)=?([^&]*)/g,
+				d = function (s) {
+						return decodeURIComponent(s.replace(a, " ")); 
+					},
+				q = url || window.location.search.substring(1),
+				qs = {},
+				e = r.exec(q);
+
+			while (e) {
+				qs[d(e[1])] = d(e[2]);
+				e = r.exec(q);
+			}
+
+			return qs;
+		},
+
+		// override this for tracking and such
+		// fires from custom tweet AND from @anywhere plugins
+		onTweet: function (e, eData) {
+			var el = (e.currentTarget) ? $(e.currentTarget) : $(e.target),
+				data = eData || el.data() || {},
+				url = el.attr("src"),
+				tweeturl = this.querystring(url).url;
+
+			$.publish("track", [{type : "event", category: "twitter", action : "on-tweet", label : tweeturl }]);
+
+			return data;
+		},
+
+		onFollow: function (e, eData) {
+			var el = $(e.currentTarget),
+				data = eData || el.data();
+
+			$.publish("track", [{type : "event", category: "twitter", action : "on-follow", label : data.url}]);
+			return data;
+		},
+
+		customTweet : function (e, eData) {
+			// needs URL and text
+			var el = $(e.currentTarget),
+				data = eData || el.data(),
+				url = this._twitter_url,
+				i;
+
+			data.url = data.url || window.location.href;
+			data.text = data.text || document.title;
+
+			for (i in data) {
+				if (typeof(data[i]) === 'string') {
+					url += "&" + i + "=" + encodeURIComponent(data[i]);
+				}
+			}
+
+			// passing through the click event to avoid blockers
+			window.open(url, 'sharer', 'toolbar=0,status=0,scrollbars=1,width=575,height=338');
+
+			// fires onTweet
+			this.onTweet(e, eData);
+
+		},
+
+		render : function () {
+			$.ajax({ url: '//platform.twitter.com/widgets.js', dataType: 'script', cache: true});
+		},
+
+		loadJSDK : function () {
+			
+			////////////////////////////////////////////////////////////
+			/////// TWITTER SHARING and tracking
+			// Load G+1
+			var e = document.createElement('script');
+			e.type = "text/javascript";
+			e.async = true;
+			e.src = 'http://platform.twitter.com/widgets.js';
+			document.getElementsByTagName('head')[0].appendChild(e);
+
+			$(e).load($.proxy(function () {
+				this.onTwitterInit();
+			}, this));
+		},
+
+		destroy : function () {
+			$('[data-custom-social="twitter"]').die("click", $.proxy(this.customTweet, this));
+			$.unsubscribe(EVENTS.POST,  $.proxy(this.customTweet, this));
+			$.unsubscribe(EVENTS.RENDER, $.proxy(this.render, this));
+		}
+	}, EVENTS);
+
+}.call(red.module.social));
