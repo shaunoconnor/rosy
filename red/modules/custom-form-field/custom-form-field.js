@@ -16,7 +16,8 @@ red.module.CustomFormField = (function () {
 			namespace : "customfield",
 			field : null,
 			customSelect : true,
-			showForMobile : false
+			showForMobile : false,
+			isMobile : (/iP(hone|ad|od)|Android/).test(window.navigator.userAgent)
 		},
 
 		// Home  page level functionality
@@ -39,9 +40,12 @@ red.module.CustomFormField = (function () {
 		},
 
 		setupCustomFormField : function () {
-			if (!this.vars.showForMobile && (/iP(hone|ad|od)|Android/).test(window.navigator.userAgent)) {
+			if (!this.vars.showForMobile && this.vars.isMobile) {
 				$("html").addClass("mobile");
-				return;
+
+				if (this.vars.type === "select") {
+					return;
+				}
 			}
 
 			if (this.vars.field.is("[type='hidden']")) {
@@ -194,23 +198,37 @@ red.module.CustomFormField = (function () {
 			list.html(html);
 			this.setupCustomSelectEvents(list);
 
+			$.extend(this.vars, {
+				list : list,
+				items : list.children()
+			});
+
 			wrap.append(list);
 			wrap.addClass(this.vars.namespace + "-custom-select");
 		},
 
 		setActiveOption : function (option) {
-			var current = this.vars.current;
+			var current = this.vars.current,
+				value = option.attr("value") || option.data("value"),
+				items = this.vars.items, relative;
 
-			current.data("value", option.attr("value") || option.data("value"));
+			current.data("value", value);
 			current.text(option.text());
+
+			if (items) {
+				relative = items.filter("[data-value='" + value + "']");
+
+				items.removeAttr("data-selected");
+				relative.attr("data-selected", "selected");
+			}
 		},
 
 		setupSelectEvents : function () {
-			this.vars.field.bind("change", $.proxy(this.onSelectChange, this));
+			this.vars.field.bind("change", this.proxy(this.onSelectChange));
 		},
 
 		setupCustomSelectEvents : function (list) {
-			$(document).bind("click", $.proxy(this.onDocumentClick, this));
+			$(document).bind("click", this.proxy(this.onDocumentClick));
 		},
 
 		onSelectChange : function (e) {

@@ -1,6 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 // Google Analytics Tracking
-/* ga.tracking.js */ 
+/* ga.tracking.js */
 
 // ## Local Namespace
 var red = red || {};
@@ -14,10 +14,10 @@ var _gaq = _gaq || [];
 /**
  * Omniture and GA tracking event wrappers
  * init: new red.module.tracking.GA()
- * publish: $.publish("track", {category:, action:, label:, value: });
+ * publish: this.publish("track", {category:, action:, label:, value: });
  */
 (function () {
-	
+
 	red.module.tracking.GA = (function () {
 
 		return red.Module.extend({
@@ -31,7 +31,7 @@ var _gaq = _gaq || [];
 			init : function () {
 				this.loadJSDK();
 
-				$.subscribe("track", $.proxy(this.track, this));
+				this.subscribe("track", this.proxy(this.track, this));
 			},
 
 			log : function () {
@@ -42,7 +42,7 @@ var _gaq = _gaq || [];
 				}
 			},
 
-			track : function (e, eData) {				
+			track : function (e, eData) {
 				var el = $(e.currentTarget),
 				data = eData || el.data();
 
@@ -93,7 +93,7 @@ var _gaq = _gaq || [];
 			},
 
 			destroy : function () {
-				$.unsubscribe("track", $.proxy(this.track, this));
+				this.unsubscribe("track", this.proxy(this.track, this));
 				this.vars = null;
 			}
 

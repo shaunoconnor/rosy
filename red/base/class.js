@@ -56,7 +56,7 @@
 		function Class(vars) {
 
 			this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
-			
+
 			// All construction is actually done in the init method
 			if (!initializing && this.init) {
 				this.init.apply(this, arguments);
@@ -78,4 +78,5 @@
 
 		return Class;
 	};
+
 }());

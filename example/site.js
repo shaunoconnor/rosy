@@ -19,9 +19,6 @@ red.Site = $.extend(true, example, red, (function () {
 		models : {},
 
 		init : function () {
-			// Create the site shell
-			this.models.Shell = new this.Shell();
-
 			// Wait for DOMContentLoaded
 			$(document).ready(this.onReady.call(this));
 		},
@@ -56,6 +53,9 @@ red.Site = $.extend(true, example, red, (function () {
 			this.createModel(pageClass);
 
 			this.models.Facebook = new example.module.social.Facebook();
+
+			// Create the site shell
+			this.models.Shell = new this.Shell();
 		}
 	};
 }()));
