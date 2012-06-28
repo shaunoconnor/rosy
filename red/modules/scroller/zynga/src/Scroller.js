@@ -197,6 +197,9 @@ var Scroller;
 		/* {Number} Scheduled zoom level (final scale when animating) */
 		__scheduledZoom: 0,
 
+		/* {Number} Default animation time */
+		__defaultAnimDuration: 250,
+
 
 
 		/*
@@ -286,7 +289,7 @@ var Scroller;
 			self.__computeScrollMax();
 
 			// Refresh scroll position
-			self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+			self.scrollTo(self.__scrollLeft, self.__scrollTop, self.__defaultAnimDuration);
 
 		},
 
@@ -357,7 +360,7 @@ var Scroller;
 				self.__refreshDeactivate();
 			}
 
-			self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+			self.scrollTo(self.__scrollLeft, self.__scrollTop, self.__defaultAnimDuration);
 
 		},
 
@@ -946,7 +949,7 @@ var Scroller;
 
 					// Use publish instead of scrollTo to allow scrolling to out of boundary position
 					// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
-					self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
+					self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, self.__defaultAnimDuration);
 
 					if (self.__refreshStart) {
 						self.__refreshStart();
@@ -954,7 +957,7 @@ var Scroller;
 
 				} else {
 
-					self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+					self.scrollTo(self.__scrollLeft, self.__scrollTop, self.__defaultAnimDuration, self.__zoomLevel);
 
 					// Directly signalize deactivation (nothing todo on refresh?)
 					if (self.__refreshActive) {
@@ -989,7 +992,6 @@ var Scroller;
 		* @param animate {Boolean?false} Whether animation should be used to move to the new coordinates
 		*/
 		__publish: function (left, top, zoom, animate) {
-
 			var self = this;
 
 			// Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
@@ -1139,7 +1141,7 @@ var Scroller;
 				self.__isDecelerating = false;
 
 				// Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
-				self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+				self.scrollTo(self.__scrollLeft, self.__scrollTop, (self.options.snapping ? self.__defaultAnimDuration : false));
 			};
 
 			// Start animation and switch on flag
