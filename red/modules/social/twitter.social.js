@@ -12,10 +12,7 @@ red.module.social = red.module.social || {};
 
 /**
  *	Requires DOM elements:
- *		<link rel="media_url">
- *		<meta property="og:app_id">
- *		<div id="fb-root">
- *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
+ *	<meta property="twitter:app_id" content="XXXXXX"	/>
  *
  *	add [data-custom-social="twitter"] to automatically fire customTweet()
  *
@@ -36,14 +33,27 @@ red.module.social = red.module.social || {};
 red.module.social.Twitter = (function () {
 
 	var EVENTS = {
-			POST : "custom-twitter-post",
-			RENDER : "social/render"
-		};
+			POST : "social/twitter/post",
+			RENDER : "social/render",
+			
+			LOGIN : "social/twitter/login",
+			LOGOUT : "social/twitter/logout",
+
+			HANDLE_LOGIN : "social/twitter/handle-login",
+			HANDLE_LOGOUT : "social/twitter/handle-logout",
+			GET_STATUS : "social/twitter/get-status",
+			POST_STATUS : "social/twitter/post-status"
+		},
+
+		APP_ID = $('[property="twitter:app_id"]').attr("content");
 
 	return red.Module.extend({
 
 		_twitter_url : "https://twitter.com/share?",
 
+		vars : {
+			debug : true
+		},
 
 		init : function () {
 
@@ -55,9 +65,58 @@ red.module.social.Twitter = (function () {
 		},
 
 		onTwitterInit : function () {
+			/*if (window.twttr) {
+				window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
+				window.twttr.events.bind('follow', $.proxy(this.onFollow, this));
+				window.twttr.events.bind('authComplete', $.proxy(this.onAuthComplete, this));
+			}*/
+			
+			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
+
+
 			if (window.twttr) {
-				window.twttr.events.bind('tweet',   this.proxy(this.onTweet));
-				window.twttr.events.bind('follow', this.proxy(this.onFollow));
+				var that = this;
+				window.twttr.anywhere(function (T) {  
+
+					T.bind("tweet", $.proxy(that.onTweet, that));
+					T.bind("follow", $.proxy(that.onFollow, that));
+					T.bind("authComplete", $.proxy(that.onAuthComplete, that));
+					T.bind("signOut", $.proxy(that.onSignOut, that));
+
+					$.subscribe(EVENTS.LOGIN, function (e) {
+						T.signIn();
+					});
+
+					$.subscribe(EVENTS.POST_STATUS, function (e, data) {
+						if (T.isConnected()) {
+							T.Status.update(data.text); 
+						} else {
+							that.customTweet(e, data);
+						}
+					});
+
+					$.subscribe(EVENTS.GET_STATUS, function (e) {
+						if (T.isConnected()) {
+							that.onAuthComplete(null, T.currentUser)
+						} else {
+							that.onSignOut();
+						}
+					});
+				});
+			}
+		},
+
+		onAuthComplete : function (e, eData) {
+			$.publish(EVENTS.HANDLE_LOGIN, [eData]);
+		},
+
+		onSignOut : function (e) {
+			$.publish(EVENTS.HANDLE_LOGOUT);
+		},
+
+		getLogout : function (e) {
+			if (window.twttr) {
+				window.twttr.anywhere.signOut();
 			}
 		},
 
@@ -77,6 +136,14 @@ red.module.social.Twitter = (function () {
 			}
 
 			return qs;
+		},
+
+		log : function () {
+			if (this.vars.debug) {
+				try {
+					console.log(arguments);
+				} catch (e) {}
+			}
 		},
 
 		// override this for tracking and such
@@ -132,16 +199,23 @@ red.module.social.Twitter = (function () {
 
 			////////////////////////////////////////////////////////////
 			/////// TWITTER SHARING and tracking
-			// Load G+1
 			var e = document.createElement('script');
 			e.type = "text/javascript";
 			e.async = true;
 			e.src = 'http://platform.twitter.com/widgets.js';
+			//e.src = "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1";
 			document.getElementsByTagName('head')[0].appendChild(e);
 
-			$(e).load(this.proxy(function () {
+			$(e).load($.proxy(function () {
 				this.onTwitterInit();
-			}));
+			}, this));
+
+			/*$.ajax({
+				dataType: "script",
+				url: "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1",
+				cache: true
+			}).done($.proxy(this.onTwitterInit, this));*/
+
 		},
 
 		destroy : function () {
@@ -149,6 +223,7 @@ red.module.social.Twitter = (function () {
 			this.unsubscribe(EVENTS.POST,  this.proxy(this.customTweet));
 			this.unsubscribe(EVENTS.RENDER, this.proxy(this.render));
 		}
+
 	}, EVENTS);
 
 }.call(red.module.social));

@@ -71,14 +71,11 @@ red.module.tracking = red.module.tracking || {};
 					throw "tracking:Omniture missing MEDIA_URL";
 				}
 
-				Modernizr.load([{
-					load : [
-						this.vars.media_url + "js/red/modules/tracking/ssla-analytics/analytics.min.js"
-						/*this.vars.media_url + "js/red/modules/tracking/ssla-analytics/source/analytics.js",
-						this.vars.media_url + "js/red/modules/tracking/ssla-analytics/source/s_code.js"*/
-					],
-					complete : $.proxy(this.onReady, this)
-				}]);
+				$.ajax({
+					dataType: "script",
+					url: this.vars.media_url + "js/red/modules/tracking/ssla-analytics/analytics.min.js",
+					cache: true
+				}).done($.proxy(this.onReady, this));
 			},
 
 			destroy : function () {

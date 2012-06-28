@@ -53,6 +53,7 @@ red.Site = $.extend(true, example, red, (function () {
 			this.createModel(pageClass);
 
 			this.models.Facebook = new example.module.social.Facebook();
+			this.models.Twitter = new example.module.social.Twitter();
 
 			// Create the site shell
 			this.models.Shell = new this.Shell();

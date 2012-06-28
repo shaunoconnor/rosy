@@ -87,8 +87,10 @@ var _gaq = _gaq || [];
 				_gaq.push(["_trackPageview"]);
 				_gaq.push(["_trackPageLoadTime"]);
 
-				Modernizr.load({
-					load : ("https:" === location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js"
+				$.ajax({
+					dataType: "script",
+					url: ("https:" === location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js",
+					cache: true
 				});
 			},
 
