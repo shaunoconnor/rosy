@@ -64,7 +64,7 @@ define(['../Module'], function (Module) {
 						this.publish(EVENTS.HANDLE_ACTION, [response]);
 					});
 				} else {
-					console.log("Facebook: You're doing actions wrong");
+					this.log("Facebook: You're doing actions wrong");
 				}
 			}
 		},
@@ -231,6 +231,13 @@ define(['../Module'], function (Module) {
 			FB.XFBML.parse();
 		},
 
+		log : function () {
+			if (this.vars.debug) {
+				try {
+					console.log(arguments);
+				} catch (e) {}
+			}
+		},
 
 		loadJSDK : function () {
 			STATIC_URL = $('link[rel="static-url"]').attr("href");
@@ -250,19 +257,11 @@ define(['../Module'], function (Module) {
 
 			window.fbAsyncInit = this.proxy(this.fbAsyncInit);
 
-			// Load the SDK Asynchronously
-			(function (d) {
-				var js,
-					id = 'facebook-jssdk';
-				if (d.getElementById(id)) {
-					return;
-				}
-				js = d.createElement('script');
-				js.id = id;
-				js.async = true;
-				js.src = "//connect.facebook.net/en_US/all.js";
-				d.getElementsByTagName('head')[0].appendChild(js);
-			}(document));
+			$.ajax({
+				dataType: "script",
+				url: "//connect.facebook.net/en_US/all.js",
+				cache: true
+			}).done($.proxy(this.onReady, this));
 		},
 
 		destroy : function () {

@@ -52,31 +52,15 @@ define([
 				// Use `attr("data-page-class")` if < jQuery 1.6
 				pageClass = body.data("pageClass");
 
-			this.models.home = new Home();
-			this.models.shell = new Shell();
-			this.models.module = new Module();
-			this.models.ga = new GA();
-			this.models.omniture = new Omniture();
-			this.models.ticker = new Ticker();
-			this.models.facebook = new Facebook();
-			this.models.twitter = new Twitter();
-			this.models.scroller = new Scroller({
-				target : $("<div><div></div></div>")
-			});
-			this.models.pageControl = new PageControl({
-				parent : $("<div>"),
-				list : $("<div>"),
-				items : $("<div>")
-			});
-			this.models.customFormField = new CustomFormField({
-				field : $("<div>")
-			});
+			// creates `Page()` based on `<div data-page-class="Home">`
+			this.setMediaURL();
+			this.createModel(pageClass);
 
-			// testing pubsub (as a global module)
-			$.subscribe('test', function(){
-				console.log('pubsub works!');
-			});
-			$.publish('test');
+			this.models.Facebook = new example.module.social.Facebook();
+			this.models.Twitter = new example.module.social.Twitter();
+
+			// Create the site shell
+			this.models.Shell = new this.Shell();
 		}
 	});
 
