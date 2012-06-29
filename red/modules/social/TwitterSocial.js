@@ -1,14 +1,5 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* shell.js */
-
-// ## Local Namespace
-
-var red = red || {};
-
-red.module = red.module || {};
-
-red.module.social = red.module.social || {};
-
+/* TwitterSocial.js */
 
 /**
  *	Requires DOM elements:
@@ -33,14 +24,14 @@ red.module.social = red.module.social || {};
  *
  */
 
-red.module.social.Twitter = (function () {
+define(['../Module'], function (Module) {
 
 	var EVENTS = {
 			POST : "custom-twitter-post",
 			RENDER : "social/render"
 		};
 
-	return red.Module.extend({
+	return Module.extend({
 
 		_twitter_url : "https://twitter.com/share?",
 
@@ -151,4 +142,4 @@ red.module.social.Twitter = (function () {
 		}
 	}, EVENTS);
 
-}.call(red.module.social));
+});

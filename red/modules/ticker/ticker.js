@@ -1,12 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* ticker.js */
 
-// The red Namespace
-var red = red || {};
-
-// Module namespace
-red.module = red.module || {};
-
 // ## red.module.Ticker
 // Creates a countdown ticker.
 //
@@ -29,10 +23,10 @@ red.module = red.module || {};
 //  ticker.bind("complete", function () {
 //      // on complete
 //  });
-red.module.Ticker = (function () {
+define(['../Module'], function (Module) {
 
 	// Extends red.Module
-	return red.Module.extend({
+	return Module.extend({
 
 		// now, start & end should be [Date-parseable formats](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date).
 		vars : {
@@ -127,4 +121,4 @@ red.module.Ticker = (function () {
 		}
 	});
 
-}.call(red));
+});

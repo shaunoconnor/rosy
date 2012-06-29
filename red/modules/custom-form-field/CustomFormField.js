@@ -1,16 +1,10 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* custom-form-field.js */
 
-// The red namespace
-var red = red || {};
-
-// Module namespace
-red.module = red.module || {};
-
-red.module.CustomFormField = (function () {
+define(['../Module'], function (Module) {
 
 	// Extends red.Module
-	return red.Module.extend({
+	return Module.extend({
 
 		vars : {
 			namespace : "customfield",
@@ -271,4 +265,4 @@ red.module.CustomFormField = (function () {
 			}
 		}
 	});
-}.call(red));
+});
