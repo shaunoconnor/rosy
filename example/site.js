@@ -21,7 +21,7 @@ define([
 	"../libs/plugins/jquery.tmpl.js"],
 	function (Class, Shell, Home, Module, GA, Omniture, Ticker, Facebook, Twitter, Scroller, PageControl, CustomFormField) {
 
-	return {
+	var Site = Class.extend({
 
 		MEDIA_URL : $("link[rel='media-url']").attr("href"),
 
@@ -30,11 +30,6 @@ define([
 		init : function () {
 			// Wait for DOMContentLoaded
 			$($.proxy(this.onReady, this));
-		},
-
-		setMediaURL : function () {
-			red.SYS = red.SYS || {};
-			red.SYS.MEDIA_URL = $("link[rel='media-url']").attr("href");
 		},
 
 		createModel : function (page, vars) {
@@ -73,7 +68,9 @@ define([
 				list : $("<div>"),
 				items : $("<div>")
 			});
-			this.models.customFormField = new CustomFormField();
+			this.models.customFormField = new CustomFormField({
+				field : $("<div>")
+			});
 
 			// testing pubsub (as a global module)
 			$.subscribe('test', function(){
@@ -81,5 +78,7 @@ define([
 			});
 			$.publish('test');
 		}
-	};
+	});
+
+	return new Site();
 });
