@@ -39,7 +39,7 @@ define(['../Module'], function (Module) {
 		IS_CONNECTED = false,
 		APP_ID = $('[property="fb:app_id"]').attr("content"),
 		NAMESPACE = $('[property="og:namespace"]').attr("content"),
-		MEDIA_URL = $('link[rel="media-url"]').attr("href");
+		STATIC_URL = $('link[rel="static-url"]').attr("href");
 
 	return Module.extend({
 
@@ -219,7 +219,7 @@ define(['../Module'], function (Module) {
 
 			FB.init({
 				appId      : APP_ID, // App ID
-				channelUrl : MEDIA_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
+				channelUrl : STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow the server to access the session
 				oauth      : true, // enable OAuth 2.0
@@ -233,19 +233,19 @@ define(['../Module'], function (Module) {
 
 
 		loadJSDK : function () {
-			MEDIA_URL = $('link[rel="media-url"]').attr("href");
+			STATIC_URL = $('link[rel="static-url"]').attr("href");
 
 			if (!$("#fb-root").length) {
 				$("body .scripts").append($('<div id="fb-root">'));
 			}
 
-			if (!MEDIA_URL) {
-				throw 'red/modules/social/Facebook.js requires <rel="media-url"> - usually set in site.js';
+			if (!STATIC_URL) {
+				throw 'red/modules/social/Facebook.js requires <link rel="static-url" href="/" />';
 			}
 
 			if (!APP_ID) {
 				// Create FB developer account, create a new app, set the URL of the app to http://localhost:8000 for testing
-				throw 'red/modules/social/Facebook.js requires meta og:app_id.';
+				throw 'red/modules/social/Facebook.js requires <meta property="fb:app_id" content="none" />';
 			}
 
 			window.fbAsyncInit = this.proxy(this.fbAsyncInit);
