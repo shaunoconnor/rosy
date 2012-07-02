@@ -30,7 +30,7 @@ red.module.social.Facebook = (function () {
 
 	var EVENTS = {
 			POST : "social/facebook/post",
-			RENDER : "social/render",
+			RENDER : "social/facebook/render",
 			LOGIN : "social/facebook/login",
 			LOGOUT : "social/facebook/logout",
 			GET_STATUS : "social/facebook/get-status",
@@ -70,7 +70,7 @@ red.module.social.Facebook = (function () {
 						this.publish(EVENTS.HANDLE_ACTION, [response]);
 					});
 				} else {
-					console.log("Facebook: You're doing actions wrong");
+					this.log("Facebook: You're doing actions wrong");
 				}
 			}
 		},
@@ -237,6 +237,13 @@ red.module.social.Facebook = (function () {
 			FB.XFBML.parse();
 		},
 
+		log : function () {
+			if (this.vars.debug) {
+				try {
+					console.log(arguments);
+				} catch (e) {}
+			}
+		},
 
 		loadJSDK : function () {
 
@@ -255,19 +262,11 @@ red.module.social.Facebook = (function () {
 
 			window.fbAsyncInit = this.proxy(this.fbAsyncInit);
 
-			// Load the SDK Asynchronously
-			(function (d) {
-				var js,
-					id = 'facebook-jssdk';
-				if (d.getElementById(id)) {
-					return;
-				}
-				js = d.createElement('script');
-				js.id = id;
-				js.async = true;
-				js.src = "//connect.facebook.net/en_US/all.js";
-				d.getElementsByTagName('head')[0].appendChild(js);
-			}(document));
+			$.ajax({
+				dataType: "script",
+				url: "//connect.facebook.net/en_US/all.js",
+				cache: true
+			}).done($.proxy(this.onReady, this));
 		},
 
 		destroy : function () {
