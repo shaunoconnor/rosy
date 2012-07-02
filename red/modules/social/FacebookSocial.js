@@ -24,7 +24,7 @@ define(['../Module'], function (Module) {
 
 	var EVENTS = {
 			POST : "social/facebook/post",
-			RENDER : "social/render",
+			RENDER : "social/facebook/render",
 			LOGIN : "social/facebook/login",
 			LOGOUT : "social/facebook/logout",
 			GET_STATUS : "social/facebook/get-status",
