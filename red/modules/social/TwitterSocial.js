@@ -188,24 +188,11 @@ define(['../Module'], function (Module) {
 
 		loadJSDK : function () {
 
-			////////////////////////////////////////////////////////////
-			/////// TWITTER SHARING and tracking
-			var e = document.createElement('script');
-			e.type = "text/javascript";
-			e.async = true;
-			e.src = 'http://platform.twitter.com/widgets.js';
-			//e.src = "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1";
-			document.getElementsByTagName('head')[0].appendChild(e);
-
-			$(e).load($.proxy(function () {
-				this.onTwitterInit();
-			}, this));
-
-			/*$.ajax({
+			$.ajax({
 				dataType: "script",
 				url: "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1",
 				cache: true
-			}).done($.proxy(this.onTwitterInit, this));*/
+			}).done($.proxy(this.onTwitterInit, this));
 
 		},
 
