@@ -34,7 +34,7 @@ red.module.social.Twitter = (function () {
 
 	var EVENTS = {
 			POST : "social/twitter/post",
-			RENDER : "social/render",
+			RENDER : "social/twitter/render",
 			
 			LOGIN : "social/twitter/login",
 			LOGOUT : "social/twitter/logout",
