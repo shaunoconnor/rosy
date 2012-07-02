@@ -1,7 +1,7 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* custom-form-field.js */
 
-define(['../Module'], function (Module) {
+define(["../Module"], function (Module) {
 
 	// Extends red.Module
 	return Module.extend({
@@ -54,7 +54,7 @@ define(['../Module'], function (Module) {
 				name = this.vars.namespace,
 				callee = "setup" + type.charAt(0).toUpperCase() + type.slice(1);
 
-			this.vars.wrap = $('<span></span>').addClass(name);
+			this.vars.wrap = $("<span></span>").addClass(name);
 
 			this.vars.wrap.addClass(this.vars.field.attr("class"));
 			this.vars.wrap.addClass(name + "-" + type);

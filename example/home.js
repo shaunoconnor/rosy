@@ -2,7 +2,7 @@
 /* home.js */
 
 // Home Page class
-define(['./base/Page'], function(Page){
+define(["./base/Page"], function(Page){
 
 	// Extends example.Page
 	return Page.extend({

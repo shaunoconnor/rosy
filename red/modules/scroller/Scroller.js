@@ -28,13 +28,13 @@
 //      // on touch inertia
 //  });
 define([
-		'../Module',
+		"../Module",
 		// we don't need an AMD reference to the scroller file,
 		// but we do need it to be included in the build
 		/*global Scroller */
-		'./zynga/src/Scroller',
-		'./zynga/src/Raf',
-		'./zynga/src/Animate'
+		"./zynga/src/Scroller",
+		"./zynga/src/Raf",
+		"./zynga/src/Animate"
 	],
 	function (Module) {
 

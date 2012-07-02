@@ -2,7 +2,7 @@
 /* about.js */
 
 // About Page specific instance
-define(['./base/Page'], function(Page){
+define(["./base/Page"], function(Page){
 
 	return Page.extend({
 

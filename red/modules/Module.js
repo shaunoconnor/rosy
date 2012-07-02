@@ -3,7 +3,7 @@
 
 // ## red.Module
 // The Module Class. Contains helper functions shared by modules.
-define(['../base/Class'], function(Class){
+define(["../base/Class"], function(Class){
 
 	// Extend Class
 	return Class.extend({

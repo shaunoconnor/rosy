@@ -2,18 +2,18 @@
 /* site.js */
 
 define([
-	'../red/base/Class',
-	'./shell',
-	'./home',
-	'../red/modules/Module',
-	'../red/modules/tracking/GATracking',
-	'../red/modules/tracking/OmnitureTracking',
-	'../red/modules/ticker/Ticker',
-	'../red/modules/social/FacebookSocial',
-	'../red/modules/social/TwitterSocial',
-	'../red/modules/scroller/Scroller',
-	'../red/modules/ios-page-control/PageControl',
-	'../red/modules/custom-form-field/CustomFormField',
+	"../red/base/Class",
+	"./shell",
+	"./home",
+	"../red/modules/Module",
+	"../red/modules/tracking/GATracking",
+	"../red/modules/tracking/OmnitureTracking",
+	"../red/modules/ticker/Ticker",
+	"../red/modules/social/FacebookSocial",
+	"../red/modules/social/TwitterSocial",
+	"../red/modules/scroller/Scroller",
+	"../red/modules/ios-page-control/PageControl",
+	"../red/modules/custom-form-field/CustomFormField",
 
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
@@ -73,10 +73,10 @@ define([
 			});
 
 			// testing pubsub (as a global module)
-			$.subscribe('test', function(){
-				console.log('pubsub works!');
+			$.subscribe("test", function(){
+				console.log("pubsub works!");
 			});
-			$.publish('test');
+			$.publish("test");
 		}
 	});
 
