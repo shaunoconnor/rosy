@@ -1,12 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* page-control.js */
 
-// The red Namespace
-var red = red || {};
-
-// Module namespace
-red.module = red.module || {};
-
 // ## red.module.PageControl
 // An iOS-style Page Control.
 //
@@ -25,10 +19,10 @@ red.module = red.module || {};
 //  control.bind("touchend", function (e) {
 //      console.log(e);
 //  });
-red.module.PageControl = (function () {
+define(['../Module'], function (Module) {
 
 	// Extends red.Module
-	return red.Module.extend({
+	return Module.extend({
 
 		vars : {
 			className : "page-control",
@@ -370,4 +364,4 @@ red.module.PageControl = (function () {
 		}
 	});
 
-}.call(red));
+});

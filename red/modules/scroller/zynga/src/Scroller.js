@@ -14,14 +14,12 @@
 
  /*jshint onevar:false, maxlen:500 */
 
-var Scroller;
-
 (function () {
 
 	/**
 	* A pure logic 'component' for 'virtual' scrolling/zooming.
 	*/
-	Scroller = function (callback, options) {
+	window.Scroller = function (callback, options) {
 
 		this.__callback = callback;
 

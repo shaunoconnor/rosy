@@ -1,13 +1,7 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* scroller.js */
 
-/*global opera, Scroller */
 
-// The red Namespace
-var red = red || {};
-
-// Module namespace
-red.module = red.module || {};
 
 // ## red.Scroller
 // Creates a countdown scroller.
@@ -33,10 +27,19 @@ red.module = red.module || {};
 //  scroller.bind("touchinertia", function () {
 //      // on touch inertia
 //  });
-red.module.Scroller = (function () {
+define([
+		'../Module',
+		// we don't need an AMD reference to the scroller file,
+		// but we do need it to be included in the build
+		/*global Scroller */
+		'./zynga/src/Scroller',
+		'./zynga/src/Raf',
+		'./zynga/src/Animate'
+	],
+	function (Module) {
 
 	// Extends red.Module
-	return red.Module.extend({
+	return Module.extend({
 
 		vars : {},
 
@@ -59,6 +62,7 @@ red.module.Scroller = (function () {
 				prevLeft, prevTop, prevZoom,
 				self = this;
 
+			/*global opera */
 			if ("opera" in window && Object.prototype.toString.call(opera) === "[object Opera]") {
 				engine = "presto";
 			} else if ("MozAppearance" in docStyle) {
@@ -291,4 +295,4 @@ red.module.Scroller = (function () {
 		}
 	});
 
-}.call(red));
+});

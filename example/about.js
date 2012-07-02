@@ -1,20 +1,10 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* about.js */
 
-// ## Local Namespace
+// About Page specific instance
+define(['./base/Page'], function(Page){
 
-// About Page class
-
-// Site-specifc namespace
-var example = example || {};
-
-// Page namespace
-example.page = example.page || {};
-
-// About specific instance
-example.page.About = (function () {
-
-	return example.Page.extend({
+	return Page.extend({
 
 		// Over-writeable vars, ex:
 		//
@@ -32,4 +22,4 @@ example.page.About = (function () {
 		init : function (vars) {}
 
 	});
-}.call(example));
+});

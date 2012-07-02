@@ -1,18 +1,12 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* module.js */
 
-// ## The red Namespace
-var red = red || {};
-
-// ## A static namespace for modules
-red.module = red.module || {};
-
 // ## red.Module
 // The Module Class. Contains helper functions shared by modules.
-red.Module = (function () {
+define(['../base/Class'], function(Class){
 
-	// Extend red.Class
-	return red.Class.extend({
+	// Extend Class
+	return Class.extend({
 
 		// Store class-specific variables
 		vars : {
@@ -69,4 +63,4 @@ red.Module = (function () {
 		}
 
 	});
-}.call(red));
+});

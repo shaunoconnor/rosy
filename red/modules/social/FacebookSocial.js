@@ -1,12 +1,6 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* facebook.social.js */
-
-// ## Local Namespace
-var red = red || {};
-
-red.module = red.module || {}; // note the use of lower case for package names now
-
-red.module.social = red.module.social || {};
+/*global FB*/
 
 /**
  *	Required DOM elements:
@@ -26,7 +20,7 @@ red.module.social = red.module.social || {};
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
 
-red.module.social.Facebook = (function () {
+define(['../Module'], function (Module) {
 
 	var EVENTS = {
 			POST : "social/facebook/post",
@@ -44,10 +38,10 @@ red.module.social.Facebook = (function () {
 
 		IS_CONNECTED = false,
 		APP_ID = $('[property="fb:app_id"]').attr("content"),
-		NAMESPACE = $('[property="og:namespace"]').attr("content");
+		NAMESPACE = $('[property="og:namespace"]').attr("content"),
+		STATIC_URL = $('link[rel="static-url"]').attr("href");
 
-
-	return red.Module.extend({
+	return Module.extend({
 
 		vars : {
 			debug : true
@@ -225,7 +219,7 @@ red.module.social.Facebook = (function () {
 
 			FB.init({
 				appId      : APP_ID, // App ID
-				channelUrl : red.SYS.STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
+				channelUrl : STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow the server to access the session
 				oauth      : true, // enable OAuth 2.0
@@ -239,18 +233,19 @@ red.module.social.Facebook = (function () {
 
 
 		loadJSDK : function () {
+			STATIC_URL = $('link[rel="static-url"]').attr("href");
 
 			if (!$("#fb-root").length) {
 				$("body .scripts").append($('<div id="fb-root">'));
 			}
 
-			if (!red.SYS.MEDIA_URL) {
-				throw 'red/modules/social/Facebook.js requires <rel="media-url"> - usually set in site.js';
+			if (!STATIC_URL) {
+				throw 'red/modules/social/Facebook.js requires <link rel="static-url" href="/" />';
 			}
 
 			if (!APP_ID) {
 				// Create FB developer account, create a new app, set the URL of the app to http://localhost:8000 for testing
-				throw 'red/modules/social/Facebook.js requires meta og:app_id.';
+				throw 'red/modules/social/Facebook.js requires <meta property="fb:app_id" content="none" />';
 			}
 
 			window.fbAsyncInit = this.proxy(this.fbAsyncInit);
@@ -278,4 +273,4 @@ red.module.social.Facebook = (function () {
 		}
 	}, EVENTS);
 
-}.call(red.module.social));
+});
