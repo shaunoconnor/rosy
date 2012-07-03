@@ -1,25 +1,31 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* site.js */
+/*jshint onevar:false*/
 
-define([
-	"../red/base/Class",
-	"./shell",
-	"./home",
-	"../red/modules/Module",
-	"../red/modules/tracking/GATracking",
-	"../red/modules/tracking/OmnitureTracking",
-	"../red/modules/ticker/Ticker",
-	"../red/modules/social/FacebookSocial",
-	"../red/modules/social/TwitterSocial",
-	"../red/modules/scroller/Scroller",
-	"../red/modules/ios-page-control/PageControl",
-	"../red/modules/custom-form-field/CustomFormField",
+define(function (require, exports, module) {
+	var Class = require("../red/base/Class");
 
-	// global plugins and libraries that are also needed but dont support amd
-	// thus we don't add them as arguments in the function below
-	"../libs/plugins/jquery.pubsub",
-	"../libs/plugins/jquery.tmpl"],
-	function (Class, Shell, Home, Module, GA, Omniture, Ticker, Facebook, Twitter, Scroller, PageControl, CustomFormField) {
+	// each of your views needs to be required so it can be set in Site.createModel
+	var views = {
+		Page  : require("./base/Page"),
+		Home  : require("./home"),
+		About : require("./about")
+	};
+
+	// only include the modules you need
+	var GATracking        = require("../red/modules/tracking/GATracking"),
+		OmnitureTracking  = require("../red/modules/tracking/OmnitureTracking"),
+		Ticker            = require("../red/modules/ticker/Ticker"),
+		FacebookSocial    = require("../red/modules/social/FacebookSocial"),
+		TwitterSocial     = require("../red/modules/social/TwitterSocial"),
+		Scroller          = require("../red/modules/scroller/Scroller"),
+		PageControl       = require("../red/modules/ios-page-control/PageControl"),
+		CustomFormField   = require("../red/modules/custom-form-field/CustomFormField"),
+		Shell             = require("./shell");
+
+	// load other jQuery plugins that don't conform to AMD
+	require("../libs/plugins/jquery.pubsub");
+	require("../libs/plugins/jquery.tmpl");
 
 	var Site = Class.extend({
 
@@ -33,8 +39,7 @@ define([
 		},
 
 		createModel : function (page, vars) {
-			var master = this.Page,
-				Model = (page && typeof master[page] === "function" ? master[page] : master);
+			var Model = views[page] || views.Page;
 
 			return (this.models[page || "page"] = new Model(vars));
 		},
@@ -51,15 +56,14 @@ define([
 			var body = $("body"),
 				// Use `attr("data-page-class")` if < jQuery 1.6
 				pageClass = body.data("pageClass");
+			this.createModel(pageClass);
 
-			this.models.home = new Home();
 			this.models.shell = new Shell();
-			this.models.module = new Module();
-			this.models.ga = new GA();
-			this.models.omniture = new Omniture();
+			this.models.ga = new GATracking();
+			this.models.omniture = new OmnitureTracking();
 			this.models.ticker = new Ticker();
-			this.models.facebook = new Facebook();
-			this.models.twitter = new Twitter();
+			this.models.facebook = new FacebookSocial();
+			this.models.twitter = new TwitterSocial();
 			this.models.scroller = new Scroller({
 				target : $("<div><div></div></div>")
 			});
