@@ -18,8 +18,7 @@ define([
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
 	"jquery",
-	"$plugins/jquery.pubsub",
-	"$plugins/jquery.tmpl"],
+	"$plugins/jquery.pubsub"],
 	function (Class, Shell, Home, Module, GA, Omniture, Ticker, Facebook, Twitter, Scroller, PageControl, CustomFormField, $) {
 
 	var Site = Class.extend({
