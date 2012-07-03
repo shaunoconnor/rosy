@@ -3,6 +3,7 @@
 /*jshint onevar:false*/
 
 define(function (require, exports, module) {
+
 	var Class = require("../red/base/Class");
 
 	// each of your views needs to be required so it can be set in Site.createModel
@@ -26,7 +27,7 @@ define(function (require, exports, module) {
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
 	require("jquery");
-	require("$plugins/jquery.pubsub");
+	require("$!pubsub");
 
 	var Site = Class.extend({
 
