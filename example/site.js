@@ -30,7 +30,7 @@ define([
 
 		init : function () {
 			// Wait for DOMContentLoaded
-			$($.proxy(this.onReady, this));
+			$(this.proxy(this.onReady));
 		},
 
 		createModel : function (page, vars) {
@@ -74,10 +74,10 @@ define([
 			});
 
 			// testing pubsub (as a global module)
-			$.subscribe("test", function(){
+			this.subscribe("test", function(){
 				console.log("pubsub works!");
 			});
-			$.publish("test");
+			this.publish("test");
 		}
 	});
 
