@@ -23,9 +23,10 @@ define(function (require, exports, module) {
 		CustomFormField   = require("../red/modules/custom-form-field/CustomFormField"),
 		Shell             = require("./shell");
 
-	// load other jQuery plugins that don't conform to AMD
-	require("../libs/plugins/jquery.pubsub");
-	require("../libs/plugins/jquery.tmpl");
+	// global plugins and libraries that are also needed but dont support amd
+	// thus we don't add them as arguments in the function below
+	require("jquery");
+	require("$plugins/jquery.pubsub");
 
 	var Site = Class.extend({
 
@@ -35,7 +36,7 @@ define(function (require, exports, module) {
 
 		init : function () {
 			// Wait for DOMContentLoaded
-			$($.proxy(this.onReady, this));
+			$(this.proxy(this.onReady));
 		},
 
 		createModel : function (page, vars) {
@@ -77,10 +78,10 @@ define(function (require, exports, module) {
 			});
 
 			// testing pubsub (as a global module)
-			$.subscribe("test", function(){
+			this.subscribe("test", function(){
 				console.log("pubsub works!");
 			});
-			$.publish("test");
+			this.publish("test");
 		}
 	});
 

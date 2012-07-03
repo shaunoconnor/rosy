@@ -4,7 +4,8 @@
 // ## The red Namespace
 define(["../../libs/Class",
 		// we need pubsub included but we don't need a reference to it with AMD.
-		"../../libs/plugins/jquery.pubsub"], function (Class) {
+		"jquery",
+		"$plugins/jquery.pubsub"], function (Class, $) {
 
 	// Extends red.Module
 	return Class.extend({
