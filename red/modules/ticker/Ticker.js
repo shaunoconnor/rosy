@@ -23,7 +23,7 @@
 //  ticker.bind("complete", function () {
 //      // on complete
 //  });
-define(['../Module'], function (Module) {
+define(["../Module"], function (Module) {
 
 	// Extends red.Module
 	return Module.extend({

@@ -2,23 +2,23 @@
 /* shell.js */
 
 // Site shell object
-define(['./base/Page'], function(Page){
+define(["./base/Page"], function (Page) {
 	return Page.extend({
 		vars : {},
-		
+
 		init : function () {
 			this.setupHeader();
 			this.setupFooter();
-			
+
 			this.sup();
 		},
 
 		setupHeader : function () {
-			console.log('setup header!');
+			console.log("setup header!");
 		},
-		
+
 		setupFooter : function () {
-			console.log('setup footer!');
+			console.log("setup footer!");
 		}
 	});
 });

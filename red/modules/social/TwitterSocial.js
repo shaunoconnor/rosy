@@ -21,7 +21,7 @@
  *
  */
 
-define(['../Module'], function (Module) {
+define(["../Module"], function (Module) {
 
 	var EVENTS = {
 			POST : "social/twitter/post",
@@ -109,7 +109,8 @@ define(['../Module'], function (Module) {
 
 		getLogout : function (e) {
 			if (window.twttr) {
-				window.twttr.anywhere.signOut();
+				window.twttr.events.bind("tweet",   this.proxy(this.onTweet));
+				window.twttr.events.bind("follow", this.proxy(this.onFollow));
 			}
 		},
 
@@ -177,7 +178,7 @@ define(['../Module'], function (Module) {
 			}
 
 			// passing through the click event to avoid blockers
-			window.open(url, 'sharer', 'toolbar=0,status=0,scrollbars=1,width=575,height=338');
+			window.open(url, "sharer", "toolbar=0,status=0,scrollbars=1,width=575,height=338");
 
 			// fires onTweet
 			this.onTweet(e, eData);
@@ -185,7 +186,7 @@ define(['../Module'], function (Module) {
 		},
 
 		render : function () {
-			$.ajax({ url: '//platform.twitter.com/widgets.js', dataType: 'script', cache: true});
+			$.ajax({ url: "//platform.twitter.com/widgets.js", dataType: "script", cache: true});
 		},
 
 		loadJSDK : function () {
