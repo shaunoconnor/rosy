@@ -14,7 +14,7 @@ define(function () {
 	var Class = function () {};
 
 	// Create a new Class that inherits from this class
-	Class.extend = function extend(prop, events) {
+	function extend(prop, events) {
 		var sup = this.prototype,
 			This = this,
 			prototype, name, tmp, ret, func;
@@ -53,7 +53,7 @@ define(function () {
 		prototype.vars = $.extend(true, {}, this.prototype.vars, prototype.vars); // inherit vars
 
 		// The dummy class constructor
-		function Class(vars) {
+		function SubClass(vars) {
 
 			this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
 			
@@ -64,20 +64,22 @@ define(function () {
 		}
 
 		// Populate our constructed prototype object
-		Class.prototype = prototype;
+		SubClass.prototype = prototype;
 
 		// Enforce the constructor to be what we expect
-		Class.constructor = Class;
+		SubClass.constructor = SubClass;
 
 		// And make this class extendable
-		Class.extend = extend;
+		SubClass.extend = extend;
 
 		if (typeof events === 'object') {
-			$.extend(Class, events);
+			$.extend(SubClass, events);
 		}
 
-		return Class;
+		return SubClass;
 	};
+
+	Class.extend = extend;
 
 	return Class;
 });
