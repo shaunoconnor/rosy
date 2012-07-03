@@ -67,7 +67,9 @@ define(['../Module'], function (Module) {
 
 			if (window.twttr) {
 				var that = this;
-				window.twttr.anywhere(function (T) {  
+				window.twttr.anywhere(function (T) {
+
+
 
 					T.bind("tweet", $.proxy(that.onTweet, that));
 					T.bind("follow", $.proxy(that.onFollow, that));
