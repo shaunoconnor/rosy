@@ -58,6 +58,7 @@ define(function (require, exports, module) {
 			var body = $("body"),
 				// Use `attr("data-page-class")` if < jQuery 1.6
 				pageClass = body.data("pageClass");
+
 			this.createModel(pageClass);
 
 			this.models.shell = new Shell();
