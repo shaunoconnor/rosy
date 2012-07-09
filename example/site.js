@@ -1,26 +1,33 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* site.js */
+/*jshint onevar:false*/
 
-define([
-	"../red/base/Class",
-	"./shell",
-	"./home",
-	"../red/modules/Module",
-	"../red/modules/tracking/GATracking",
-	"../red/modules/tracking/OmnitureTracking",
-	"../red/modules/ticker/Ticker",
-	"../red/modules/social/FacebookSocial",
-	"../red/modules/social/TwitterSocial",
-	"../red/modules/scroller/Scroller",
-	"../red/modules/ios-page-control/PageControl",
-	"../red/modules/custom-form-field/CustomFormField",
+define(function (require, exports, module) {
+
+	var Class = require("../red/base/Class");
+
+	// each of your views needs to be required so it can be set in Site.createModel
+	var views = {
+		Page  : require("./base/Page"),
+		Home  : require("./home"),
+		About : require("./about")
+	};
+
+	// only include the modules you need
+	var GATracking        = require("../red/modules/tracking/GATracking"),
+		OmnitureTracking  = require("../red/modules/tracking/OmnitureTracking"),
+		Ticker            = require("../red/modules/ticker/Ticker"),
+		FacebookSocial    = require("../red/modules/social/FacebookSocial"),
+		TwitterSocial     = require("../red/modules/social/TwitterSocial"),
+		Scroller          = require("../red/modules/scroller/Scroller"),
+		PageControl       = require("../red/modules/ios-page-control/PageControl"),
+		CustomFormField   = require("../red/modules/custom-form-field/CustomFormField"),
+		Shell             = require("./shell");
 
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
-	"jquery",
-	"$plugins/jquery.pubsub",
-	"$plugins/jquery.tmpl"],
-	function (Class, Shell, Home, Module, GA, Omniture, Ticker, Facebook, Twitter, Scroller, PageControl, CustomFormField, $) {
+	require("jquery");
+	require("$!pubsub");
 
 	var Site = Class.extend({
 
@@ -30,12 +37,11 @@ define([
 
 		init : function () {
 			// Wait for DOMContentLoaded
-			$($.proxy(this.onReady, this));
+			$(this.proxy(this.onReady));
 		},
 
 		createModel : function (page, vars) {
-			var master = this.Page,
-				Model = (page && typeof master[page] === "function" ? master[page] : master);
+			var Model = views[page] || views.Page;
 
 			return (this.models[page || "page"] = new Model(vars));
 		},
@@ -53,15 +59,31 @@ define([
 				// Use `attr("data-page-class")` if < jQuery 1.6
 				pageClass = body.data("pageClass");
 
-			// creates `Page()` based on `<div data-page-class="Home">`
-			this.setMediaURL();
 			this.createModel(pageClass);
 
+			this.models.shell = new Shell();
+			this.models.ga = new GATracking();
+			this.models.omniture = new OmnitureTracking();
+			this.models.ticker = new Ticker();
+			this.models.facebook = new FacebookSocial();
+			this.models.twitter = new TwitterSocial();
+			this.models.scroller = new Scroller({
+				target : $("<div><div></div></div>")
+			});
+			this.models.pageControl = new PageControl({
+				parent : $("<div>"),
+				list : $("<div>"),
+				items : $("<div>")
+			});
+			this.models.customFormField = new CustomFormField({
+				field : $("<div>")
+			});
+
 			// testing pubsub (as a global module)
-			$.subscribe("test", function(){
+			this.subscribe("test", function(){
 				console.log("pubsub works!");
 			});
-			$.publish("test");
+			this.publish("test");
 		}
 	});
 

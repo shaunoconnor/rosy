@@ -3,9 +3,9 @@
 
 /**
  * Omniture and GA tracking event wrappers
- * REQUIRES 
+ * REQUIRES
 	- ssla-analytics/  (this file loads ssla-analytics/analytics.min.js)
-	
+
  */
 define(["../Module",
 		// we don't need an AMD reference to the scroller file,
@@ -30,7 +30,7 @@ define(["../Module",
 
 
 		init : function () {
-			$.subscribe("track", $.proxy(this.track, this));
+			this.subscribe("track", this.proxy(this.track));
 		},
 
 		track : function (e, data) {
@@ -52,8 +52,8 @@ define(["../Module",
 		},
 
 		destroy : function () {
-			$.unsubscribe("track", $.proxy(this.track, this));
-			
+			this.unsubscribe("track", this.proxy(this.track));
+
 			this.tracker = null;
 			this.vars = null;
 		}

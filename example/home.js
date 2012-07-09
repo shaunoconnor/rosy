@@ -18,7 +18,9 @@ define(["./base/Page"], function (Page) {
 		},
 
 		// Home  page level functionality
-		init : function () {}
+		init : function () {
+			console.log('init home page');
+		}
 
 	});
 });
