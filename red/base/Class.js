@@ -13,7 +13,8 @@ define(["./AbstractClass",
 		namespace : null,
 
 		vars : {
-			subs : {}
+			subs : {},
+			USE_VARS: true
 		},
 
 		init : function (vars, context) {},
