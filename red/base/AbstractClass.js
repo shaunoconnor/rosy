@@ -4,10 +4,18 @@ define(
 	
 		"use strict";
 
-		var initializing = false,
-			fnTest = (/xyz/).test(function () {
-				var xyz;
-			}) ? (/\bsup\b/) : (/.*/);
+		/*=========================== HELPER FUNCTIONS ===========================*/
+
+			/*
+			If Function.toString() works as expected, return a regex that checks for `sup()`
+			otherwise return a regex that passes everything.
+			*/
+
+			var _doesCallSuper = /xyz/.test(function(){var xyz;}) ? /\bthis\.sup\b/ : /.*/;
+
+		/*=========================== END OF HELPER FUNCTIONS ===========================*/
+
+		var initializing = false;
 
 		// The base Class implementation (does nothing)
 		var Class = function () {};
@@ -30,7 +38,7 @@ define(
 					func = prop[name];
 
 					// Check if we're overwriting an existing function
-					prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && fnTest.test(func) ? (function (name, fn) {
+					prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && _doesCallSuper.test(func) ? (function (name, fn) {
 						return function () {
 							tmp = this.sup;
 
