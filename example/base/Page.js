@@ -5,7 +5,7 @@
 // New pages will try to load a specialized class ("Home" for instance),
 // if one cannot be found, the site will instantiate this Page by default
 
-define(["../../red/base/Class"], function (Class) {
+define(["red/base/Class"], function (Class) {
 	return Class.extend({
 
 		// Over-writeable vars, ex: new Page({x:10});

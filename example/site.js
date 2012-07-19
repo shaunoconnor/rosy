@@ -4,7 +4,7 @@
 
 define(function (require, exports, module) {
 
-	var Class = require("../red/base/Class");
+	var Class = require("red/base/Class");
 
 	// each of your views needs to be required so it can be set in Site.createModel
 	var views = {
@@ -14,14 +14,14 @@ define(function (require, exports, module) {
 	};
 
 	// only include the modules you need
-	var GATracking        = require("../red/modules/tracking/GATracking"),
-		OmnitureTracking  = require("../red/modules/tracking/OmnitureTracking"),
-		Ticker            = require("../red/modules/ticker/Ticker"),
-		FacebookSocial    = require("../red/modules/social/FacebookSocial"),
-		TwitterSocial     = require("../red/modules/social/TwitterSocial"),
-		Scroller          = require("../red/modules/scroller/Scroller"),
-		PageControl       = require("../red/modules/ios-page-control/PageControl"),
-		CustomFormField   = require("../red/modules/custom-form-field/CustomFormField"),
+	var GATracking        = require("red/modules/tracking/GATracking"),
+		OmnitureTracking  = require("red/modules/tracking/OmnitureTracking"),
+		Ticker            = require("red/modules/ticker/Ticker"),
+		FacebookSocial    = require("red/modules/social/FacebookSocial"),
+		TwitterSocial     = require("red/modules/social/TwitterSocial"),
+		Scroller          = require("red/modules/scroller/Scroller"),
+		PageControl       = require("red/modules/ios-page-control/PageControl"),
+		CustomFormField   = require("red/modules/custom-form-field/CustomFormField"),
 		Shell             = require("./shell");
 
 	// global plugins and libraries that are also needed but dont support amd
