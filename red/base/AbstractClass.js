@@ -46,70 +46,69 @@ define(
 
 		/*=========================== END OF HELPER FUNCTIONS ===========================*/
 
-		var initializing = false;
+		return (function() {
 
-		// The base Class implementation (does nothing)
-		var Class = function () {};
+			// Setup a dummy constructor for prototype-chaining without any overhead.
+			var dummy = function () {};
+			var MClass = function () {};
 
-		// Create a new Class that inherits from this class
-		function extend(prop, events) {
-			var sup = this.prototype,
-				This = this,
-				prototype, name, tmp, ret, func;
+			MClass.extend = function (props, staticProps) {
 
-			// Instantiate a base class (but only create the instance,
-			// don't run the init constructor)
-			initializing = true;
-			prototype = new This();
-			initializing = false;
+				dummy.prototype = this.prototype;
+				var p, proto = _copyTo(new dummy(), props);
 
-			// Copy the properties over onto the new prototype
-			for (name in prop) {
+				function Class (opts) {
 
-				if (prop.hasOwnProperty(name)) {
-
-					func = prop[name];
-
-					// Check if we're overwriting an existing function
-					if (typeof func === "function" && typeof sup[name] === "function" && _doesCallSuper.test(func)) {
-						func = _createSuperFunction(func, sup[name]);
+					/**
+					* If USE_OPTS is true, and the first argument, is an object,
+					* deep copy it to this.opts
+					**/
+					if (this.opts && this.opts.USE_OPTS && typeof opts === "object") {
+						_copyTo(this.opts, opts);
 					}
 
-					prototype[name] = func;
+					var fn = this.init || this.prototype.constructor;
+					return fn.apply(this, arguments);
 				}
-			}
 
-			prototype.vars = _copyTo({}, this.prototype.vars, prototype.vars); // inherit vars
+				for (p in props) {
+					if (
+						p !== "static" 
+						&& typeof props[p] === "function" 
+						&& typeof this.prototype[p] === "function" 
+						&& _doesCallSuper.test(props[p])
+					) {
+						// this.sup() magic, on an as-needed
+						proto[p] = _createSuperFunction(props[p], this.prototype[p]);
+					}
 
-			// The dummy class constructor
-			function SubClass(vars) {
+					else if (typeof props[p] === "object") {
 
-				this.vars = _copyTo({}, this.vars, vars); // override this.vars object with passed argument
-				
-				// All construction is actually done in the init method
-				if (!initializing && this.init) {
-					this.init.apply(this, arguments);
+						if (props[p] instanceof Array) {
+							proto[p] = props[p].concat();
+						}
+
+						else {
+							proto[p] = _copyTo({}, props[p]);	
+						}
+					}
 				}
-			}
 
-			// Populate our constructed prototype object
-			SubClass.prototype = prototype;
+				Class.prototype = proto;
 
-			// Enforce the constructor to be what we expect
-			SubClass.constructor = SubClass;
+				_copyTo(Class, this, props.static, staticProps);
 
-			// And make this class extendable
-			SubClass.extend = extend;
+				Class.prototype.constructor = Class.prototype.static = Class;
 
-			if (typeof events === 'object') {
-				_copyTo(SubClass, events);
-			}
+				if (typeof Class.prototype.setup == "function") {
+					Class.prototype.setup();
+				}
 
-			return SubClass;
-		};
+				return Class;
+			};
+			
+			return MClass;
 
-		Class.extend = extend;
-
-		return Class;
+		})();
 	}
 );
