@@ -6,6 +6,22 @@ define(
 
 		/*=========================== HELPER FUNCTIONS ===========================*/
 
+			var _copyTo = function (obj) {
+				while(arguments.length > 1) {
+					var prop, obj2 = Array.prototype.splice.call(arguments, 1, 1)[0];					
+
+					for (prop in obj2) {						
+						if (typeof obj2[prop] === "object") {
+							obj[prop] = _copyTo({}, obj2[prop]);
+						}
+						else {
+							obj[prop] = obj2[prop];
+						}
+					}
+				}
+				return obj;
+			};
+
 			/*
 			If Function.toString() works as expected, return a regex that checks for `sup()`
 			otherwise return a regex that passes everything.
@@ -57,12 +73,12 @@ define(
 				}
 			}
 
-			prototype.vars = $.extend(true, {}, this.prototype.vars, prototype.vars); // inherit vars
+			prototype.vars = _copyTo({}, this.prototype.vars, prototype.vars); // inherit vars
 
 			// The dummy class constructor
 			function SubClass(vars) {
 
-				this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
+				this.vars = _copyTo({}, this.vars, vars); // override this.vars object with passed argument
 				
 				// All construction is actually done in the init method
 				if (!initializing && this.init) {
@@ -80,7 +96,7 @@ define(
 			SubClass.extend = extend;
 
 			if (typeof events === 'object') {
-				$.extend(SubClass, events);
+				_copyTo(SubClass, events);
 			}
 
 			return SubClass;
