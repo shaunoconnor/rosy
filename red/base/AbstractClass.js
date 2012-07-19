@@ -1,85 +1,85 @@
-// ## Simple JavaScript Inheritance
-// - By John Resig http://ejohn.org/
-// - MIT Licensed.
-/* class.js */
+define(
 
-// Inspired by base2 and Prototype
-define(function () {
-	var initializing = false,
-		fnTest = (/xyz/).test(function () {
-			var xyz;
-		}) ? (/\bsup\b/) : (/.*/);
+	function () {
+	
+		"use strict";
 
-	// The base Class implementation (does nothing)
-	var Class = function () {};
+		var initializing = false,
+			fnTest = (/xyz/).test(function () {
+				var xyz;
+			}) ? (/\bsup\b/) : (/.*/);
 
-	// Create a new Class that inherits from this class
-	function extend(prop, events) {
-		var sup = this.prototype,
-			This = this,
-			prototype, name, tmp, ret, func;
+		// The base Class implementation (does nothing)
+		var Class = function () {};
 
-		// Instantiate a base class (but only create the instance,
-		// don't run the init constructor)
-		initializing = true;
-		prototype = new This();
-		initializing = false;
+		// Create a new Class that inherits from this class
+		function extend(prop, events) {
+			var sup = this.prototype,
+				This = this,
+				prototype, name, tmp, ret, func;
 
-		// Copy the properties over onto the new prototype
-		for (name in prop) {
-			if (prop.hasOwnProperty(name)) {
-				func = prop[name];
+			// Instantiate a base class (but only create the instance,
+			// don't run the init constructor)
+			initializing = true;
+			prototype = new This();
+			initializing = false;
 
-				// Check if we're overwriting an existing function
-				prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && fnTest.test(func) ? (function (name, fn) {
-					return function () {
-						tmp = this.sup;
+			// Copy the properties over onto the new prototype
+			for (name in prop) {
+				if (prop.hasOwnProperty(name)) {
+					func = prop[name];
 
-						// Add a new .sup() method that is the same method
-						// but on the super-class
-						this.sup = sup[name];
+					// Check if we're overwriting an existing function
+					prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && fnTest.test(func) ? (function (name, fn) {
+						return function () {
+							tmp = this.sup;
 
-						// The method only need to be bound temporarily, so we
-						// remove it when we're done executing
-						ret = fn.apply(this, arguments);
-						this.sup = tmp;
+							// Add a new .sup() method that is the same method
+							// but on the super-class
+							this.sup = sup[name];
 
-						return ret;
-					};
-				}(name, func)) : func;
+							// The method only need to be bound temporarily, so we
+							// remove it when we're done executing
+							ret = fn.apply(this, arguments);
+							this.sup = tmp;
+
+							return ret;
+						};
+					}(name, func)) : func;
+				}
 			}
-		}
 
-		prototype.vars = $.extend(true, {}, this.prototype.vars, prototype.vars); // inherit vars
+			prototype.vars = $.extend(true, {}, this.prototype.vars, prototype.vars); // inherit vars
 
-		// The dummy class constructor
-		function SubClass(vars) {
+			// The dummy class constructor
+			function SubClass(vars) {
 
-			this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
-			
-			// All construction is actually done in the init method
-			if (!initializing && this.init) {
-				this.init.apply(this, arguments);
+				this.vars = $.extend(true, {}, this.vars, vars); // override this.vars object with passed argument
+				
+				// All construction is actually done in the init method
+				if (!initializing && this.init) {
+					this.init.apply(this, arguments);
+				}
 			}
-		}
 
-		// Populate our constructed prototype object
-		SubClass.prototype = prototype;
+			// Populate our constructed prototype object
+			SubClass.prototype = prototype;
 
-		// Enforce the constructor to be what we expect
-		SubClass.constructor = SubClass;
+			// Enforce the constructor to be what we expect
+			SubClass.constructor = SubClass;
 
-		// And make this class extendable
-		SubClass.extend = extend;
+			// And make this class extendable
+			SubClass.extend = extend;
 
-		if (typeof events === 'object') {
-			$.extend(SubClass, events);
-		}
+			if (typeof events === 'object') {
+				$.extend(SubClass, events);
+			}
 
-		return SubClass;
-	};
+			return SubClass;
+		};
 
-	Class.extend = extend;
+		Class.extend = extend;
 
-	return Class;
-});
+		return Class;
+	}
+);
