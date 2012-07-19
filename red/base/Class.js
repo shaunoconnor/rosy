@@ -2,7 +2,7 @@
 /* site.js */
 
 // ## The red Namespace
-define(["../../libs/Class",
+define(["./AbstractClass",
 		// we need pubsub included but we don't need a reference to it with AMD.
 		"jquery",
 		"$!pubsub"], function (Class, $) {
