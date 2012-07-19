@@ -22,6 +22,21 @@ define(
 				return obj;
 			};
 
+			var _createSuperFunction = function (fn, superFn) {
+				return function() {
+					var r, tmp = this.sup || null;
+
+					// Reference the prototypes method, as super temporarily
+					this.sup = superFn;
+
+					r = fn.apply(this, arguments);
+
+					// Reset this.sup
+					this.sup = tmp;
+					return r;
+				};
+			};
+
 			/*
 			If Function.toString() works as expected, return a regex that checks for `sup()`
 			otherwise return a regex that passes everything.
@@ -50,26 +65,17 @@ define(
 
 			// Copy the properties over onto the new prototype
 			for (name in prop) {
+
 				if (prop.hasOwnProperty(name)) {
+
 					func = prop[name];
 
 					// Check if we're overwriting an existing function
-					prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && _doesCallSuper.test(func) ? (function (name, fn) {
-						return function () {
-							tmp = this.sup;
+					if (typeof func === "function" && typeof sup[name] === "function" && _doesCallSuper.test(func)) {
+						func = _createSuperFunction(func, sup[name]);
+					}
 
-							// Add a new .sup() method that is the same method
-							// but on the super-class
-							this.sup = sup[name];
-
-							// The method only need to be bound temporarily, so we
-							// remove it when we're done executing
-							ret = fn.apply(this, arguments);
-							this.sup = tmp;
-
-							return ret;
-						};
-					}(name, func)) : func;
+					prototype[name] = func;
 				}
 			}
 
