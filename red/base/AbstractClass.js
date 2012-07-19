@@ -57,14 +57,14 @@ define(
 				dummy.prototype = this.prototype;
 				var p, proto = _copyTo(new dummy(), props);
 
-				function Class (opts) {
+				function Class (vars) {
 
 					/**
-					* If USE_OPTS is true, and the first argument, is an object,
-					* deep copy it to this.opts
+					* If USE_VARS is true, and the first argument, is an object,
+					* deep copy it to this.vars
 					**/
-					if (this.opts && this.opts.USE_OPTS && typeof opts === "object") {
-						_copyTo(this.opts, opts);
+					if (this.vars && this.vars.USE_VARS && typeof vars === "object") {
+						_copyTo(this.vars, vars);
 					}
 
 					var fn = this.init || this.prototype.constructor;
