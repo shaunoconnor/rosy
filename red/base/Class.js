@@ -8,8 +8,35 @@ define(
 
 	function (AbstractClass, $) {
 
-		// Extends red.Module
-		return Class.extend({
+
+		"use strict";
+
+		/*================= Function.bind() polyfill =================*/
+
+		if (!Function.prototype.bind) {
+			Function.prototype.bind = function (oThis) {
+				if (typeof this !== "function") {
+					// closest thing possible to the ECMAScript 5 internal IsCallable function
+					throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+				}
+
+				var aArgs = Array.prototype.slice.call(arguments, 1), 
+				fToBind = this, 
+				fNOP = function () {},
+				fBound = function () {
+					return fToBind.apply(this instanceof fNOP ? this : oThis || window,
+					aArgs.concat(Array.prototype.slice.call(arguments)));
+				};
+
+				fNOP.prototype = this.prototype;
+				fBound.prototype = new fNOP();
+				return fBound;
+			};
+		}
+
+		/*==================================*/
+
+		return AbstractClass.extend({
 
 			namespace : null,
 
@@ -78,8 +105,12 @@ define(
 				e.preventDefault();
 			},
 
-			proxy : function (func) {
-				return $.proxy(func, this);
+			/** 
+			* Shorthand for func.bind(this)
+			* or rather, $.proxy(func, this) in jQuery terms
+			*/
+			proxy : function (fn) {
+				return fn ? fn.bind(this) : fn;
 			},
 
 			// Middleware setTimeout method. Allows for scope retention inside timers.
