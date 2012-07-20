@@ -6,10 +6,10 @@ define(
 		"$!pubsub"
 	],
 
-	function (Class, $) {
+	function (AbstractClass, $) {
 
 		// Extends red.Module
-		return Class.extend({
+		return AbstractClass.extend({
 
 			namespace : null,
 
