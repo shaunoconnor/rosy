@@ -2,12 +2,10 @@ define(
 
 	[
 		"./AbstractClass",
-		"jquery",
-		"$!pubsub"
+		"../notifications/NotificationManager"
 	],
 
-	function (AbstractClass, $) {
-
+	function (AbstractClass, NotificationManager) {
 
 		"use strict";
 
@@ -38,66 +36,63 @@ define(
 
 		return AbstractClass.extend({
 
-			namespace : null,
-
 			vars : {
-				subs : {},
 				USE_VARS: true
 			},
 
 			init : function (vars, context) {},
 
-			getUniqueId : function () {
-				var name = this.namespace || "";
-				return [name, Math.floor(Math.random() * 9999999)].join("/");
-			},
+			/** 
+			* Subscribes to a notification.
+			*/
 
-			scopeNotification : function (name) {
-				this.uid = this.uid || this.getUniqueId();
-				return name + "." + this.uid;
-			},
+			subscribe : function(name, handler, priority) {
+				this._interestHandlers = this._interestHandlers || {};
 
-			publish : function (name, args) {
-				return $.publish(name, args);
-			},
-
-			subscribe : function (name, func) {
-				name = this.scopeNotification(name);
-
-				this.vars.subs[name] = this.vars.subs[name] || [];
-				this.vars.subs[name].push(func);
-
-				return $.subscribe(name, func);
-			},
-
-			unsubscribe : function (name, func) {
-				var group, key, i, j;
-
-				if (!name && !func) {
-					for (key in this.vars.subs) {
-						if (this.vars.subs.hasOwnProperty(key)) {
-							for (i = 0, j = this.vars.subs[key].length; i < j; i++) {
-								$.unsubscribe(key, this.vars.subs[key][i]);
-							}
-							this.vars.subs[key] = null;
-						}
-					}
-
-					delete this.vars.subs;
-				} else if (name) {
-					name = this.scopeNotification(name);
-					group = this.vars.subs[name];
-
-					if (group) {
-						for (i = 0, j = group.length; i < j; i++) {
-							if (!func || group[i] === func) {
-								group[i] = null;
-							}
-						}
-					}
-
-					return $.unsubscribe(name, func);
+				if (handler && !this._interestHandlers[name]) {
+					handler = this.proxy(handler);
+					NotificationManager.subscribe(name, handler, priority);
+					this._interestHandlers[name] = handler;
 				}
+			},
+
+			/** 
+			* Unsubscribes from a notification.
+			*/
+
+			unsubscribe : function(name) {
+				if (!name) {
+					return this.unsubscribeAll();
+				}
+
+				if (this._interestHandlers && this._interestHandlers[name]) {
+					var handler = this._interestHandlers[name];
+					this._interestHandlers[name] = null;
+					delete this._interestHandlers[name];
+				}
+
+				NotificationManager.unsubscribe(name, handler);
+			},
+
+			/**
+			* Unsubscribes from all notifications registered via this.subscribe();
+			*/
+
+			unsubscribeAll : function() {
+				for (var interest in this._interestHandlers) {
+					if (this._interestHandlers.hasOwnProperty(interest)) {
+						this.unsubscribe(interest);
+					}
+				}
+				this._interestHandlers = [];
+			},
+
+			/** 
+			* Publishes a notification with the specified data.
+			*/
+
+			publish : function(name, data, callback) {
+				NotificationManager.publish(name, data, callback, this);
 			},
 
 			// Middleware preventDefault method. A shortcut to avoid delegation for a simple task.
