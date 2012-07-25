@@ -13,7 +13,6 @@ define(["./base/Page"], function (Page) {
 		//  });
 		vars : {
 			x : 100,
-			// Results in `{ x : 1, y : 2 }` by inheriting from `example.Page`
 			y : 3,
 			z : 4
 		},
