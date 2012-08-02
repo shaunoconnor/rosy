@@ -18,16 +18,16 @@ define(
 					throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
 				}
 
-				var aArgs = Array.prototype.slice.call(arguments, 1), 
-				fToBind = this, 
-				fNOP = function () {},
-				fBound = function () {
-					return fToBind.apply(this instanceof fNOP ? this : oThis || window,
-					aArgs.concat(Array.prototype.slice.call(arguments)));
-				};
+				var aArgs = Array.prototype.slice.call(arguments, 1),
+					fToBind = this,
+					FNOP = function () {},
+					fBound = function () {
+						return fToBind.apply(this instanceof FNOP ? this : oThis || window,
+						aArgs.concat(Array.prototype.slice.call(arguments)));
+					};
 
-				fNOP.prototype = this.prototype;
-				fBound.prototype = new fNOP();
+				FNOP.prototype = this.prototype;
+				fBound.prototype = new FNOP();
 				return fBound;
 			};
 		}
@@ -42,10 +42,9 @@ define(
 
 			init : function (vars, context) {},
 
-			/** 
+			/**
 			* Subscribes to a notification.
 			*/
-
 			subscribe : function(name, handler, priority) {
 				this._interestHandlers = this._interestHandlers || {};
 
@@ -56,10 +55,9 @@ define(
 				}
 			},
 
-			/** 
+			/**
 			* Unsubscribes from a notification.
 			*/
-
 			unsubscribe : function(name) {
 				if (!name) {
 					return this.unsubscribeAll();
@@ -69,15 +67,13 @@ define(
 					var handler = this._interestHandlers[name];
 					this._interestHandlers[name] = null;
 					delete this._interestHandlers[name];
+					NotificationManager.unsubscribe(name, handler);
 				}
-
-				NotificationManager.unsubscribe(name, handler);
 			},
 
 			/**
 			* Unsubscribes from all notifications registered via this.subscribe();
 			*/
-
 			unsubscribeAll : function() {
 				for (var interest in this._interestHandlers) {
 					if (this._interestHandlers.hasOwnProperty(interest)) {
@@ -87,20 +83,21 @@ define(
 				this._interestHandlers = [];
 			},
 
-			/** 
+			/**
 			* Publishes a notification with the specified data.
 			*/
-
 			publish : function(name, data, callback) {
 				NotificationManager.publish(name, data, callback, this);
 			},
 
-			// Middleware preventDefault method. A shortcut to avoid delegation for a simple task.
+			/**
+			* Middleware preventDefault method. A shortcut to avoid delegation for a simple task.
+			*/
 			preventDefault : function (e) {
 				e.preventDefault();
 			},
 
-			/** 
+			/**
 			* Shorthand for func.bind(this)
 			* or rather, $.proxy(func, this) in jQuery terms
 			*/
@@ -113,9 +110,18 @@ define(
 				return fn ? fn.bind(this) : fn;
 			},
 
-			// Middleware setTimeout method. Allows for scope retention inside timers.
+			/**
+			* Middleware setTimeout method. Allows for scope retention inside timers.
+			*/
 			setTimeout : function (func, delay) {
 				return window.setTimeout(this.proxy(func), delay);
+			},
+
+			/**
+			* Middleware setInterval method. Allows for scope retention inside timers.
+			*/
+			setInterval : function (func, delay) {
+				return window.setInterval(this.proxy(func), delay);
 			},
 
 			destroy : function () {
