@@ -13,6 +13,25 @@ define(function () {
 	// The base Class implementation (does nothing)
 	var Class = function () {};
 
+	function createSuperFunc (name, fn, sup) {
+		return function () {
+			var tmp, ret;
+			tmp = this.sup;
+
+			// Add a new .sup() method that is the same method
+			// but on the super-class
+			this.sup = sup[name];
+
+			// The method only need to be bound temporarily, so we
+			// remove it when we're done executing
+			ret = fn.apply(this, arguments);
+			this.sup = tmp;
+
+			return ret;
+		};
+	}
+
+
 	// Create a new Class that inherits from this class
 	function extend(prop, events) {
 		var sup = this.prototype,
@@ -31,22 +50,12 @@ define(function () {
 				func = prop[name];
 
 				// Check if we're overwriting an existing function
-				prototype[name] = (typeof func === "function") && (typeof sup[name] === "function") && fnTest.test(func) ? (function (name, fn) {
-					return function () {
-						tmp = this.sup;
-
-						// Add a new .sup() method that is the same method
-						// but on the super-class
-						this.sup = sup[name];
-
-						// The method only need to be bound temporarily, so we
-						// remove it when we're done executing
-						ret = fn.apply(this, arguments);
-						this.sup = tmp;
-
-						return ret;
-					};
-				}(name, func)) : func;
+				if ((typeof func === "function") && (typeof sup[name] === "function")) {
+					prototype[name] = createSuperFunc(name, func, sup);
+				}
+				else {
+					prototype[name] = func;
+				}
 			}
 		}
 
@@ -77,7 +86,7 @@ define(function () {
 		}
 
 		return SubClass;
-	};
+	}
 
 	Class.extend = extend;
 

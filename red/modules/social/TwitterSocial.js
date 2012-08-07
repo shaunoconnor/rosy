@@ -82,7 +82,7 @@ define(["../Module"], function (Module) {
 
 					$.subscribe(EVENTS.POST_STATUS, function (e, data) {
 						if (T.isConnected()) {
-							T.Status.update(data.text); 
+							T.Status.update(data.text);
 						} else {
 							that.customTweet(e, data);
 						}
@@ -90,7 +90,7 @@ define(["../Module"], function (Module) {
 
 					$.subscribe(EVENTS.GET_STATUS, function (e) {
 						if (T.isConnected()) {
-							that.onAuthComplete(null, T.currentUser)
+							that.onAuthComplete(null, T.currentUser);
 						} else {
 							that.onSignOut();
 						}
