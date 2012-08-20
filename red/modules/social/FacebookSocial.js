@@ -277,7 +277,7 @@ define(["../Module"], function (Module) {
 			STATIC_URL = $('link[rel="static-url"]').attr("href");
 
 			if (!$("#fb-root").length) {
-				$("body .scripts").append($('<div id="fb-root">'));
+				$("body").append($('<div id="fb-root">'));
 			}
 
 			if (!STATIC_URL) {
