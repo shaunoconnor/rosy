@@ -295,7 +295,7 @@ define(["../Module"], function (Module) {
 				dataType: "script",
 				url: "//connect.facebook.net/en_US/all.js",
 				cache: true
-			}).done($.proxy(this.onReady, this));
+			}).done(this.proxy(this.onReady));
 		},
 
 		destroy : function () {
