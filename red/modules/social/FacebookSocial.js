@@ -86,8 +86,14 @@ define(["../Module"], function (Module) {
 		getLogout : function () {
 			FB.logout(function (response) {
 				IS_CONNECTED = false;
+
 				this.publish(EVENTS.HANDLE_LOGOUT, [response]);
-				this.publish("track", [{type : "event", category: "facebook", action : "logout", label : "user logged out"}]);
+				this.publish("track", [{
+					type : "event",
+					category: "facebook",
+					action : "logout",
+					label : "user logged out"
+				}]);
 			});
 		},
 
@@ -95,7 +101,12 @@ define(["../Module"], function (Module) {
 			if (IS_CONNECTED) {
 				FB.api('/me', function(response) {
 					this.publish(EVENTS.HANDLE_ME, [response]);
-					this.publish("track", [{type : "event", category: "facebook", action : "me", label : "got user info"}]);
+					this.publish("track", [{
+						type : "event",
+						category: "facebook",
+						action : "me",
+						label : "got user info"
+					}]);
 				});
 			}
 		},
@@ -106,11 +117,23 @@ define(["../Module"], function (Module) {
 				if (response.authResponse) {
 					IS_CONNECTED = true;
 					this.publish(EVENTS.HANDLE_LOGIN, [response]);
-					this.publish("track", [{type : "event", category: "facebook", action : "login:accepted", label : "user connected w/ fb"}]);
+					this.publish("track", [{
+						type : "event",
+						category: "facebook",
+						action : "login:accepted",
+						label : "user connected w/ fb"
+					}]);
 				} else {
-					this.publish("track", [{type : "event", category: "facebook", action : "login:canceled", label : "user canceled login"}]);
+					this.publish("track", [{
+						type : "event",
+						category: "facebook",
+						action : "login:canceled",
+						label : "user canceled login"
+					}]);
 				}
-			}, {scope: 'publish_actions'}); // CUSTOMIZE THIS FOR YOUR LEVEL OF NEED
+			}, {
+				scope : "publish_actions"
+			}); // CUSTOMIZE THIS FOR YOUR LEVEL OF NEED
 		},
 
 
@@ -133,7 +156,13 @@ define(["../Module"], function (Module) {
 		onLike : function (URL) {
 			// tracls as facebook-like-profile or facebook-like-other (for custom page liking)
 			var action = "on-like-" + ((URL.indexOf("seed") > 0) ? "profile" : "other");
-			this.publish("track", [{type : "event", category: "facebook", action : action, label : URL}]);
+
+			this.publish("track", [{
+				type : "event",
+				category : "facebook",
+				action : action,
+				label : URL
+			}]);
 		},
 
 		//	add [data-custom-social="facebook"] to a link to automatically fire this
@@ -167,7 +196,12 @@ define(["../Module"], function (Module) {
 
 			FB.ui(publishObj);
 
-			this.publish("track", [{type : "event", category : "facebook", action : "on-post", label : data.origin}]);
+			this.publish("track", [{
+				type : "event",
+				category : "facebook",
+				action : "on-post",
+				label : data.origin
+			}]);
 
 			return data;
 		},
