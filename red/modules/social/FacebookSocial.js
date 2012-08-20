@@ -228,7 +228,7 @@ define(["../Module"], function (Module) {
 		},
 
 		onFBInit : function () {
-			FB.Event.unsubscribe('xfbml.render', this.onFBInit); // unregister, we only want to init once
+			FB.Event.unsubscribe("xfbml.render", this.onFBInit); // unregister, we only want to init once
 
 			this.subscribe(EVENTS.POST,  this.proxy(this.customFacebookPost));
 			this.subscribe(EVENTS.RENDER, this.proxy(this.render));
@@ -243,17 +243,17 @@ define(["../Module"], function (Module) {
 
 		fbAsyncInit : function () {
 
-			FB.Event.subscribe('comments.add', this.proxy(this.onAddComment));
-			FB.Event.subscribe('auth.sessionChange', this.proxy(this.onSesionChange));
-			FB.Event.subscribe('auth.statusChange', this.proxy(this.onStatusChange));
-			FB.Event.subscribe('auth.login', this.proxy(this.onLogin));
-			FB.Event.subscribe('edge.create', this.proxy(this.onLike));
-			FB.Event.subscribe('xfbml.render', this.proxy(this.onRender));
-			FB.Event.subscribe('xfbml.render', this.proxy(this.onFBInit));
+			FB.Event.subscribe("comments.add", this.proxy(this.onAddComment));
+			FB.Event.subscribe("auth.sessionChange", this.proxy(this.onSesionChange));
+			FB.Event.subscribe("auth.statusChange", this.proxy(this.onStatusChange));
+			FB.Event.subscribe("auth.login", this.proxy(this.onLogin));
+			FB.Event.subscribe("edge.create", this.proxy(this.onLike));
+			FB.Event.subscribe("xfbml.render", this.proxy(this.onRender));
+			FB.Event.subscribe("xfbml.render", this.proxy(this.onFBInit));
 
 			FB.init({
 				appId      : APP_ID, // App ID
-				channelUrl : STATIC_URL + '/js/red/modules/social/facebook-channel.html', // Channel File
+				channelUrl : STATIC_URL + "/js/red/modules/social/facebook-channel.html", // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow the server to access the session
 				oauth      : true, // enable OAuth 2.0
