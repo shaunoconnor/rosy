@@ -26,7 +26,7 @@ define(["../Module"], function (Module) {
 	var EVENTS = {
 			POST : "social/twitter/post",
 			RENDER : "social/twitter/render",
-			
+
 			LOGIN : "social/twitter/login",
 			LOGOUT : "social/twitter/logout",
 
@@ -56,14 +56,7 @@ define(["../Module"], function (Module) {
 		},
 
 		onTwitterInit : function () {
-			/*if (window.twttr) {
-				window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
-				window.twttr.events.bind('follow', $.proxy(this.onFollow, this));
-				window.twttr.events.bind('authComplete', $.proxy(this.onAuthComplete, this));
-			}*/
-			
 			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
-
 
 			if (window.twttr) {
 				var that = this;
@@ -109,7 +102,7 @@ define(["../Module"], function (Module) {
 
 		getLogout : function (e) {
 			if (window.twttr) {
-				window.twttr.events.bind("tweet",   this.proxy(this.onTweet));
+				window.twttr.events.bind("tweet",  this.proxy(this.onTweet));
 				window.twttr.events.bind("follow", this.proxy(this.onFollow));
 			}
 		},
@@ -148,7 +141,12 @@ define(["../Module"], function (Module) {
 				url = el.attr("src"),
 				tweeturl = this.querystring(url).url;
 
-			this.publish("track", [{type : "event", category: "twitter", action : "on-tweet", label : tweeturl }]);
+			this.publish("track", [{
+				type : "event",
+				category: "twitter",
+				action : "on-tweet",
+				label : tweeturl
+			}]);
 
 			return data;
 		},
@@ -157,7 +155,13 @@ define(["../Module"], function (Module) {
 			var el = $(e.currentTarget),
 				data = eData || el.data();
 
-			this.publish("track", [{type : "event", category: "twitter", action : "on-follow", label : data.url}]);
+			this.publish("track", [{
+				type : "event",
+				category: "twitter",
+				action : "on-follow",
+				label : data.url
+			}]);
+
 			return data;
 		},
 
@@ -182,21 +186,22 @@ define(["../Module"], function (Module) {
 
 			// fires onTweet
 			this.onTweet(e, eData);
-
 		},
 
 		render : function () {
-			$.ajax({ url: "//platform.twitter.com/widgets.js", dataType: "script", cache: true});
+			$.ajax({
+				url: "//platform.twitter.com/widgets.js",
+				dataType: "script",
+				cache: true
+			});
 		},
 
 		loadJSDK : function () {
-
 			$.ajax({
 				dataType: "script",
 				url: "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1",
 				cache: true
 			}).done($.proxy(this.onTwitterInit, this));
-
 		},
 
 		destroy : function () {
