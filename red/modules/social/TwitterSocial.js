@@ -56,34 +56,31 @@ define(["../Module"], function (Module) {
 		},
 
 		onTwitterInit : function () {
-			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
+			this.subscribe(EVENTS.LOGOUT, this.proxy(this.getLogout));
 
 			if (window.twttr) {
 				var that = this;
 				window.twttr.anywhere(function (T) {
+					T.bind("tweet",that.proxy(that.onTweet));
+					T.bind("follow", that.proxy(that.onFollow));
+					T.bind("authComplete", that.proxy(that.onAuthComplete));
+					T.bind("signOut", that.proxy(that.onSignOut));
 
-
-
-					T.bind("tweet", $.proxy(that.onTweet, that));
-					T.bind("follow", $.proxy(that.onFollow, that));
-					T.bind("authComplete", $.proxy(that.onAuthComplete, that));
-					T.bind("signOut", $.proxy(that.onSignOut, that));
-
-					$.subscribe(EVENTS.LOGIN, function (e) {
+					that.subscribe(EVENTS.LOGIN, function (e) {
 						T.signIn();
 					});
 
-					$.subscribe(EVENTS.POST_STATUS, function (e, data) {
+					that.subscribe(EVENTS.POST_STATUS, function (e, data) {
 						if (T.isConnected()) {
-							T.Status.update(data.text); 
+							T.Status.update(data.text);
 						} else {
 							that.customTweet(e, data);
 						}
 					});
 
-					$.subscribe(EVENTS.GET_STATUS, function (e) {
+					that.subscribe(EVENTS.GET_STATUS, function (e) {
 						if (T.isConnected()) {
-							that.onAuthComplete(null, T.currentUser)
+							that.onAuthComplete(null, T.currentUser);
 						} else {
 							that.onSignOut();
 						}
@@ -93,11 +90,11 @@ define(["../Module"], function (Module) {
 		},
 
 		onAuthComplete : function (e, eData) {
-			$.publish(EVENTS.HANDLE_LOGIN, [eData]);
+			this.publish(EVENTS.HANDLE_LOGIN, [eData]);
 		},
 
 		onSignOut : function (e) {
-			$.publish(EVENTS.HANDLE_LOGOUT);
+			this.publish(EVENTS.HANDLE_LOGOUT);
 		},
 
 		getLogout : function (e) {
