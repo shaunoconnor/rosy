@@ -33,8 +33,16 @@
 		interval = setInterval(func, 100);
 	};
 	page.onConsoleMessage = function (msg) { console.log(msg); };
+
+	var opened = false;
 	page.open(url, function (status) {
 		var test;
+
+		if (opened) {
+			return;
+		}
+
+		opened = true;
 		// inject custom scripts to change the behaviour of phantomjs
 
 		// add ES5 bind
