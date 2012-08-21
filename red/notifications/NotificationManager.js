@@ -1,6 +1,10 @@
 define(
 
-	function () {
+	[
+		"underscore"
+	],
+
+	function (_) {
 
 		"use strict";
 
@@ -109,7 +113,7 @@ define(
 		};
 
 		NotificationManager.unsubscribe = function (name, fn) {
-			var fnIndex = _interests[name].indexOf(fn);
+			var fnIndex = _.indexOf(_interests[name], fn);
 			if (fnIndex > -1) {
 				_interests[name].splice(fnIndex, 1);
 			}
@@ -125,14 +129,14 @@ define(
 
 		NotificationManager.releaseNotification = function (notification) {
 			notification.status = 1;
-			if (_pendingNotifications.indexOf(notification) > -1) {
+			if (_.indexOf(_pendingNotifications, notification) > -1) {
 				_notifyObjects(notification);
 			}
 		};
 
 		NotificationManager.cancelNotification = function (notification) {
 			var name = notification.name;
-			_pendingNotifications.splice(_pendingNotifications.indexOf(notification), 1);
+			_pendingNotifications.splice(_.indexOf(_pendingNotifications, notification), 1);
 			notification = null;
 		};
 

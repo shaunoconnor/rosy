@@ -1,31 +1,14 @@
 define(
 
-	function () {
+	[
+		"underscore"
+	],
+
+	function (_) {
 
 		"use strict";
 
 		/*=========================== HELPER FUNCTIONS ===========================*/
-
-			var _copyTo = function (obj) {
-				while(arguments.length > 1) {
-					var prop, obj2 = Array.prototype.splice.call(arguments, 1, 1)[0];
-
-					for (prop in obj2) {
-						if (obj2[prop] && typeof obj2[prop] === "object") {
-							if (obj2[prop] instanceof Array) {
-								obj[prop] = obj2[prop].concat();
-							}
-							else {
-								obj[prop] = _copyTo({}, obj2[prop]);
-							}
-						}
-						else {
-							obj[prop] = obj2[prop];
-						}
-					}
-				}
-				return obj;
-			};
 
 			var _createSuperFunction = function (fn, superFn) {
 				return function() {
@@ -60,7 +43,7 @@ define(
 			MClass.extend = function (props, staticProps) {
 
 				Dummy.prototype = this.prototype;
-				var p, proto = _copyTo(new Dummy(), props);
+				var p, proto = _.extend(new Dummy(), props);
 
 				function Class (vars) {
 
@@ -69,7 +52,7 @@ define(
 					* deep copy it to this.vars
 					**/
 					if (this.vars && typeof vars === "object") {
-						_copyTo(this.vars, vars);
+						_.extend(this.vars, _.clone(vars, true));
 					}
 
 					var fn = this.init || this.prototype.constructor;
@@ -94,14 +77,14 @@ define(
 						}
 
 						else if (props[p] !== null) {
-							proto[p] = _copyTo({}, props[p]);
+							proto[p] = _.clone(props[p], p === "vars");
 						}
 					}
 				}
 
 				Class.prototype = proto;
 
-				_copyTo(Class, this, props.static, staticProps);
+				_.extend(Class, this, props.static, staticProps);
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 

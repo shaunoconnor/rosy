@@ -2,59 +2,13 @@ define(
 
 	[
 		"./AbstractClass",
-		"../notifications/NotificationManager"
+		"../notifications/NotificationManager",
+		"underscore"
 	],
 
-	function (AbstractClass, NotificationManager) {
+	function (AbstractClass, NotificationManager, _) {
 
 		"use strict";
-
-		/*================= Function.bind() polyfill =================*/
-
-		if (!Function.prototype.bind) {
-			Function.prototype.bind = function (oThis) {
-				if (typeof this !== "function") {
-					// closest thing possible to the ECMAScript 5 internal IsCallable function
-					throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-				}
-
-				var aArgs = Array.prototype.slice.call(arguments, 1),
-					fToBind = this,
-					FNOP = function () {},
-					fBound = function () {
-						return fToBind.apply(this instanceof FNOP ? this : oThis || window,
-						aArgs.concat(Array.prototype.slice.call(arguments)));
-					};
-
-				FNOP.prototype = this.prototype;
-				fBound.prototype = new FNOP();
-				return fBound;
-			};
-		}
-
-		/*================= Array.indexOf polyfill =================*/
-
-		Array.prototype.indexOf = Array.prototype.indexOf || function (a, b) {
-			if (!this.length || !(this instanceof Array) || arguments.length < 1) {
-				return -1;
-			}
-
-			b = b || 0;
-
-			if (b >= this.length) {
-				return -1;
-			}
-
-			while (b < this.length) {
-				if (this[b] === a) {
-					return b;
-				}
-				b += 1;
-			}
-			return -1;
-		};
-
-		/*==================================*/
 
 		return AbstractClass.extend({
 
@@ -116,7 +70,7 @@ define(
 			},
 
 			/**
-			* Shorthand for func.bind(this)
+			* Cross-browser shorthand for func.bind(this)
 			* or rather, $.proxy(func, this) in jQuery terms
 			*/
 			proxy : function (fn) {
@@ -125,7 +79,7 @@ define(
 					return $.proxy(fn, this);
 				}
 
-				return fn ? fn.bind(this) : fn;
+				return fn ? _.bind(fn, this) : fn;
 			},
 
 			/**
