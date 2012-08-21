@@ -1,10 +1,10 @@
 define(
 
 	[
-		"underscore"
+		"../utils/Utils"
 	],
 
-	function (_) {
+	function (Utils) {
 
 		"use strict";
 
@@ -43,7 +43,7 @@ define(
 			MClass.extend = function (props, staticProps) {
 
 				Dummy.prototype = this.prototype;
-				var p, proto = _.extend(new Dummy(), props);
+				var p, proto = Utils.extend(new Dummy(), props);
 
 				function Class (vars) {
 
@@ -52,7 +52,7 @@ define(
 					* deep copy it to this.vars
 					**/
 					if (this.vars && typeof vars === "object") {
-						_.extend(this.vars, _.clone(vars, true));
+						Utils.extend(this.vars, true, vars);
 					}
 
 					var fn = this.init || this.prototype.constructor;
@@ -77,14 +77,14 @@ define(
 						}
 
 						else if (props[p] !== null) {
-							proto[p] = _.clone(props[p], p === "vars");
+							proto[p] = Utils.extend({}, (p === "vars"), props[p]);
 						}
 					}
 				}
 
 				Class.prototype = proto;
 
-				_.extend(Class, this, props.static, staticProps);
+				Utils.extend(Class, this, props.static, staticProps);
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 

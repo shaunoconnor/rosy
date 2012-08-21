@@ -10,15 +10,8 @@ require.config({
 		"text" : "libs/plugins/amd/text",
 		"json" : "libs/plugins/amd/json",
 		"templates" : "../../templates",
-
-		/**
-		* If you are using swig or if you want to use more than _.clone and _.extend:
-		* Replace `libs/lodash.barebones` with `libs/lodash`
-		**/
-
-		"underscore": "libs/lodash.barebones",
-		"swig": "libs/swig.min",
-
+		"underscore": "libs/lodash",
+		"swig": "libs/swig.min"
 	},
 
 	waitSeconds: 15,
