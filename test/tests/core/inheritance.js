@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"project/base/Page"
 ], function (OxBlood, Page) {
 	OxBlood.addCoreTests(function () {

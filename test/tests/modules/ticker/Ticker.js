@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"red/modules/Module",
 	"red/modules/ticker/Ticker"
 ], function (OxBlood, Module, Ticker) {

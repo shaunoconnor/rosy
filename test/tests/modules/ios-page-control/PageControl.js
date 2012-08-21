@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"red/modules/Module",
 	"red/modules/ios-page-control/PageControl"
 ], function (OxBlood, Module, PageControl) {

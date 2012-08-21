@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"red/modules/Module",
 	"red/modules/custom-form-field/CustomFormField"
 ], function (OxBlood, Module, CustomFormField) {

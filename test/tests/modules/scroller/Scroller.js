@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"red/modules/Module",
 	"red/modules/scroller/Scroller"
 ], function (OxBlood, Module, Scroller) {

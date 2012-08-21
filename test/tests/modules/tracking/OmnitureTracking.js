@@ -1,5 +1,5 @@
 define([
-	"oxblood",
+	"OxBlood",
 	"red/modules/Module",
 	"red/modules/tracking/OmnitureTracking"
 ], function (OxBlood, Module, OmnitureTracking) {
