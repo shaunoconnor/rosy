@@ -114,7 +114,7 @@ define(
 				_interests[name].splice(fnIndex, 1);
 			}
 		};
-		
+
 		NotificationManager.publish = function (name, data, callback, dispatcher) {
 			var notification = new Notification(name, data, callback);
 			notification.status = 1;
@@ -129,7 +129,7 @@ define(
 				_notifyObjects(notification);
 			}
 		};
-		
+
 		NotificationManager.cancelNotification = function (notification) {
 			var name = notification.name;
 			_pendingNotifications.splice(_pendingNotifications.indexOf(notification), 1);
