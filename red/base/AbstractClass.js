@@ -8,10 +8,10 @@ define(
 
 			var _copyTo = function (obj) {
 				while(arguments.length > 1) {
-					var prop, obj2 = Array.prototype.splice.call(arguments, 1, 1)[0];					
+					var prop, obj2 = Array.prototype.splice.call(arguments, 1, 1)[0];
 
-					for (prop in obj2) {						
-						if (typeof obj2[prop] === "object") {
+					for (prop in obj2) {
+						if (obj2[prop] && typeof obj2[prop] === "object") {
 							obj[prop] = _copyTo({}, obj2[prop]);
 						}
 						else {
@@ -49,13 +49,13 @@ define(
 		return (function() {
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
-			var dummy = function () {};
+			var Dummy = function () {};
 			var MClass = function () {};
 
 			MClass.extend = function (props, staticProps) {
 
-				dummy.prototype = this.prototype;
-				var p, proto = _copyTo(new dummy(), props);
+				Dummy.prototype = this.prototype;
+				var p, proto = _copyTo(new Dummy(), props);
 
 				function Class (vars) {
 
@@ -73,10 +73,10 @@ define(
 
 				for (p in props) {
 					if (
-						p !== "static" 
-						&& typeof props[p] === "function" 
-						&& typeof this.prototype[p] === "function" 
-						&& _doesCallSuper.test(props[p])
+						p !== "static" &&
+						typeof props[p] === "function" &&
+						typeof this.prototype[p] === "function" &&
+						_doesCallSuper.test(props[p])
 					) {
 						// this.sup() magic, on an as-needed
 						proto[p] = _createSuperFunction(props[p], this.prototype[p]);
@@ -88,8 +88,8 @@ define(
 							proto[p] = props[p].concat();
 						}
 
-						else {
-							proto[p] = _copyTo({}, props[p]);	
+						else if (props[p] !== null) {
+							proto[p] = _copyTo({}, props[p]);
 						}
 					}
 				}
@@ -100,7 +100,7 @@ define(
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 
-				if (typeof Class.prototype.setup == "function") {
+				if (typeof Class.prototype.setup === "function") {
 					Class.prototype.setup();
 				}
 
@@ -109,6 +109,6 @@ define(
 			
 			return MClass;
 
-		})();
+		}());
 	}
 );
