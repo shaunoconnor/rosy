@@ -3,10 +3,11 @@ define(
 	[
 		"./AbstractClass",
 		"../notifications/NotificationManager",
-		"underscore"
+		"../polyfills/function-bind",
+		"../polyfills/array-indexof"
 	],
 
-	function (AbstractClass, NotificationManager, _) {
+	function (AbstractClass, NotificationManager) {
 
 		"use strict";
 
