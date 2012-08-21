@@ -26,7 +26,7 @@ define(function (require, exports, module) {
 
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
-	require("jquery");
+	var $ = require("$");
 
 	var Site = Class.extend({
 
