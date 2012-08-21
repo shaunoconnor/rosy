@@ -1,7 +1,7 @@
 define(
 
 	function () {
-	
+
 		"use strict";
 
 		/*=========================== HELPER FUNCTIONS ===========================*/
@@ -12,7 +12,12 @@ define(
 
 					for (prop in obj2) {
 						if (obj2[prop] && typeof obj2[prop] === "object") {
-							obj[prop] = _copyTo({}, obj2[prop]);
+							if (obj2[prop] instanceof Array) {
+								obj[prop] = obj2[prop].concat();
+							}
+							else {
+								obj[prop] = _copyTo({}, obj2[prop]);
+							}
 						}
 						else {
 							obj[prop] = obj2[prop];
@@ -60,10 +65,10 @@ define(
 				function Class (vars) {
 
 					/**
-					* If USE_VARS is true, and the first argument, is an object,
+					* If the prototype has a vars object and the first argument, is an object,
 					* deep copy it to this.vars
 					**/
-					if (this.vars && this.vars.USE_VARS && typeof vars === "object") {
+					if (this.vars && typeof vars === "object") {
 						_copyTo(this.vars, vars);
 					}
 
@@ -106,7 +111,7 @@ define(
 
 				return Class;
 			};
-			
+
 			return MClass;
 
 		}());
