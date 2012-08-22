@@ -2,6 +2,7 @@
 	var optimist = require("optimist");
 	var union = require("union");
 	var ecstatic = require("ecstatic");
+	var path = require("path");
 	var fs = require("fs");
 	var cp = require("child_process");
 
@@ -11,13 +12,13 @@
 	var port = 8765;
 	var ip = "0.0.0.0";
 
-	var root = "./";
+	var root = "./" + (argv.r || argv.root || "");
 	var autoIndex = true;
 	var cache = 3600;
 
 	var host = "http://%i:%p".replace("%i", ip).replace("%p", port);
 	var webpage = "%s/test/runner.html".replace("%s", host);
-	var runner = "test/lib/mocha/run-mocha.js";
+	var runner = path.join(root, "test/lib/mocha/run-mocha.js");
 
 	var server = union.createServer({
 		before : [
