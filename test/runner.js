@@ -1,8 +1,12 @@
 (function () {
+	var optimist = require("optimist");
 	var union = require("union");
 	var ecstatic = require("ecstatic");
 	var fs = require("fs");
 	var cp = require("child_process");
+
+	var argv = optimist.argv;
+	var mode = argv.m || argv.mode;
 
 	var port = 8765;
 	var ip = "0.0.0.0";
@@ -25,24 +29,35 @@
 	});
 
 	server.listen(port, ip, function () {
-		var child = cp.spawn("phantomjs", [runner, webpage], {
-			env: null,
-			setsid: true,
-			stdio: [0, 1, "pipe"]
-		});
+		var child;
 
-		child.addListener("exit", function () {
-			server.close();
-			process.exit();
-		});
+		if (mode === "browser") {
+			child = cp.spawn("open", [webpage], {
+				env: null,
+				setsid: true,
+				stdio: "inherit"
+			});
+		} else {
+			child = cp.spawn("phantomjs", [runner, webpage], {
+				env: null,
+				setsid: true,
+				stdio: [0, 1, "pipe"]
+			});
 
-		child.stderr.on("data", function (data) {
-			if (~ data.toString().indexOf("No such file or directory")) {
-				console.error("Are you missing PhantomJS? Install via `brew install phantomjs`");
-			}
+			child.stderr.on("data", function (data) {
+				if (~ data.toString().indexOf("No such file or directory")) {
+					console.error("Are you missing PhantomJS? Install via `brew install phantomjs`");
+				}
 
-			process.exit();
-		});
+				process.exit();
+			});
+
+			child.addListener("exit", function () {
+				server.close();
+				process.exit();
+			});
+		}
+
 	});
 
 }());
