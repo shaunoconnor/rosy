@@ -24,7 +24,7 @@ define([
 			var key, test, i, j;
 
 			for (key in tests) {
-				test = tests[key];
+				test = tests[key].sort();
 
 				for (i = 0, j = test.length; i < j; i++) {
 					test[i]();
