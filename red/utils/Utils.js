@@ -2,6 +2,8 @@ define(
 
 	function () {
 
+		/*jshint eqeqeq:false, noempty:false, eqnull:true */
+
 		"use strict";
 
 		function extend (target, deep /*, obj1, obj2, obj3, ... */) {
@@ -58,7 +60,7 @@ define(
 			}
 
 			// Return the modified object
-			return target;			
+			return target;
 		}
 
 		function isObject (obj) {
@@ -81,7 +83,7 @@ define(
 				return obj.toString() == "[object Array]";
 			}
 			return false;
-		}
+		};
 
 		function isPlainObject (obj) {
 

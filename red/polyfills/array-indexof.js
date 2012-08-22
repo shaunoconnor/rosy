@@ -3,7 +3,8 @@ define(
 
 		if (!Array.prototype.indexOf) {
 
-			 Array.prototype.indexOf = function (a, b) {
+			Array.prototype.indexOf = function (a, b) {
+
 				if (!this.length || !(this instanceof Array) || arguments.length < 1) {
 					return -1;
 				}
