@@ -1,3 +1,5 @@
+/*jshint es5:true*/
+
 define([
 	"OxBlood",
 	"project/site"

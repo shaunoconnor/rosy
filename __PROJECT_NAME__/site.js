@@ -1,8 +1,11 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* site.js */
-/*jshint onevar:false*/
 
 define(function (require, exports, module) {
+
+	/*global console */
+
+	"use strict";
 
 	var Class = require("red/base/Class");
 

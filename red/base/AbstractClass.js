@@ -6,6 +6,8 @@ define(
 
 	function (Utils) {
 
+		/*jshint es5:true*/
+
 		"use strict";
 
 		/*=========================== HELPER FUNCTIONS ===========================*/

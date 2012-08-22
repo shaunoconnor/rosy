@@ -3,6 +3,7 @@ define(
 	function () {
 
 		/*jshint eqeqeq:false, noempty:false, eqnull:true */
+		/*global $, window */
 
 		"use strict";
 
@@ -36,13 +37,13 @@ define(
 
 						// Recurse if we're merging plain objects or arrays
 						if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
-							
+
 							if (copyIsArray) {
 								copyIsArray = false;
 								clone = src && isArray(src) ? src : [];
 
 							}
-							
+
 							else {
 								clone = src && isPlainObject(src) ? src : {};
 							}

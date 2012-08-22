@@ -9,6 +9,8 @@ define(
 
 	function (AbstractClass, NotificationManager) {
 
+		/*global $, window */
+
 		"use strict";
 
 		return AbstractClass.extend({
