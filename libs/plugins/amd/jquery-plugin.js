@@ -1,8 +1,8 @@
 define(
 
-	var prefix = "libs/plugins/jquery/jquery.";
-
 	function () {
+
+		var prefix = "libs/plugins/jquery/jquery.";
 
 		return {
 
