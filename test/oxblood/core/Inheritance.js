@@ -45,6 +45,44 @@ define([
 					expect(foo.vars.x).to.equal(1);
 				});
 
+				it("should deep copy objects", function () {
+					var Foo = Page.extend({
+						vars : {
+							y : {
+								a: 1,
+								b: 2,
+								c: [0, 1, 2]
+							}
+						}
+					});
+
+					var Bar = Foo.extend({
+						vars : {
+							y : {
+								a: 3,
+								b: 4,
+								c: [5, 6, 7]
+							}
+						}
+					});
+
+					var foo = new Foo();
+					var bar = new Bar();
+
+					expect(foo.vars.y.a).to.equal(1);
+					expect(foo.vars.y.b).to.equal(2);
+					expect(foo.vars.y.c[1]).to.equal(1);
+
+					expect(bar.vars.y.a).to.equal(3);
+					expect(bar.vars.y.b).to.equal(4);
+					expect(bar.vars.y.c[1]).to.equal(6);
+
+					bar.vars.y.b = 9;
+
+					expect(foo.vars.y.b).to.equal(2);
+					expect(bar.vars.y.b).to.equal(9);
+				});
+
 			});
 
 		});
