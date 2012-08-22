@@ -33,6 +33,7 @@
 
 		child.addListener("exit", function () {
 			server.close();
+			process.exit();
 		});
 
 		child.stderr.on("data", function (data) {
