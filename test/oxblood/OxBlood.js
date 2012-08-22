@@ -1,6 +1,6 @@
 define([
 	"test/lib/chai",
-	"test/lib/mocha"
+	"test/lib/mocha/mocha"
 ], function (chai, _mocha) {
 	mocha.setup("bdd");
 	expect = chai.expect;

@@ -14,7 +14,7 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<link rel="stylesheet" href="css/mocha.css" />
+		<link rel="stylesheet" href="lib/mocha/css/mocha.css" />
 
 		<meta property="ga:property_id" content="UA-26918715-3"/>
 		<meta property="ga:domain" content="none"/>
@@ -42,9 +42,9 @@
 				baseUrl : "../",
 				paths: {
 					"project": "__PROJECT_NAME__",
-					"OxBlood": "test/OxBlood",
-					"core": "test/tests/core",
-					"modules": "test/tests/modules"
+					"OxBlood": "test/oxblood/OxBlood",
+					"core": "test/oxblood/core",
+					"modules": "test/oxblood/modules"
 				},
 				urlArgs : "cacheBust=" + (new Date()).getTime()
 			});

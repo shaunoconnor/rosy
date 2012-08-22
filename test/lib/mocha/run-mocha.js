@@ -46,13 +46,13 @@
 		// inject custom scripts to change the behaviour of phantomjs
 
 		// add ES5 bind
-		page.injectJs('bind.js');
+		page.injectJs('../bind.js');
 
 		// add the node.js console
-		page.injectJs('console.js');
+		page.injectJs('../console.js');
 
 		// add a shim for the node.js process.stdout.write
-		page.injectJs('process.stdout.write.js');
+		page.injectJs('../process.stdout.write.js');
 
 		// now execute phantomjs
 		page.evaluate(function(){
