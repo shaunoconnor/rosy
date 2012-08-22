@@ -80,7 +80,7 @@ define(
 					return $.proxy(fn, this);
 				}
 
-				return fn ? _.bind(fn, this) : fn;
+				return fn ? fn.bind(this) : fn;
 			},
 
 			/**
