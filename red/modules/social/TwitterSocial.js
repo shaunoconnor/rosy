@@ -26,7 +26,7 @@ define(["../Module"], function (Module) {
 	var EVENTS = {
 			POST : "social/twitter/post",
 			RENDER : "social/twitter/render",
-			
+
 			LOGIN : "social/twitter/login",
 			LOGOUT : "social/twitter/logout",
 
@@ -56,41 +56,31 @@ define(["../Module"], function (Module) {
 		},
 
 		onTwitterInit : function () {
-			/*if (window.twttr) {
-				window.twttr.events.bind('tweet',   $.proxy(this.onTweet, this));
-				window.twttr.events.bind('follow', $.proxy(this.onFollow, this));
-				window.twttr.events.bind('authComplete', $.proxy(this.onAuthComplete, this));
-			}*/
-			
-			$.subscribe(EVENTS.LOGOUT, $.proxy(this.getLogout, this));
-
+			this.subscribe(EVENTS.LOGOUT, this.proxy(this.getLogout));
 
 			if (window.twttr) {
 				var that = this;
 				window.twttr.anywhere(function (T) {
+					T.bind("tweet",that.proxy(that.onTweet));
+					T.bind("follow", that.proxy(that.onFollow));
+					T.bind("authComplete", that.proxy(that.onAuthComplete));
+					T.bind("signOut", that.proxy(that.onSignOut));
 
-
-
-					T.bind("tweet", $.proxy(that.onTweet, that));
-					T.bind("follow", $.proxy(that.onFollow, that));
-					T.bind("authComplete", $.proxy(that.onAuthComplete, that));
-					T.bind("signOut", $.proxy(that.onSignOut, that));
-
-					$.subscribe(EVENTS.LOGIN, function (e) {
+					that.subscribe(EVENTS.LOGIN, function (e) {
 						T.signIn();
 					});
 
-					$.subscribe(EVENTS.POST_STATUS, function (e, data) {
+					that.subscribe(EVENTS.POST_STATUS, function (e, data) {
 						if (T.isConnected()) {
-							T.Status.update(data.text); 
+							T.Status.update(data.text);
 						} else {
 							that.customTweet(e, data);
 						}
 					});
 
-					$.subscribe(EVENTS.GET_STATUS, function (e) {
+					that.subscribe(EVENTS.GET_STATUS, function (e) {
 						if (T.isConnected()) {
-							that.onAuthComplete(null, T.currentUser)
+							that.onAuthComplete(null, T.currentUser);
 						} else {
 							that.onSignOut();
 						}
@@ -100,16 +90,16 @@ define(["../Module"], function (Module) {
 		},
 
 		onAuthComplete : function (e, eData) {
-			$.publish(EVENTS.HANDLE_LOGIN, [eData]);
+			this.publish(EVENTS.HANDLE_LOGIN, [eData]);
 		},
 
 		onSignOut : function (e) {
-			$.publish(EVENTS.HANDLE_LOGOUT);
+			this.publish(EVENTS.HANDLE_LOGOUT);
 		},
 
 		getLogout : function (e) {
 			if (window.twttr) {
-				window.twttr.events.bind("tweet",   this.proxy(this.onTweet));
+				window.twttr.events.bind("tweet",  this.proxy(this.onTweet));
 				window.twttr.events.bind("follow", this.proxy(this.onFollow));
 			}
 		},
@@ -148,7 +138,12 @@ define(["../Module"], function (Module) {
 				url = el.attr("src"),
 				tweeturl = this.querystring(url).url;
 
-			this.publish("track", [{type : "event", category: "twitter", action : "on-tweet", label : tweeturl }]);
+			this.publish("track", [{
+				type : "event",
+				category: "twitter",
+				action : "on-tweet",
+				label : tweeturl
+			}]);
 
 			return data;
 		},
@@ -157,7 +152,13 @@ define(["../Module"], function (Module) {
 			var el = $(e.currentTarget),
 				data = eData || el.data();
 
-			this.publish("track", [{type : "event", category: "twitter", action : "on-follow", label : data.url}]);
+			this.publish("track", [{
+				type : "event",
+				category: "twitter",
+				action : "on-follow",
+				label : data.url
+			}]);
+
 			return data;
 		},
 
@@ -182,21 +183,22 @@ define(["../Module"], function (Module) {
 
 			// fires onTweet
 			this.onTweet(e, eData);
-
 		},
 
 		render : function () {
-			$.ajax({ url: "//platform.twitter.com/widgets.js", dataType: "script", cache: true});
+			$.ajax({
+				url: "//platform.twitter.com/widgets.js",
+				dataType: "script",
+				cache: true
+			});
 		},
 
 		loadJSDK : function () {
-
 			$.ajax({
 				dataType: "script",
 				url: "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1",
 				cache: true
 			}).done($.proxy(this.onTwitterInit, this));
-
 		},
 
 		destroy : function () {
