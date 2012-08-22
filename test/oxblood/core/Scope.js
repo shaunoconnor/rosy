@@ -1,20 +1,21 @@
 define([
 	"OxBlood",
-	"project/site"
-], function (OxBlood, Site) {
+	"project/base/Page"
+], function (OxBlood, Page) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Scope", function () {
+			var testInstance = new Page();
 
 			describe(".proxy()", function () {
 
 				it("proxy should be a function", function () {
-					expect(Site.proxy).to.be.a("function");
+					expect(testInstance.proxy).to.be.a("function");
 				});
 
 				it("should report scope as itself", function (done) {
-					Site.proxy(function () {
-						expect(this).to.equal(Site);
+					testInstance.proxy(function () {
+						expect(this).to.equal(testInstance);
 						done();
 					})();
 				});
