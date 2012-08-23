@@ -15,7 +15,7 @@ define([
 
 				it("should report scope as itself", function (done) {
 					testInstance.proxy(function () {
-						expect(this).to.equal(testInstance);
+						expect(this).to.eql(testInstance);
 						done();
 					})();
 				});

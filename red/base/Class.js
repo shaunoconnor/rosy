@@ -78,7 +78,7 @@ define(
 			*/
 			proxy : function (fn) {
 
-				if ($ && $.proxy) {
+				if (window.$ && $.proxy) {
 					return $.proxy(fn, this);
 				}
 
