@@ -45,7 +45,7 @@ define([
 					var testPage = Page.extend({
 
 						vars : {
-							x : 0,
+							x : 0
 						},
 
 						init : function () {
