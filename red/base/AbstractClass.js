@@ -45,7 +45,7 @@ define(
 			MClass.extend = function (props, staticProps) {
 
 				Dummy.prototype = this.prototype;
-				var p, proto = Utils.extend(new Dummy(), props);
+				var p, proto = Utils.extend(new Dummy(), true, props);
 
 				function Class (vars) {
 
@@ -79,14 +79,13 @@ define(
 						}
 
 						else if (props[p] !== null) {
-							proto[p] = Utils.extend({}, (p === "vars"), props[p]);
+							proto[p] = Utils.extend({}, true, props[p]);
 						}
 					}
 				}
 
 				Class.prototype = proto;
-
-				Utils.extend(Class, this, props.static, staticProps);
+				Utils.extend(Class, true, this, props.static, staticProps);
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 
