@@ -54,7 +54,7 @@ define(
 					* deep copy it to this.vars
 					**/
 					if (this.vars && typeof vars === "object") {
-						Utils.extend(this.vars, true, vars);
+						this.vars = Utils.extend({}, true, this.vars, vars);
 					}
 
 					var fn = this.init || this.prototype.constructor;
@@ -85,7 +85,7 @@ define(
 				}
 
 				Class.prototype = proto;
-				Utils.extend(Class, true, this, props.static, staticProps);
+				Utils.extend(Class, this, props.static, staticProps);
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 
