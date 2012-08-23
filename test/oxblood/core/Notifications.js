@@ -7,6 +7,8 @@ define([
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Notifications", function () {
+			var delay = 10;
+
 			var testInstance = new Page();
 
 			describe(".subscribe()", function () {
@@ -81,12 +83,7 @@ define([
 				var doneCalled;
 
 				it("should hold a notification", function (done) {
-					var time, lapse;
-					var delay = 10;
-
 					testInstance.subscribe("hold-test", function (notification) {
-						time = new Date().getTime();
-
 						notification.hold();
 
 						window.setTimeout(function () {
@@ -98,10 +95,6 @@ define([
 					});
 
 					holdInstance.subscribe("hold-test", function (notification) {
-						lapse = new Date().getTime() - time;
-
-						expect(lapse).to.be.greaterThan(delay - 1);
-
 						if (!doneCalled) {
 							done(false);
 						}
@@ -117,12 +110,7 @@ define([
 				var doneCalled;
 
 				it("should release a notification", function (done) {
-					var time, lapse;
-					var delay = 10;
-
 					testInstance.subscribe("release-test", function (notification) {
-						time = new Date().getTime();
-
 						notification.hold();
 
 						window.setTimeout(function () {
@@ -135,9 +123,6 @@ define([
 					});
 
 					releaseInstance.subscribe("release-test", function (notification) {
-						lapse = new Date().getTime() - time;
-						expect(lapse).to.be.greaterThan(delay - 1);
-
 						doneCalled = true;
 						done();
 					});
@@ -151,8 +136,6 @@ define([
 				var cancelInstance = new Page();
 
 				it("should cancel a notification", function (done) {
-					var delay = 10;
-
 					testInstance.subscribe("cancel-test", function (notification) {
 						notification.cancel();
 
