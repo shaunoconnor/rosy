@@ -52,9 +52,6 @@
 		<!-- End Require JS -->
 
 		<script>
-			var AGENT = window.navigator.userAgent;
-			var GLOBALS = ["FB", "fbAsyncInit", "twttr", "_gat", "gaGlobal"];
-
 			require([
 				"OxBlood",
 
@@ -73,8 +70,8 @@
 			], function (OxBlood) {
 				OxBlood.registerTests();
 
-				if (!(/PhantomJS/).test(AGENT)) {
-					mocha.run().globals(GLOBALS);
+				if (!(/PhantomJS/).test(window.navigator.userAgent)) {
+					mocha.run();
 				}
 			});
 		</script>

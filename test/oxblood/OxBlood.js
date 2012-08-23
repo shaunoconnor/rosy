@@ -2,7 +2,10 @@ define([
 	"test/lib/chai",
 	"test/lib/mocha/mocha"
 ], function (chai, _mocha) {
-	mocha.setup("bdd");
+	mocha.setup({
+		ui: "bdd",
+		ignoreLeaks: true
+	});
 	expect = chai.expect;
 
 	return {
