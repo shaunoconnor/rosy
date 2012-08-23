@@ -43,7 +43,10 @@ define([
 
 				it("should unsubscribe all notifications", function (done) {
 					var testPage = Page.extend({
-						vars : {},
+
+						vars : {
+							x : 0,
+						},
 
 						init : function () {
 							this.subscribe("test-1", function () {
