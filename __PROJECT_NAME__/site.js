@@ -1,11 +1,8 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* site.js */
+/*jshint onevar:false*/
 
 define(function (require, exports, module) {
-
-	/*global console */
-
-	"use strict";
 
 	var Class = require("red/base/Class");
 
@@ -29,7 +26,7 @@ define(function (require, exports, module) {
 
 	// global plugins and libraries that are also needed but dont support amd
 	// thus we don't add them as arguments in the function below
-	var $ = require("$");
+	require("jquery");
 
 	var Site = Class.extend({
 
