@@ -80,7 +80,7 @@ define(
 
 						else if (props[p] !== null) {
 							if (p === "vars") {
-								proto[p] = Utils.extend({}, true, this.prototype[p], props[p]);	
+								proto[p] = Utils.extend({}, true, this.prototype[p], props[p]);
 							}
 							else {
 								proto[p] = Utils.extend({}, props[p]);
