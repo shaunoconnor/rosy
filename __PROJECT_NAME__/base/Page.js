@@ -12,9 +12,7 @@ define(["red/base/Class"], function (Class) {
 			x : 1
 		},
 
-		init : function () {
-			console.log("init page superclass");
-		}
+		init : function () {}
 
 	});
 });
