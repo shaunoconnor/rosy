@@ -1,5 +1,6 @@
 define([
 	"test/lib/chai",
+	"test/lib/trim",
 	"test/lib/mocha/mocha"
 ], function (chai, _mocha) {
 	mocha.setup({
