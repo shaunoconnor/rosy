@@ -7,17 +7,17 @@ define(
 
 		"use strict";
 
-		function extend (target, deep /*, obj1, obj2, obj3, ... */) {
+		function extend (target) {
 
-			var options, name, src, copy, copyIsArray, clone, i, length;
+			var deep, options, name, src, copy, copyIsArray, clone, i, length;
 
 			// Handle case when target is a string or something (possible in deep copy)
 			if (typeof target !== "object" && !isFunction(target)) {
 				target = {};
 			}
 
-			i = isObject(deep) ? 1 : 2;
-			deep = deep === true;
+			i = isObject(arguments[1]) ? 1 : 2;
+			deep = (arguments[1] === true);
 
 			for (length = arguments.length; i < length; i ++) {
 
