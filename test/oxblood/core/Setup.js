@@ -12,14 +12,13 @@ define([
 					var testPage = Page.extend({
 						setup : function () {
 							this.vars.isSetup = true;
-							expect(this.vars.isSetup).to.be(true);
+							expect(this.vars.isSetup).to.be.ok();
 
 							done();
 						}
 					});
 
 					var testInstance = new Page();
-					expect(testInstance.setup).to.be.a("function");
 				});
 
 			});
