@@ -79,7 +79,12 @@ define(
 						}
 
 						else if (props[p] !== null) {
-							proto[p] = Utils.extend({}, (p === "vars"), props[p]);
+							if (p === "vars") {
+								proto[p] = Utils.extend({}, true, this.prototype[p], props[p]);	
+							}
+							else {
+								proto[p] = Utils.extend({}, props[p]);
+							}
 						}
 					}
 				}
