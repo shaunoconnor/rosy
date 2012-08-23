@@ -82,8 +82,19 @@ define([
 				var holdInstance = new Page();
 				var doneCalled;
 
+				it("hold should be a function", function (done) {
+					testInstance.subscribe("hold-test-1", function (notification) {
+						expect(notification).to.be.an("object");
+						expect(notification.hold).to.be.a("function");
+
+						done();
+					});
+
+					testInstance.publish("hold-test-1");
+				});
+
 				it("should hold a notification", function (done) {
-					testInstance.subscribe("hold-test", function (notification) {
+					testInstance.subscribe("hold-test-2", function (notification) {
 						notification.hold();
 
 						window.setTimeout(function () {
@@ -94,13 +105,13 @@ define([
 						done();
 					});
 
-					holdInstance.subscribe("hold-test", function (notification) {
+					holdInstance.subscribe("hold-test-2", function (notification) {
 						if (!doneCalled) {
 							done(false);
 						}
 					});
 
-					testInstance.publish("hold-test");
+					testInstance.publish("hold-test-2");
 				});
 
 			});
@@ -109,8 +120,19 @@ define([
 				var releaseInstance = new Page();
 				var doneCalled;
 
+				it("release should be a function", function (done) {
+					testInstance.subscribe("release-test-1", function (notification) {
+						expect(notification).to.be.an("object");
+						expect(notification.release).to.be.a("function");
+
+						done();
+					});
+
+					testInstance.publish("release-test-1");
+				});
+
 				it("should release a notification", function (done) {
-					testInstance.subscribe("release-test", function (notification) {
+					testInstance.subscribe("release-test-2", function (notification) {
 						notification.hold();
 
 						window.setTimeout(function () {
@@ -122,12 +144,12 @@ define([
 						}, delay);
 					});
 
-					releaseInstance.subscribe("release-test", function (notification) {
+					releaseInstance.subscribe("release-test-2", function (notification) {
 						doneCalled = true;
 						done();
 					});
 
-					testInstance.publish("release-test");
+					testInstance.publish("release-test-2");
 				});
 
 			});
@@ -135,8 +157,19 @@ define([
 			describe(".cancel()", function () {
 				var cancelInstance = new Page();
 
+				it("cancel should be a function", function (done) {
+					testInstance.subscribe("cancel-test-1", function (notification) {
+						expect(notification).to.be.an("object");
+						expect(notification.cancel).to.be.a("function");
+
+						done();
+					});
+
+					testInstance.publish("cancel-test-1");
+				});
+
 				it("should cancel a notification", function (done) {
-					testInstance.subscribe("cancel-test", function (notification) {
+					testInstance.subscribe("cancel-test-2", function (notification) {
 						notification.cancel();
 
 						window.setTimeout(function () {
@@ -144,17 +177,28 @@ define([
 						}, delay);
 					});
 
-					cancelInstance.subscribe("cancel-test", function (notification) {
+					cancelInstance.subscribe("cancel-test-2", function (notification) {
 						done(false);
 					});
 
-					testInstance.publish("cancel-test");
+					testInstance.publish("cancel-test-2");
 				});
 			});
 
 			describe(".respond()", function () {
+				it("respond should be a function", function (done) {
+					testInstance.subscribe("respond-test-1", function (notification) {
+						expect(notification).to.be.an("object");
+						expect(notification.respond).to.be.a("function");
+
+						done();
+					});
+
+					testInstance.publish("respond-test-1");
+				});
+
 				it("should respond to a notification with a callback", function (done) {
-					testInstance.subscribe("respond-test", function (notification) {
+					testInstance.subscribe("respond-test-2", function (notification) {
 						expect(notification).to.be.an("object");
 
 						notification.respond({
@@ -163,7 +207,7 @@ define([
 						});
 					});
 
-					testInstance.publish("respond-test", {}, function (obj) {
+					testInstance.publish("respond-test-2", {}, function (obj) {
 						expect(obj).to.eql({
 							x : 1,
 							y : 2
@@ -175,13 +219,22 @@ define([
 			});
 
 			describe("n.dispatcher", function () {
-				it("should report the current target", function () {
-					testInstance.subscribe("dispatcher-test", function (notification) {
+				it("notification should contain dispatcher property", function (done) {
+					testInstance.subscribe("dispatcher-test-1", function (notification) {
 						expect(notification.dispatcher).to.be.an("object");
-						expect(notification.dispatcher).to.eql(testInstance);
+						done();
 					});
 
-					testInstance.publish("dispatcher-test");
+					testInstance.publish("dispatcher-test-1");
+				});
+
+				it("should report the current target", function (done) {
+					testInstance.subscribe("dispatcher-test-2", function (notification) {
+						expect(notification.dispatcher).to.eql(testInstance);
+						done();
+					});
+
+					testInstance.publish("dispatcher-test-2");
 				});
 			});
 
