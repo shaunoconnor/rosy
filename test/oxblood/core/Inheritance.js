@@ -9,7 +9,7 @@ define([
 			describe("Class Inheritance", function () {
 
 				it("should create an instance of Page", function () {
-					expect(new Page()).to.be.an["instanceof"](Page);
+					expect(new Page()).to.be.a(Page);
 				});
 
 				it("should contain vars.x with a value of 1", function () {

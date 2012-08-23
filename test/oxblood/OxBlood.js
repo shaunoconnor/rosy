@@ -1,13 +1,12 @@
 define([
-	"test/lib/chai",
 	"test/lib/trim",
+	"test/lib/expect",
 	"test/lib/mocha/mocha"
-], function (chai, _mocha) {
+], function () {
 	mocha.setup({
 		ui: "bdd",
 		ignoreLeaks: true
 	});
-	expect = chai.expect;
 
 	return {
 		tests : {

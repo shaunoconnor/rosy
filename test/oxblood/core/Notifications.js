@@ -62,7 +62,7 @@ define([
 
 				it("should publish a notification with data", function (done) {
 					testInstance.subscribe("pub-data-test", function (notification) {
-						expect(notification.data).to.deep.equal({
+						expect(notification.data).to.eql({
 							x : 1,
 							y : 2
 						});
@@ -164,7 +164,7 @@ define([
 					});
 
 					testInstance.publish("respond-test", {}, function (obj) {
-						expect(obj).to.deep.equal({
+						expect(obj).to.eql({
 							x : 1,
 							y : 2
 						});
@@ -178,7 +178,7 @@ define([
 				it("should report the current target", function () {
 					testInstance.subscribe("dispatcher-test", function (notification) {
 						expect(notification.dispatcher).to.be.an("object");
-						expect(notification.dispatcher).to.deep.equal(testInstance);
+						expect(notification.dispatcher).to.eql(testInstance);
 					});
 
 					testInstance.publish("dispatcher-test");

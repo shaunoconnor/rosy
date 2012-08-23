@@ -22,7 +22,7 @@ define([
 				});
 
 				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.an["instanceof"](Module);
+					expect(testInstance).to.be.a(Module);
 				});
 
 			});
