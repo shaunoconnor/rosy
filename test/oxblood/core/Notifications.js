@@ -78,10 +78,11 @@ define([
 
 			describe(".hold()", function () {
 				var holdInstance = new Page();
+				var doneCalled;
 
 				it("should hold a notification", function (done) {
 					var time, lapse;
-					var delay = 50;
+					var delay = 10;
 
 					testInstance.subscribe("hold-test", function (notification) {
 						time = new Date().getTime();
@@ -92,14 +93,18 @@ define([
 							notification.release();
 						}, delay);
 
+						doneCalled = true;
 						done();
 					});
 
 					holdInstance.subscribe("hold-test", function (notification) {
 						lapse = new Date().getTime() - time;
+
 						expect(lapse).to.be.greaterThan(delay - 1);
 
-						done(false);
+						if (!doneCalled) {
+							done(false);
+						}
 					});
 
 					testInstance.publish("hold-test");
@@ -109,10 +114,11 @@ define([
 
 			describe(".release()", function () {
 				var releaseInstance = new Page();
+				var doneCalled;
 
 				it("should release a notification", function (done) {
 					var time, lapse;
-					var delay = 50;
+					var delay = 10;
 
 					testInstance.subscribe("release-test", function (notification) {
 						time = new Date().getTime();
@@ -121,7 +127,10 @@ define([
 
 						window.setTimeout(function () {
 							notification.release();
-							done(false);
+
+							if (!doneCalled) {
+								done(false);
+							}
 						}, delay);
 					});
 
@@ -129,6 +138,7 @@ define([
 						lapse = new Date().getTime() - time;
 						expect(lapse).to.be.greaterThan(delay - 1);
 
+						doneCalled = true;
 						done();
 					});
 
@@ -141,12 +151,14 @@ define([
 				var cancelInstance = new Page();
 
 				it("should cancel a notification", function (done) {
+					var delay = 10;
+
 					testInstance.subscribe("cancel-test", function (notification) {
 						notification.cancel();
 
 						window.setTimeout(function () {
 							done();
-						}, 50);
+						}, delay);
 					});
 
 					cancelInstance.subscribe("cancel-test", function (notification) {
