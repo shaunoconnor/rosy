@@ -1,15 +1,19 @@
 define(
 
+	[
+		"../polyfills/array-indexof"
+	],
+
 	function () {
 
 		"use strict";
 
-		var Notification = function (name, data, callback) {			
+		var Notification = function (name, data, callback) {
 			this.name = name;
 			this.data = data;
 			this.callback = callback;
 			return this;
-		}
+		};
 
 		Notification.prototype.data = {};
 		Notification.prototype.name = "";
@@ -60,7 +64,7 @@ define(
 			var name = notification.name;
 			_pendingNotifications.push(notification);
 			_notifyObjects(notification);
-		};
+		}
 
 		function _notifyObjects (notification) {
 
@@ -72,7 +76,7 @@ define(
 				var len = subs.length;
 
 				while(notification.pointer < len) {
-					if (notification.status == 1) {
+					if (notification.status === 1) {
 						subs[notification.pointer](notification);
 						notification.pointer ++;
 					}
@@ -91,7 +95,7 @@ define(
 					notification.cancel();
 				}
 			}
-		};	
+		}
 
 		var NotificationManager = {};
 
@@ -114,7 +118,7 @@ define(
 				_interests[name].splice(fnIndex, 1);
 			}
 		};
-		
+
 		NotificationManager.publish = function (name, data, callback, dispatcher) {
 			var notification = new Notification(name, data, callback);
 			notification.status = 1;
@@ -129,7 +133,7 @@ define(
 				_notifyObjects(notification);
 			}
 		};
-		
+
 		NotificationManager.cancelNotification = function (notification) {
 			var name = notification.name;
 			_pendingNotifications.splice(_pendingNotifications.indexOf(notification), 1);

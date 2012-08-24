@@ -1,11 +1,14 @@
 require.config({
+
 	paths: {
-		"jquery": "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min",
-		"$" : "libs/plugins/amd/$"
+		"$": "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min",
+		"templates" : "../../templates"
 	},
+
 	waitSeconds: 15,
+
 	shim : {
-		jquery : {
+		"$" : {
 			exports : "jQuery"
 		}
 	}

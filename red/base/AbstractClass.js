@@ -1,26 +1,16 @@
 define(
 
-	function () {
-	
+	[
+		"../utils/Utils"
+	],
+
+	function (Utils) {
+
+		/*jshint es5:true*/
+
 		"use strict";
 
 		/*=========================== HELPER FUNCTIONS ===========================*/
-
-			var _copyTo = function (obj) {
-				while(arguments.length > 1) {
-					var prop, obj2 = Array.prototype.splice.call(arguments, 1, 1)[0];					
-
-					for (prop in obj2) {						
-						if (typeof obj2[prop] === "object") {
-							obj[prop] = _copyTo({}, obj2[prop]);
-						}
-						else {
-							obj[prop] = obj2[prop];
-						}
-					}
-				}
-				return obj;
-			};
 
 			var _createSuperFunction = function (fn, superFn) {
 				return function() {
@@ -49,22 +39,22 @@ define(
 		return (function() {
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
-			var dummy = function () {};
+			var Dummy = function () {};
 			var MClass = function () {};
 
 			MClass.extend = function (props, staticProps) {
 
-				dummy.prototype = this.prototype;
-				var p, proto = _copyTo(new dummy(), props);
+				Dummy.prototype = this.prototype;
+				var p, proto = Utils.extend(new Dummy(), props);
 
 				function Class (vars) {
 
 					/**
-					* If USE_VARS is true, and the first argument, is an object,
+					* If the prototype has a vars object and the first argument, is an object,
 					* deep copy it to this.vars
 					**/
-					if (this.vars && this.vars.USE_VARS && typeof vars === "object") {
-						_copyTo(this.vars, vars);
+					if (this.vars && typeof vars === "object") {
+						this.vars = Utils.extend({}, true, this.vars, vars);
 					}
 
 					var fn = this.init || this.prototype.constructor;
@@ -73,10 +63,10 @@ define(
 
 				for (p in props) {
 					if (
-						p !== "static" 
-						&& typeof props[p] === "function" 
-						&& typeof this.prototype[p] === "function" 
-						&& _doesCallSuper.test(props[p])
+						p !== "static" &&
+						typeof props[p] === "function" &&
+						typeof this.prototype[p] === "function" &&
+						_doesCallSuper.test(props[p])
 					) {
 						// this.sup() magic, on an as-needed
 						proto[p] = _createSuperFunction(props[p], this.prototype[p]);
@@ -88,27 +78,31 @@ define(
 							proto[p] = props[p].concat();
 						}
 
-						else {
-							proto[p] = _copyTo({}, props[p]);	
+						else if (props[p] !== null) {
+							if (p === "vars") {
+								proto[p] = Utils.extend({}, true, this.prototype[p], props[p]);
+							}
+							else {
+								proto[p] = Utils.extend({}, props[p]);
+							}
 						}
 					}
 				}
 
 				Class.prototype = proto;
-
-				_copyTo(Class, this, props.static, staticProps);
+				Utils.extend(Class, this, props.static, staticProps);
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 
-				if (typeof Class.prototype.setup == "function") {
+				if (typeof Class.prototype.setup === "function") {
 					Class.prototype.setup();
 				}
 
 				return Class;
 			};
-			
+
 			return MClass;
 
-		})();
+		}());
 	}
 );

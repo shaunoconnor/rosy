@@ -3,6 +3,11 @@
 
 // Site shell object
 define(["./base/Page"], function (Page) {
+
+	/*global console */
+
+	"use strict";
+
 	return Page.extend({
 		vars : {},
 
