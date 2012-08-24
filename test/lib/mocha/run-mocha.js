@@ -69,7 +69,7 @@
 			// wait for dom loaded
 			window.addEventListener("load", function () {
 				// then run mocha
-				mocha.run().globals(GLOBALS).on('end', function(){
+				mocha.run().on('end', function(){
 
 					// and add a flag when the test end.
 					mocha.end = true;
