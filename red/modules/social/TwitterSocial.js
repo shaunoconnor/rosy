@@ -21,7 +21,7 @@
  *
  */
 
-define(["../Module"], function (Module) {
+define(["../Module", "$"], function (Module, $) {
 
 	var EVENTS = {
 			POST : "social/twitter/post",

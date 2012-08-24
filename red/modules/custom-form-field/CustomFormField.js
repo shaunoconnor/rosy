@@ -1,7 +1,7 @@
 // ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
 /* custom-form-field.js */
 
-define(["../Module"], function (Module) {
+define(["../Module", "$"], function (Module, $) {
 
 	// Extends red.Module
 	return Module.extend({
