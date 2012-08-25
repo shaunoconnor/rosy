@@ -57,7 +57,7 @@ define(
 						this.vars = Utils.extend({}, true, this.vars, vars);
 					}
 
-					var fn = this.init || this.prototype.constructor;
+					var fn = this.__init || this.init || this.prototype.constructor;
 					return fn.apply(this, arguments);
 				}
 
@@ -68,7 +68,7 @@ define(
 						typeof this.prototype[p] === "function" &&
 						_doesCallSuper.test(props[p])
 					) {
-						// this.sup() magic, on an as-needed
+						// this.sup() magic, as-needed
 						proto[p] = _createSuperFunction(props[p], this.prototype[p]);
 					}
 
