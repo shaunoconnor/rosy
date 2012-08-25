@@ -1,7 +1,8 @@
 define(
 
 	[
-		"../utils/Utils"
+		"../utils/Utils",
+		"../polyfills/function-bind"
 	],
 
 	function (Utils) {
@@ -88,6 +89,8 @@ define(
 						}
 					}
 				}
+
+				proto.extend = MClass.extend.bind(Class);
 
 				Class.prototype = proto;
 				Utils.extend(Class, this, props.static, staticProps);
