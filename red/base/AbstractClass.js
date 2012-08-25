@@ -95,7 +95,7 @@ define(
 				Class.prototype.constructor = Class.prototype.static = Class;
 
 				if (typeof Class.prototype.setup === "function") {
-					Class.prototype.setup();
+					Class.prototype.setup.call(Class);
 				}
 
 				return Class;
