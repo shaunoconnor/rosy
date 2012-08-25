@@ -11,14 +11,15 @@ define([
 				it("should setup the class if .setup() exists", function (done) {
 					var testPage = Page.extend({
 						setup : function () {
-							this.vars.isSetup = true;
-							expect(this.vars.isSetup).to.be.ok();
-
-							done();
+							this.prototype.vars.isSetup = true;
 						}
 					});
 
 					var testInstance = new Page();
+
+					expect(testInstance.vars.isSetup).to.be.ok();
+					done();
+
 				});
 
 			});
