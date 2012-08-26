@@ -85,8 +85,8 @@ define(["../Module"], function (Module) {
 		},
 
 		destroy : function () {
-			this.unsubscribe("track", this.proxy(this.track, this));
 			this.vars = null;
+			this.sup();
 		}
 
 	});

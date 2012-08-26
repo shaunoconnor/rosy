@@ -106,7 +106,7 @@ define(["../Module"], function (Module) {
 
 		// Start the necessary timers/intervals
 		startTicker : function () {
-			this.vars.ticker = window.setInterval($.proxy(this.updateTicker, this), 1000);
+			this.vars.ticker = window.setInterval(this.proxy(this.updateTicker), 1000);
 			this.setTimeout(this.updateTicker, 10);
 		},
 
@@ -118,6 +118,15 @@ define(["../Module"], function (Module) {
 			}
 
 			this.trigger(event);
+		},
+
+		destroy : function () {
+			if (this.vars.ticker) {
+				window.clearInterval(this.vars.ticker);
+				delete this.vars.ticker;
+			}
+
+			this.sup();
 		}
 	});
 

@@ -286,6 +286,8 @@ define([
 					doc.off("mouseup", this.onMouseUp);
 				}
 			}
+
+			this.sup();
 		}
 	});
 

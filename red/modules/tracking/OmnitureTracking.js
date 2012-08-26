@@ -52,10 +52,10 @@ define(["../Module",
 		},
 
 		destroy : function () {
-			this.unsubscribe("track", this.proxy(this.track));
-
 			this.tracker = null;
 			this.vars = null;
+
+			this.sup();
 		}
 
 	});

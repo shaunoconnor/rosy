@@ -299,10 +299,9 @@ define(["../Module"], function (Module) {
 		},
 
 		destroy : function () {
-			$(document).off("click", '[data-custom-social="facebook"]', this.proxy(this.customFacebookPost));
+			$(document).off("click", '[data-custom-social="facebook"]', this.customFacebookPost);
 
-			this.unsubscribe(EVENTS.POST,  this.proxy(this.customFacebookPost));
-			this.unsubscribe(EVENTS.RENDER, this.proxy(this.render));
+			this.sup();
 		}
 	}, EVENTS);
 

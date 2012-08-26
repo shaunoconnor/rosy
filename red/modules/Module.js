@@ -14,6 +14,10 @@ define(["../base/Class", "$"], function (Class, $) {
 			events : {}
 		},
 
+		init : function (vars) {
+			this.sup(vars);
+		},
+
 		// Bind a custom event(s) to a given module
 		bind : function (type, method) {
 			this.vars.events["on" + type] = this.vars.events["on" + type] || [];
@@ -48,7 +52,9 @@ define(["../base/Class", "$"], function (Class, $) {
 					args = [args];
 				}
 
-				args[0].type = args[0].type || type;
+				if (args[0]) {
+					args[0].type = args[0].type || type;
+				}
 
 				for (i = 0, j = events.length; i < j; i++) {
 					event = events[i];
@@ -60,6 +66,10 @@ define(["../base/Class", "$"], function (Class, $) {
 					}
 				}
 			}
+		},
+
+		destroy : function () {
+			this.sup();
 		}
 
 	});

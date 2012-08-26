@@ -50,7 +50,7 @@ define(["../Module"], function (Module) {
 
 			this.loadJSDK();
 
-			$('[data-custom-social="twitter"]').live("click", this.proxy(this.customTweet));
+			$(document).on("click", '[data-custom-social="twitter"]', this.proxy(this.customTweet));
 			this.subscribe(EVENTS.POST,  this.proxy(this.customTweet));
 			this.subscribe(EVENTS.RENDER, this.proxy(this.render));
 		},
@@ -123,10 +123,8 @@ define(["../Module"], function (Module) {
 		},
 
 		log : function () {
-			if (this.vars.debug) {
-				try {
-					console.log(arguments);
-				} catch (e) {}
+			if (this.vars.debug && window.console) {
+				console.log(arguments);
 			}
 		},
 
@@ -202,9 +200,9 @@ define(["../Module"], function (Module) {
 		},
 
 		destroy : function () {
-			$('[data-custom-social="twitter"]').die("click", this.proxy(this.customTweet));
-			this.unsubscribe(EVENTS.POST,  this.proxy(this.customTweet));
-			this.unsubscribe(EVENTS.RENDER, this.proxy(this.render));
+			$(document).off("click", '[data-custom-social="twitter"]', this.customTweet);
+
+			this.sup();
 		}
 
 	}, EVENTS);
