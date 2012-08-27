@@ -5,11 +5,10 @@ define(
 		"./ViewGroup",
 		"./ViewRouter",
 		"./TransitionManager",
-		"./ViewNotification",
 		"$",
 	],
 
-	function (Class, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
+	function (Class, ViewGroup, ViewRouter, TransitionManager, $) {
 
 		/*jshint eqnull:true*/
 
@@ -60,10 +59,6 @@ define(
 
 				config.mode = config.mode === "hash" ? "#" : config.mode;
 
-				this.subscribe(ViewNotification.ROUTE_CHANGE, this._handleRouteChange);
-				this.subscribe(ViewNotification.UPDATE_TITLE, this._updateTitle);
-				this.subscribe(ViewNotification.CLOSE_VIEW_GROUP, this._closeViewGroup);
-
 				TransitionManager	=	config.TransitionManager || TransitionManager;
 
 				this.mode			=	config.mode || this.mode;
@@ -111,6 +106,22 @@ define(
 				}
 
 				this._onStateChange(null, true);
+			},
+
+			changeRoute : function (route) {
+				this._gotoRoute(route);
+			},
+
+			updateTitle : function (title) {
+				if (HISTORY_SUPPORTED) {
+					var route = window.location.href;
+					history.replaceState(null, title, route + window.location.hash);
+				}
+				document.title = title;
+			},
+
+			closeViewGroup : function (viewGroup, cb) {
+				TransitionManager.close({viewGroup : (typeof viewGroup === "string") ? this.getViewGroup(viewGroup) : viewGroup}, cb);
 			},
 
 			getViewGroup : function (id) {
@@ -231,10 +242,6 @@ define(
 				this._gotoRoute({route : route, updateHistory : false});
 			},
 
-			_handleRouteChange : function (n) {
-				this._gotoRoute(n.data);
-			},
-
 			_gotoRoute : function (data) {
 
 				// Force all routes to begin with a "/" and have no hashtag
@@ -347,17 +354,6 @@ define(
 				}
 			},
 
-			_closeViewGroup : function (n) {
-
-				var d = n.data;
-
-				if (typeof d.viewGroup === "string") {
-					d.viewGroup = this.getViewGroup(d.viewGroup);
-				}
-
-				TransitionManager.close(d.viewGroup, n.respond);
-			},
-
 			_updateHistory : function (title, route, useHash) {
 				
 				if (HISTORY_SUPPORTED && !useHash) {
@@ -372,16 +368,6 @@ define(
 						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
 					}
 				}
-			},
-
-			_updateTitle : function (n) {
-
-				if (HISTORY_SUPPORTED) {
-					var route = window.location.href;
-					history.replaceState(null, n.data.title || "", route);
-				}
-
-				document.title = n.data.title || "";
 			},
 
 			_regexMatch : function (m, m2) {

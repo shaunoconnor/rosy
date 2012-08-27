@@ -10,7 +10,7 @@ define(
 
 		return Class.extend({
 
-			_viewManager : null,
+			viewManager : null,
 
 			id : null,
 			config : {},
@@ -29,15 +29,15 @@ define(
 				this.config = obj.config;
 				this.routes = obj.routes;
 
-				this._viewManager = viewManager;
+				this.viewManager = viewManager;
 			},
 
 			activate : function () {
-				this._viewManager.activate(this.currentRoute);
+				this.viewManager.activate(this.currentRoute);
 			},
 
 			deactivate : function () {
-				this._viewManager.deactivate(this.currentRoute);
+				this.viewManager.deactivate(this.currentRoute);
 			},
 
 			changeRoute : function (route) {

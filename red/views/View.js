@@ -1,12 +1,10 @@
 define(
 
 	[
-		"../base/Class",
-		"./ViewManager",
-		"./ViewNotification"
+		"../base/Class"
 	],
 
-	function (Class, ViewManager, ViewNotification) {
+	function (Class) {
 
 		"use strict";
 
@@ -149,7 +147,7 @@ define(
 			},
 
 			updateTitle : function(title) {
-				this.publish(ViewNotification.UPDATE_TITLE, {title: title});
+				this.viewGroup.viewManager.updateTitle(title);
 			},
 
 			/**
@@ -164,7 +162,6 @@ define(
 					this._loadTimeout = null;
 				}
 
-				this.publish(ViewNotification.VIEW_LOAD_COMPLETED);
 				return this._loadCB ? this._loadCB() : null;
 			},
 
@@ -175,7 +172,6 @@ define(
 					this._inTimeout = null;
 				}
 
-				this.publish(ViewNotification.VIEW_IN_COMPLETED);
 				return this._inCB ? this._inCB() : null;
 			},
 
@@ -186,7 +182,6 @@ define(
 					this._outTimeout = null;
 				}
 
-				this.publish(ViewNotification.VIEW_OUT_COMPLETED);
 				return this._outCB ? this._outCB() : null;
 			},
 
@@ -197,7 +192,6 @@ define(
 					this._cleanupTimeout = null;
 				}
 
-				this.publish(ViewNotification.VIEW_DESTROYED);
 				this.__destroy();
 				return this._cleanupCB ? this._cleanupCB() : null;
 			},
@@ -214,8 +208,6 @@ define(
 				this.__update(params, data, true);
 				
 				this.init();
-
-				this.publish(ViewNotification.VIEW_INITIALIZED);
 			},
 
 			__update : function (params, data, isInit) {
@@ -235,10 +227,6 @@ define(
 				for (p in data) {
 					this.data[p] = data[p];
 				}
-
-				if (!isInit) {
-					this.publish(ViewNotification.VIEW_UPDATED);
-				}
 			},
 
 			__load : function (cb) {
@@ -248,7 +236,6 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._loadCB = cb;
-				this.publish(ViewNotification.VIEW_LOAD_STARTED);
 				this.load.call(this);
 			},
 
@@ -259,7 +246,6 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._inCB = cb;
-				this.publish(ViewNotification.VIEW_IN_STARTED);
 				this.transitionIn.call(this);
 				this.viewGroup.activate();
 			},
@@ -271,7 +257,6 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._outCB = cb;
-				this.publish(ViewNotification.VIEW_OUT_STARTED);
 				this.transitionOut.call(this);
 			},
 
