@@ -20,7 +20,7 @@
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
 
-define(["../Module"], function (Module) {
+define(["../Module", "$"], function (Module, $) {
 
 	var EVENTS = {
 			POST : "social/facebook/post",
