@@ -212,9 +212,10 @@ define(
 				this.viewGroup = viewGroup;
 				this.config = config;
 				this.__update(params, data, true);
-				this.publish(ViewNotification.VIEW_INITIALIZED);
-
+				
 				this.init();
+
+				this.publish(ViewNotification.VIEW_INITIALIZED);
 			},
 
 			__update : function (params, data, isInit) {
@@ -238,7 +239,6 @@ define(
 				if (!isInit) {
 					this.publish(ViewNotification.VIEW_UPDATED);
 				}
-
 			},
 
 			__load : function (cb) {
