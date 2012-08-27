@@ -361,7 +361,7 @@ define(
 			_updateHistory : function (title, route, useHash) {
 				
 				if (HISTORY_SUPPORTED && !useHash) {
-					history.pushState(null, title || "", route);
+					history.pushState(null, title || "", route + window.location.hash);
 				}
 
 				else if (useHash || this.mode === "#") {
