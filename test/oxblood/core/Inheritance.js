@@ -1,7 +1,8 @@
 define([
 	"OxBlood",
-	"./SubClass"
-], function (OxBlood, SubClass) {
+	"./SubClass",
+	"$"
+], function (OxBlood, SubClass, $) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Inheritance", function () {
@@ -78,6 +79,65 @@ define([
 						expect(bar.vars.y.a).to.equal(3);
 						expect(bar.vars.y.b).to.equal(4);
 						expect(bar.vars.y.c[1]).to.equal(6);
+					});
+
+					it("should deep copy jQuery objects", function (done) {
+						var html = $("html");
+						var body = $("body");
+
+						html.data({
+							x : true,
+							y : true
+						});
+
+						body.data({
+							foo : true,
+							bar : true
+						});
+
+						var Foo = SubClass.extend({
+							vars : {
+								html : html,
+								body : body
+							},
+
+							init : function () {
+								expect(this.vars.html).to.eql(html);
+								expect(this.vars.html.data()).to.eql(html.data());
+
+								expect(this.vars.body).to.eql(body);
+								expect(this.vars.body.data()).to.eql(body.data());
+							}
+						});
+
+						var Bar = Foo.extend({
+							vars : {
+								html : html.data("z", true),
+								body : body.data("baz", true)
+							},
+
+							init : function () {
+								var htmlData = this.vars.html.data();
+								var bodyData = this.vars.body.data();
+
+								expect(this.vars.html).to.eql(html);
+
+								expect(htmlData.x).to.be.ok();
+								expect(htmlData.y).to.be.ok();
+								expect(htmlData.z).to.be.ok();
+
+								expect(this.vars.body).to.eql(body);
+
+								expect(bodyData.foo).to.be.ok();
+								expect(bodyData.bar).to.be.ok();
+								expect(bodyData.baz).to.be.ok();
+
+								done();
+							}
+						});
+
+						var foo = new Foo();
+						var bar = new Bar();
 					});
 
 					it("should inherit parent values", function () {
