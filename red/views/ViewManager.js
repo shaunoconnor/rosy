@@ -354,7 +354,7 @@ define(
 						}
 
 						else {
-							skipped ++; 
+							skipped ++;
 						}
 					}
 

@@ -268,7 +268,7 @@ define(
 
 				this.publish(ViewNotification.VIEW_LOAD_STARTED, {view : this, viewGroup: this.viewGroup});
 
-				this.load.call(this);				
+				this.load.call(this);
 			},
 
 			__transitionIn : function (cb) {
