@@ -108,8 +108,8 @@ define(
 				this._onStateChange(null, true);
 			},
 
-			changeRoute : function (route) {
-				this._gotoRoute(route);
+			changeRoute : function (route, transition) {
+				this._gotoRoute({route: route, transition: transition});
 			},
 
 			updateTitle : function (title) {
@@ -238,7 +238,7 @@ define(
 			},
 
 			_onStateChange : function (e) {
-				var route = window.location.hash || window.location.pathname;
+				var route = window.location.pathname;
 				this._gotoRoute({route : route, updateHistory : false});
 			},
 
@@ -362,11 +362,12 @@ define(
 
 				else if (useHash || this.mode === "#") {
 
-					window.location.hash = route;
-
 					if (!this._pollInterval) {
+						HASH_VALUE = HASH_VALUE || window.location.hash;
 						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
 					}
+
+					window.location.hash = route;
 				}
 			},
 
