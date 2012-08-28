@@ -54,41 +54,37 @@
 
 		<script>
 
-			require(["$"], function ($) {
 
-				$(function(){
+			require([
+				"OxBlood",
 
-					require([
-						"OxBlood",
+				"core/Initialization",
+				"core/Notifications",
+				"core/Inheritance",
+				"core/Destruction",
+				"core/Timers",
+				"core/Scope",
 
-						"core/Initialization",
-						"core/Notifications",
-						"core/Inheritance",
-						"core/Destruction",
-						"core/Timers",
-						"core/Scope",
+				"test/oxblood/__PROJECT_NAME__/site",
 
-						"test/oxblood/__PROJECT_NAME__/site",
+				"modules/custom-form-field/CustomFormField",
+				"modules/ios-page-control/PageControl",
+				"modules/scroller/Scroller",
+				"modules/social/FacebookSocial",
+				"modules/social/TwitterSocial",
+				"modules/ticker/Ticker",
+				"modules/tracking/GATracking",
+				"modules/tracking/OmnitureTracking",
 
-						"modules/custom-form-field/CustomFormField",
-						"modules/ios-page-control/PageControl",
-						"modules/scroller/Scroller",
-						"modules/social/FacebookSocial",
-						"modules/social/TwitterSocial",
-						"modules/ticker/Ticker",
-						"modules/tracking/GATracking",
-						"modules/tracking/OmnitureTracking",
+				"routing/Routing",
+				"$"
 
-						"routing/Routing"
+			], function (OxBlood) {
+				OxBlood.registerTests();
 
-					], function (OxBlood) {
-						OxBlood.registerTests();
-
-						if (!(/PhantomJS/).test(window.navigator.userAgent)) {
-							mocha.run();
-						}
-					});
-				});
+				if (!(/PhantomJS/).test(window.navigator.userAgent)) {
+					$(mocha.run);
+				}
 			});
 
 		</script>
