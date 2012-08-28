@@ -53,34 +53,44 @@
 		<!-- End Require JS -->
 
 		<script>
-			require([
-				"OxBlood",
 
-				"core/Inheritance",
-				"core/Notifications",
-				"core/Destruction",
-				"core/Timers",
-				"core/Setup",
-				"core/Scope",
+			require(["$"], function ($) {
 
-				"modules/custom-form-field/CustomFormField",
-				"modules/ios-page-control/PageControl",
-				"modules/scroller/Scroller",
-				"modules/social/FacebookSocial",
-				"modules/social/TwitterSocial",
-				"modules/ticker/Ticker",
-				"modules/tracking/GATracking",
-				"modules/tracking/OmnitureTracking",
+				$(function(){
 
-				"routing/Routing"
+					require([
+						"OxBlood",
 
-			], function (OxBlood) {
-				OxBlood.registerTests();
+						"core/Initialization",
+						"core/Notifications",
+						"core/Inheritance",
+						"core/Destruction",
+						"core/Timers",
+						"core/Scope",
 
-				if (!(/PhantomJS/).test(window.navigator.userAgent)) {
-					mocha.run();
-				}
+						"test/oxblood/__PROJECT_NAME__/site",
+
+						"modules/custom-form-field/CustomFormField",
+						"modules/ios-page-control/PageControl",
+						"modules/scroller/Scroller",
+						"modules/social/FacebookSocial",
+						"modules/social/TwitterSocial",
+						"modules/ticker/Ticker",
+						"modules/tracking/GATracking",
+						"modules/tracking/OmnitureTracking",
+
+						"routing/Routing"
+
+					], function (OxBlood) {
+						OxBlood.registerTests();
+
+						if (!(/PhantomJS/).test(window.navigator.userAgent)) {
+							mocha.run();
+						}
+					});
+				});
 			});
+
 		</script>
 
 	</body>
