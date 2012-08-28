@@ -141,7 +141,14 @@ define(
 
 				var i,
 					l,
+					j,
+					l2,
+					k,
+					l3,
+					m,
+					m2,
 					route,
+					elRoute,
 					regexes,
 					toCheck = [],
 					$el,
@@ -154,25 +161,21 @@ define(
 					toCheck.push({route : route, regexes: regexes});
 				}
 
-				$elements.each(this.proxy(function (k, el) {
+				for (i = 0, l = $elements.length; i < l; i ++) {
 
-					$el = $(el);
+					$el = $($elements[i]);
 
 					if ($el.data("active-disabled") == null && !$el.hasClass(this.activeClass)) {
 
-						var j,
-							l2,
-							m,
-							m2,
-							elRoute = $el.data("route") || $el.attr("href");
+						elRoute = $el.data("route") || $el.attr("href");
 
-						for (i = 0, l = toCheck.length; i < l; i ++) {
-							route = toCheck[i].route;
-							regexes = toCheck[i].regexes;
+						for (j = 0, l2 = toCheck.length; j < l2; j ++) {
+							route = toCheck[j].route;
+							regexes = toCheck[j].regexes;
 
-							for (j = 0, l2 = regexes.length; j < l2; j++) {
-								m = regexes[i].exec(route);
-								m2 = regexes[i].exec(elRoute);
+							for (k = 0, l3 = regexes.length; k < l3; k ++) {
+								m = regexes[k].exec(route);
+								m2 = regexes[k].exec(elRoute);
 
 								if (m2) {
 									if (this._regexMatch(m, m2)) {
@@ -184,25 +187,26 @@ define(
 							}
 						}
 					}
-				}));
+				};
 			},
 
 			deactivate : function (/*route1, route2, route3, ...*/) {
+
 				var i,
 					l,
-					activeClass = this.activeClass,
+					j,
+					l2,
 					route;
-
-
-				function removeClass (j, $el) {
-					$el.removeClass(activeClass);
-				}
 
 				for (i = 0, l = arguments.length; i < l; i ++) {
 					route = arguments[i];
 
 					if (this._activeElements[route]) {
-						$(this._activeElements[route]).each(removeClass);
+
+						for (j = 0, l2 = this._activeElements[route].length; j < l2; j ++) {
+							$(this._activeElements[route][j]).removeClass(this.activeClass);
+						}
+
 						this._activeElements[route] = null;
 					}
 				}
