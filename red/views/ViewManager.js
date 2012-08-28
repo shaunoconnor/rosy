@@ -127,7 +127,7 @@ define(
 			},
 
 			closeViewGroup : function (viewGroup, cb) {
-				TransitionManager.close({viewGroup : (typeof viewGroup === "string") ? this.getViewGroup(viewGroup) : viewGroup}, cb);
+				TransitionManager.close((typeof viewGroup === "string") ? this.getViewGroup(viewGroup) : viewGroup, cb);
 			},
 
 			getViewGroup : function (id) {
@@ -362,7 +362,7 @@ define(
 					}));
 				}
 				else {
-					TransitionManager.close(matchedView.viewGroup);
+					TransitionManager.close(matchedView.viewGroup, data ? data.cb : null);
 				}
 			},
 
