@@ -22,15 +22,14 @@ define(
 
 					before(function (done){
 						ViewManager.getViewGroup("main").config.useHistory = false;
-						done();
+						ViewManager.changeRoute("/test", null, function () {
+							done();
+						});
 					});
 
 					it("should successfully change view without updating history", function (done) {
-
-						ViewManager.changeRoute("/test", null, function () {
-							expect(window.location.pathname + window.location.search).to.equal(REAL_URL);
-							done();
-						});
+						expect(window.location.pathname + window.location.search).to.equal(REAL_URL);
+						done();
 					});
 
 				});
@@ -83,7 +82,7 @@ define(
 
 					it("should successfully push hash changes", function (done) {
 
-						var route = "/test";
+						var route = "/test/contact";
 
 						ViewManager.changeRoute(route, null, function () {
 							expect(window.location.hash).to.equal('#' + route);
@@ -93,12 +92,12 @@ define(
 
 					it("should successfully listen for hash changes", function (done) {
 
-						var route = "/test/contact";
+						var route = "/test/about";
 
 						var subscriber = new Class();
 						subscriber.subscribe(ViewNotification.VIEW_CHANGED, function (n) {
 
-							expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("contact");
+							expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("about");
 
 							if (HISTORY_SUPPORT) {
 								history.pushState(null, null, REAL_URL);
