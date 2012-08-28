@@ -1,11 +1,11 @@
 define([
 	"OxBlood",
-	"project/base/Page"
-], function (OxBlood, Page) {
+	"red/base/Class"
+], function (OxBlood, Class) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Scope", function () {
-			var testInstance = new Page();
+			var testInstance = new Class();
 
 			describe(".proxy()", function () {
 
