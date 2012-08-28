@@ -58,26 +58,24 @@ define(
 
 			initialize : function (config) {
 
-				var i,
-					l,
-					viewGroup,
-					viewGroups = config.viewGroups,
-					defaultRoute = config.defaultRoute || null;
-
-				config.mode = config.mode === "hash" ? "#" : config.mode;
-
-				TransitionManager	=	config.TransitionManager || TransitionManager;
-
-				this.mode			=	config.mode || this.mode;
-				this.aliases		=	config.aliases || this.aliases;
-				this.selectors		=	config.selectors || this.selectors;
-				this.activeClass	=	config.activeClass || this.activeClass;
-				this.bubble			=	config.bubble || this.bubble;
-				this.container		=	$(config.container || document);
-
 				if (!this.initialized) {
 
-					this.initialized = true;
+					var i,
+						l,
+						viewGroup,
+						viewGroups = config.viewGroups,
+						defaultRoute = config.defaultRoute || null;
+
+					config.mode = config.mode === "hash" ? "#" : config.mode;
+
+					TransitionManager	=	config.TransitionManager || TransitionManager;
+
+					this.mode			=	config.mode || this.mode;
+					this.aliases		=	config.aliases || this.aliases;
+					this.selectors		=	config.selectors || this.selectors;
+					this.activeClass	=	config.activeClass || this.activeClass;
+					this.bubble			=	config.bubble || this.bubble;
+					this.container		=	$(config.container || document);
 
 					for (i = 0, l = viewGroups.length; i < l; i ++) {
 						viewGroup = new ViewGroup(viewGroups[i], this);
@@ -116,6 +114,12 @@ define(
 					}
 
 					this._onStateChange(null, true);
+
+					this.initialized = true;
+				}
+
+				else {
+					throw new Error("ViewManager has already been initialized.");
 				}
 			},
 
