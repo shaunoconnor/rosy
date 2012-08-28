@@ -74,6 +74,8 @@ define(
 				this.bubble			=	config.bubble || this.bubble;
 				this.container		=	$(config.container || document);
 
+				this._viewGroups = [];
+
 				for (i = 0, l = viewGroups.length; i < l; i ++) {
 					viewGroup = new ViewGroup(viewGroups[i], this);
 
@@ -89,16 +91,21 @@ define(
 				this._router = new ViewRouter(this._viewGroups);
 
 				if (HISTORY_SUPPORTED) {
+					window.removeEventListener('popstate', this.proxy(this._onStateChange));
 					window.addEventListener('popstate', this.proxy(this._onStateChange));
 				}
 
 				else {
 					if (this.mode === "#") {
 						HASH_VALUE = window.location.hash;
+						if (this._pollInterval) {
+							clearInterval(this._pollInterval);
+						}
 						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
 					}
 				}
 
+				this.container.off("click", this.selectors.join(","), this.proxy(this._onLinkClick));
 				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
 
 				if (defaultRoute) {
