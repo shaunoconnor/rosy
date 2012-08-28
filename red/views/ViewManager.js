@@ -257,7 +257,7 @@ define(
 				var i,
 					l,
 					p,
-					skipped,
+					skipped = 0,
 					matchedView,
 					matchedViews,
 					viewGroup,
@@ -343,6 +343,10 @@ define(
 
 									this._changeView(matchedView, data);
 									didRoute = true;
+								}
+
+								else if (currentView) {
+									skipped ++;
 								}
 							}
 						}
