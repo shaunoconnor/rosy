@@ -15,7 +15,8 @@ define(
 		* method is not called within MAX_WAIT_TIME, then an Error is thrown.
 		**/
 
-		var MAX_WAIT_TIME = 10000;
+		var MAX_WAIT_TIME = 10000,
+			ERROR_HANDLER = function (e) {throw e;};
 
 		return Class.extend({
 
@@ -38,6 +39,9 @@ define(
 			static : {
 				setMaxWaitTime : function (ms) {
 					MAX_WAIT_TIME = ms;
+				},
+				setErrorHandler : function (fn) {
+					ERROR_HANDLER = fn;
 				}
 			},
 
@@ -97,7 +101,7 @@ define(
 			**/
 
 			load : function () {
-				throw new Error(this.viewClass + " must implement the load() method.");
+				ERROR_HANDLER(new Error(this.viewClass + " must implement the load() method."));
 			},
 
 			/**
@@ -108,7 +112,7 @@ define(
 			**/
 
 			transitionIn : function () {
-				throw new Error(this.viewClass + " must implement the transitionIn() method.");
+				ERROR_HANDLER(new Error(this.viewClass + " must implement the transitionIn() method."));
 			},
 
 			/**
@@ -119,7 +123,7 @@ define(
 			**/
 
 			transitionOut : function () {
-				throw new Error(this.viewClass + " must implement the transitionOut() method.");
+				ERROR_HANDLER(new Error(this.viewClass + " must implement the transitionOut() method."));
 			},
 
 			/**
@@ -131,7 +135,7 @@ define(
 			**/
 
 			destroy : function () {
-				throw new Error(this.viewClass + " must implement the destroy() method.");
+				ERROR_HANDLER(new Error(this.viewClass + " must implement the destroy() method."));
 			},
 
 			/**
@@ -232,7 +236,7 @@ define(
 			__load : function (cb) {
 
 				this._loadTimeout = this.setTimeout(function() {
-					throw new Error(this.viewClass + " : loadComplete() was never called.");
+					ERROR_HANDLER(new Error(this.viewClass + " : loadComplete() was never called."));
 				}, MAX_WAIT_TIME);
 
 				this._loadCB = cb;
@@ -242,7 +246,7 @@ define(
 			__transitionIn : function (cb) {
 
 				this._inTimeout = this.setTimeout(function() {
-					throw new Error(this.viewClass + " : transitionInComplete() was never called.");
+					ERROR_HANDLER(new Error(this.viewClass + " : transitionInComplete() was never called."));
 				}, MAX_WAIT_TIME);
 
 				this._inCB = cb;
@@ -253,7 +257,7 @@ define(
 			__transitionOut : function (cb) {
 
 				this._outTimeout = this.setTimeout(function() {
-					throw new Error(this.viewClass + " : transitionOutComplete() was never called.");
+					ERROR_HANDLER(new Error(this.viewClass + " : transitionOutComplete() was never called."));
 				}, MAX_WAIT_TIME);
 
 				this._outCB = cb;
@@ -263,7 +267,7 @@ define(
 			__cleanup : function (cb) {
 
 				this._cleanupTimeout = this.setTimeout(function() {
-					throw new Error(this.viewClass + " : cleanupComplete() was never called.");
+					ERROR_HANDLER(new Error(this.viewClass + " : cleanupComplete() was never called."));
 				}, MAX_WAIT_TIME);
 
 				this._cleanupCB = cb;
