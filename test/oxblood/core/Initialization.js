@@ -1,7 +1,7 @@
 define([
 	"OxBlood",
-	"red/base/Class"
-], function (OxBlood, Class) {
+	"./SubClass"
+], function (OxBlood, SubClass) {
 	console.log(arguments);
 
 	OxBlood.addCoreTests(function () {
@@ -11,13 +11,13 @@ define([
 			describe(".setup()", function () {
 
 				it("should setup the class if .setup() exists", function (done) {
-					var testClass = Class.extend({
+					var testSubClass = SubClass.extend({
 						setup : function () {
 							this.prototype.isSetup = true;
 						}
 					});
 
-					var testInstance = new testClass();
+					var testInstance = new testSubClass();
 
 					expect(testInstance.isSetup).to.be.ok();
 					done();
@@ -28,8 +28,8 @@ define([
 
 			describe(".init()", function () {
 
-				it("should run on Class initialization", function (done) {
-					var testClass = Class.extend({
+				it("should run on SubClass initialization", function (done) {
+					var testSubClass = SubClass.extend({
 						vars : {
 							x : 0,
 							y : 0,
@@ -50,7 +50,7 @@ define([
 						}
 					});
 
-					var testInstance = new testClass();
+					var testInstance = new testSubClass();
 
 				});
 
@@ -59,7 +59,7 @@ define([
 			describe(".__init()", function () {
 
 				it("should run before .init()", function (done) {
-					var testClass = Class.extend({
+					var testSubClass = SubClass.extend({
 						vars : {
 							hasRun : false
 						},
@@ -74,14 +74,14 @@ define([
 						}
 					});
 
-					var testExtendClass = testClass.extend({
+					var testExtendSubClass = testSubClass.extend({
 						init : function () {
 							expect(this.vars.hasRun).to.be.ok();
 							done();
 						}
 					});
 
-					var testInstance = new testExtendClass();
+					var testInstance = new testExtendSubClass();
 
 				});
 
