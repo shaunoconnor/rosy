@@ -39,6 +39,7 @@ define(
 			disabledClass : "disabled",
 			bubble : false,
 			container : null,
+			initialized : false,
 
 			/**
 			*	CONFIG OPTIONS:
@@ -74,49 +75,52 @@ define(
 				this.bubble			=	config.bubble || this.bubble;
 				this.container		=	$(config.container || document);
 
-				this._viewGroups = [];
+				if (!this.initialized) {
 
-				for (i = 0, l = viewGroups.length; i < l; i ++) {
-					viewGroup = new ViewGroup(viewGroups[i], this);
+					this.initialized = true;
 
-					viewGroup.config = viewGroup.config || {};
-					viewGroup.config.useHistory = viewGroup.config.useHistory === "hash" ? "#" : viewGroup.config.useHistory;
-					this._viewGroups.push(viewGroup);
+					for (i = 0, l = viewGroups.length; i < l; i ++) {
+						viewGroup = new ViewGroup(viewGroups[i], this);
 
-					if (viewGroup.config.useHistory === "#" && this.mode === "#") {
-						throw new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'");
-					}
-				}
+						viewGroup.config = viewGroup.config || {};
+						viewGroup.config.useHistory = viewGroup.config.useHistory === "hash" ? "#" : viewGroup.config.useHistory;
+						this._viewGroups.push(viewGroup);
 
-				this._router = new ViewRouter(this._viewGroups);
-
-				if (HISTORY_SUPPORTED) {
-					window.removeEventListener('popstate', this.proxy(this._onStateChange));
-					window.addEventListener('popstate', this.proxy(this._onStateChange));
-				}
-
-				else {
-					if (this.mode === "#") {
-						HASH_VALUE = window.location.hash;
-						if (this._pollInterval) {
-							clearInterval(this._pollInterval);
+						if (viewGroup.config.useHistory === "#" && this.mode === "#") {
+							throw new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'");
 						}
-						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
 					}
+
+					this._router = new ViewRouter(this._viewGroups);
+
+					if (HISTORY_SUPPORTED) {
+						window.removeEventListener('popstate', this.proxy(this._onStateChange));
+						window.addEventListener('popstate', this.proxy(this._onStateChange));
+					}
+
+					else {
+						if (this.mode === "#") {
+							HASH_VALUE = window.location.hash;
+							if (this._pollInterval) {
+								clearInterval(this._pollInterval);
+							}
+							this._pollInterval = this.setInterval(this._pollForHashChange, 100);
+						}
+					}
+
+					this.container.off("click", this.selectors.join(","), this.proxy(this._onLinkClick));
+					this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
+
+					if (defaultRoute) {
+						this._gotoRoute({route : defaultRoute});
+					}
+
+					this._onStateChange(null, true);
 				}
-
-				this.container.off("click", this.selectors.join(","), this.proxy(this._onLinkClick));
-				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
-
-				if (defaultRoute) {
-					this._gotoRoute({route : defaultRoute});
-				}
-
-				this._onStateChange(null, true);
 			},
 
-			changeRoute : function (route, transition) {
-				this._gotoRoute({route: route, transition: transition});
+			changeRoute : function (route, transition, cb) {
+				this._gotoRoute({route: route, transition: transition, cb : cb});
 			},
 
 			updateTitle : function (title) {
@@ -356,7 +360,7 @@ define(
 			_changeView : function (matchedView, data) {
 				if (matchedView.viewClass) {
 					require([matchedView.viewClass], this.proxy(function (ViewClass) {
-						TransitionManager.transition(matchedView, data, (data ? data.transition : null));
+						TransitionManager.transition(matchedView, data, (data ? data.transition : null), (data ? data.cb : null));
 					}));
 				}
 				else {
