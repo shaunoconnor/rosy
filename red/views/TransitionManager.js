@@ -11,34 +11,34 @@ define(
 		var transitionSequences = {
 
 			"sync" : [
-				"transitionOut",
-				"cleanup",
-				"load",
-				"transitionIn",
-				"complete"
+				["transitionOut"],
+				["cleanup"],
+				["load"],
+				["transitionIn"],
+				["complete"]
 			],
 
 			"async" : [
-				"load",
+				["load"],
 				["transitionIn", "transitionOut"],
-				"cleanup",
-				"complete"
+				["cleanup"],
+				["complete"]
 			],
 
 			"preload" : [
-				"load",
-				"transitionOut",
-				"transitionIn",
-				"cleanup",
-				"complete"
+				["load"],
+				["transitionOut"],
+				["transitionIn"],
+				["cleanup"],
+				["complete"]
 			],
 
 			"reverse" : [
-				"load",
-				"transitionIn",
-				"transitionOut",
-				"cleanup",
-				"complete"
+				["load"],
+				["transitionIn"],
+				["transitionOut"],
+				["cleanup"],
+				["complete"]
 			]
 		};
 
@@ -46,7 +46,10 @@ define(
 
 			transition : function (view, data, transition, cb) {
 
-				var deferredTransition = null;
+				var oldView,
+					newView,
+					transitionObj,
+					deferredTransition;
 
 				if (view.viewGroup.transitioning === true) {
 					view.viewGroup.deferredTransition = {
@@ -64,16 +67,16 @@ define(
 
 				view.viewGroup.transitioning = true;
 
-				var oldView = view.viewGroup.currentView;
+				oldView = view.viewGroup.currentView;
 
 				require([view.viewClass], this.proxy(function (ViewClass) {
 
-					var newView = new ViewClass(view.viewGroup, view.viewConfig, view.params, data);
+					newView = new ViewClass(view.viewGroup, view.viewConfig, view.params, data);
 					newView.viewClass = view.viewClass;
 
 					view.viewGroup.newView = newView;
 
-					var transitionObj = {
+					transitionObj = {
 						"load"			: newView.__load.bind(newView),
 						"transitionIn"	: newView.__transitionIn.bind(newView),
 						"transitionOut"	: oldView && oldView.__transitionOut ? oldView.__transitionOut.bind(oldView) : null,
@@ -102,16 +105,18 @@ define(
 
 			close : function (viewGroup, cb) {
 
+				var view,
+					transitionObj;
 
 				if (viewGroup) {
 
 					viewGroup.newView = null;
 
-					var view = viewGroup.currentView;
+					view = viewGroup.currentView;
 
 					if (view) {
 
-						var transitionObj = {
+						transitionObj = {
 							"load" : null,
 							"transitionIn" : null,
 							"transitionOut" : view.__transitionOut.bind(view),
@@ -143,41 +148,34 @@ define(
 					return;
 				}
 
-				var cbCount = 0;
-				var sequence = transitionSequences[transition];
-				var i, ln;
+				var i,
+					l,
+					cbCount = 0,
+					sequence = transitionSequences[transition],
+					nextInSequence = this._nextInSequence,
 
-				var nextInSequence = this._nextInSequence;
+					callFn = this.proxy(function (fn) {
 
-				if (typeof sequence[index] === "string") {
-					sequence[index] = [sequence[index]];
-				}
+						if (!fn) {
+							next(true);
+							return;
+						}
 
-				ln = sequence[index].length;
+						fn(next);
+					}),
 
-				var callFn = this.proxy(function (fn) {
+					next = this.proxy(function (force) {
 
-					if (!fn) {
-						next(true);
-						return;
-					}
+						cbCount ++;
 
-					fn(next);
-				});
+						if (cbCount >= l || force) {
+							this._nextInSequence(index + 1, transition, transitionObj);
+						}
+					});
 
-				var next = this.proxy(function (force) {
-
-					cbCount ++;
-
-					if (cbCount >= ln || force) {
-						this._nextInSequence(index + 1, transition, transitionObj);
-					}
-				});
-
-				for (i = 0; i < ln; i ++) {
+				for (i = 0, l = sequence[index].length; i < l; i ++) {
 					callFn(transitionObj[sequence[index][i]]);
 				}
-
 			}
 		});
 

@@ -14,10 +14,16 @@ define(
 		
 			init : function (viewGroups) {
 
-				var view, path, route;
+				var i,
+					j,
+					l,
+					l2,
+					view,
+					path,
+					route;
 
-				for (var ln = viewGroups.length, i = ln - 1; i >= 0; i --) {
-					for (var ln2 = viewGroups[i].routes.length, j = ln2 - 1; j >= 0; j --) {
+				for (l = viewGroups.length, i = l - 1; i >= 0; i --) {
+					for (l2 = viewGroups[i].routes.length, j = l2 - 1; j >= 0; j --) {
 						view = viewGroups[i].routes[j];
 						path = this._normalize(view.route);
 						route = {
@@ -35,13 +41,18 @@ define(
 
 			getViewsByRoute : function (route) {
 
-				var r,
+				var i,
+					j,
+					l,
+					l2,
+					r,
 					m,
+					param,
 					params,
 					paramVals,
 					views = [];
 				
-				for (var ln = this._routes.length, i = 0; i < ln; i ++) {
+				for (l = this._routes.length, i = 0; i < l; i ++) {
 
 					r = this._routes[i];
 					m = r.path.exec(route);
@@ -50,8 +61,8 @@ define(
 
 						params = {};
 
-						for (var j = 1, ln2 = m.length; j < ln2; j ++) {
-							var param = r.params[j -1];
+						for (j = 1, l2 = m.length; j < l2; j ++) {
+							param = r.params[j -1];
 							params[param.name] = m[j] || null;
 						}
 
@@ -69,10 +80,10 @@ define(
 
 			getRouteRegexes : function (route) {
 
-				var r,
-					m,
-					i,
+				var i,
 					l,
+					r,
+					m,
 					str,
 					regexes = [],
 					regexStrs = {};

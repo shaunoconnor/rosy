@@ -14,8 +14,8 @@ define(
 
 		"use strict";
 
-		var HISTORY_SUPPORTED = window.history && window.history.pushState;
-		var HASH_VALUE;
+		var HISTORY_SUPPORTED = window.history && window.history.pushState,
+			HASH_VALUE;
 
 		var ViewManager = Class.extend({
 
@@ -57,6 +57,12 @@ define(
 
 			initialize : function (config) {
 
+				var i,
+					l,
+					viewGroup,
+					viewGroups = config.viewGroups,
+					defaultRoute = config.defaultRoute || null;
+
 				config.mode = config.mode === "hash" ? "#" : config.mode;
 
 				TransitionManager	=	config.TransitionManager || TransitionManager;
@@ -67,12 +73,6 @@ define(
 				this.activeClass	=	config.activeClass || this.activeClass;
 				this.bubble			=	config.bubble || this.bubble;
 				this.container		=	$(config.container || document);
-
-				var i,
-					l,
-					viewGroup,
-					viewGroups = config.viewGroups,
-					defaultRoute = config.defaultRoute || null;
 
 				for (i = 0, l = viewGroups.length; i < l; i ++) {
 					viewGroup = new ViewGroup(viewGroups[i], this);
@@ -114,8 +114,7 @@ define(
 
 			updateTitle : function (title) {
 				if (HISTORY_SUPPORTED) {
-					var route = window.location.href;
-					history.replaceState(null, title, route + window.location.hash);
+					history.replaceState(null, title, window.location.href + window.location.hash);
 				}
 				document.title = title;
 			},
@@ -126,7 +125,9 @@ define(
 
 			getViewGroup : function (id) {
 
-				var i, l, viewGroup;
+				var i,
+					l,
+					viewGroup;
 
 				for (i = 0, l = this._viewGroups.length; i < l; i ++) {
 					viewGroup = this._viewGroups[i];
@@ -147,11 +148,11 @@ define(
 					l3,
 					m,
 					m2,
+					$el,
 					route,
 					elRoute,
 					regexes,
 					toCheck = [],
-					$el,
 					$elements = this.container.find(this.selectors.join(","));
 
 				for (i = 0, l = arguments.length; i < l; i ++) {
@@ -214,11 +215,10 @@ define(
 
 			_onLinkClick : function (e) {
 
-				var $el = $(e.currentTarget);
-				var route;
-
-				var transition = $el.data("transition") || null;
-				var viewGroup = $el.data("view-group") || null;
+				var route,
+					$el = $(e.currentTarget),
+					transition = $el.data("transition") || null,
+					viewGroup = $el.data("view-group") || null;
 
 				if (!$el.attr("target") && !$el.hasClass(this.disabledClass)) {
 
@@ -242,11 +242,21 @@ define(
 			},
 
 			_onStateChange : function (e) {
-				var route = window.location.pathname;
-				this._gotoRoute({route : route, updateHistory : false});
+				this._gotoRoute({route : window.location.pathname, updateHistory : false});
 			},
 
 			_gotoRoute : function (data) {
+
+				var i,
+					l,
+					p,
+					matchedView,
+					matchedViews,
+					viewGroup,
+					currentView,
+					didRoute = false,
+					deactiveRoutes = [],
+					activateRoutes = [];
 
 				// Force all routes to begin with a "/" and have no hashtag
 				data.route = data.route.replace("#", "");
@@ -255,18 +265,7 @@ define(
 				// If this route is an alias, grab the alias value
 				data.route = this.aliases[data.route] || data.route;
 
-				var i,
-					l,
-					p,
-					didRoute = false,
-					matchedView,
-					viewGroup,
-					currentView,
-					deactiveRoutes = [],
-					activateRoutes = [],
-					matchedViews = this._router.getViewsByRoute(data.route);
-
-				if (matchedViews) {
+				if (matchedViews = this._router.getViewsByRoute(data.route)) {
 
 					if (data.event) {
 						data.event.preventDefault();
@@ -377,13 +376,16 @@ define(
 
 			_regexMatch : function (m, m2) {
 
+				var i,
+					l;
+
 				m = m.concat();
 				m2 = m2.concat();
 
 				m.splice(0,1);
 				m2.splice(0,1);
 
-				for (var l = m.length, i = l; i >= 0; i --) {
+				for (l = m.length, i = l; i >= 0; i --) {
 					if (m[i] !== m2[i] && typeof m2[i] !== "undefined") {
 						return false;
 					}

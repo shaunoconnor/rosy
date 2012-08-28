@@ -216,13 +216,13 @@ define(
 
 			__update : function (params, data, isInit) {
 
+				var p;
+
 				if (!isInit) {
 					if (this.update(params, data) === false) {
 						return false;
 					}
 				}
-
-				var p;
 
 				for (p in params) {
 					this.params[p] = params[p];
