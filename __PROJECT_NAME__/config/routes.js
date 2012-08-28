@@ -6,6 +6,10 @@ define(
 
 		var namespace = "__PROJECT_NAME__";
 
+		function ns (route) {
+			return namespace + route;
+		}
+
 		return {
 
 			"aliases" : {
@@ -23,7 +27,7 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : namespace + "/views/Home",
+							"viewClass" : ns("/views/Home"),
 							"route" : "/",
 							"config" : {
 								"bodyClass" : "home",
@@ -31,7 +35,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/About",
+							"viewClass" : ns("/views/About"),
 							"route" : "/about/:subSection?",
 							"config" : {
 								"bodyClass" : "about",
@@ -40,7 +44,7 @@ define(
 
 						},
 						{
-							"viewClass" : namespace + "/views/Contact",
+							"viewClass" : ns("/views/Contact"),
 							"route" : "/contact",
 							"config" : {
 								"bodyClass" : "contact",
