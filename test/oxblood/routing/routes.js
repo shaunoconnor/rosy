@@ -18,7 +18,7 @@ define(
 						"id" : "main",
 						"selector" : "#main",
 						"useHistory" : true, // true|false|"#"
-						"transition" : "async" // sync|async|preload|reverse
+						"transition" : "sync" // sync|async|preload|reverse
 					},
 
 					"routes" : [
@@ -46,6 +46,22 @@ define(
 								"bodyClass" : "contact",
 								"title" : "Contact"
 							}
+						},
+						{
+							"viewClass" : namespace + "/views/Sync",
+							"route" : "/transition/sync"
+						},
+						{
+							"viewClass" : namespace + "/views/Async",
+							"route" : "/transition/async"
+						},
+						{
+							"viewClass" : namespace + "/views/Preload",
+							"route" : "/transition/preload"
+						},
+						{
+							"viewClass" : namespace + "/views/Reverse",
+							"route" : "/transition/reverse"
 						}
 					]
 				}

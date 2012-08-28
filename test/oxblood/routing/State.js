@@ -6,7 +6,7 @@ define(function () {
 		changeState : function (a) {
 			state.currentState = a;
 			if (state.onChange) {
-				state.onChange(state.transitionState);
+				state.onChange(state.currentState);
 			}
 		},
 		changeTransitionState : function (a) {
