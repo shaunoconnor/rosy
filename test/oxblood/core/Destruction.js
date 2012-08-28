@@ -1,7 +1,8 @@
 define([
 	"OxBlood",
+	"red/base/Class",
 	"./SubClass"
-], function (OxBlood, Class) {
+], function (OxBlood, Class, SubClass) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Teardown", function () {
@@ -9,7 +10,7 @@ define([
 			describe("Class Destruction", function () {
 
 				it("should teardown the created Class", function (done) {
-					var testClass = Class.extend({
+					var testClass = SubClass.extend({
 						vars : {
 							x : 1,
 							y : 2,
@@ -36,13 +37,14 @@ define([
 
 					var testInstance = new testClass();
 
+					expect(testInstance).to.be.a(SubClass);
 					expect(testInstance).to.be.a(Class);
 
 					testInstance.destroy();
 				});
 
 				it("should unsubscribe all notifications", function (done) {
-					var testClass = Class.extend({
+					var testClass = SubClass.extend({
 
 						vars : {
 							x : 0
@@ -77,8 +79,9 @@ define([
 
 					var testInstance = new testClass();
 
+					expect(testInstance).to.be.a(SubClass);
 					expect(testInstance).to.be.a(Class);
-
+					
 					testInstance.destroy();
 				});
 
