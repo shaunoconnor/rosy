@@ -29,8 +29,9 @@
 //  });
 define([
 		"../Module",
-		"./zynga/ZyngaScroller"
-	], function (Module, Scroller) {
+		"./zynga/ZyngaScroller",
+		"$"
+	], function (Module, Scroller, $) {
 
 	// Extends red.Module
 	return Module.extend({
