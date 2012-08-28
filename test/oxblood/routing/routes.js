@@ -17,7 +17,7 @@ define(
 					"config" : {
 						"id" : "main",
 						"selector" : "#main",
-						"useHistory" : true, // true|false|"#"
+						"useHistory" : false, // true|false|"#"
 						"transition" : "sync" // sync|async|preload|reverse
 					},
 
@@ -46,6 +46,18 @@ define(
 								"bodyClass" : "contact",
 								"title" : "Contact"
 							}
+						},
+						{
+							"viewClass" : null,
+							"route" : "/nothing"
+						},
+						{
+							"viewClass" : namespace + "/views/UpdateTest",
+							"route" : "/update/:something?"
+						},
+						{
+							"viewClass" : namespace + "/views/CanCloseTest",
+							"route" : "/canClose"
 						},
 						{
 							"viewClass" : namespace + "/views/Sync",
