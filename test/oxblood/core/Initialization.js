@@ -2,7 +2,6 @@ define([
 	"OxBlood",
 	"./SubClass"
 ], function (OxBlood, SubClass) {
-	console.log(arguments);
 
 	OxBlood.addCoreTests(function () {
 

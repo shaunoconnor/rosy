@@ -99,7 +99,6 @@ define(
 						ViewManager.changeRoute("/update/100", "sync", function () {
 							expect(ViewManager.getViewGroup("main").currentRoute).to.equal(route);
 							ViewManager.changeRoute("/update/2", "sync", function () {
-								console.log(ViewManager.getViewGroup("main").currentRoute);
 								expect(ViewManager.getViewGroup("main").currentRoute).to.not.equal(route);
 								done();
 							});
