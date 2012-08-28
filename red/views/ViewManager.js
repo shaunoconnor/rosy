@@ -58,64 +58,61 @@ define(
 
 			initialize : function (config) {
 
-				if (!this.initialized) {
+				if (this.initialized) {
+					throw new Error("ViewManager has already been initialized.");
+				}
 
-					var i,
-						l,
-						viewGroup,
-						viewGroups = config.viewGroups,
-						defaultRoute = config.defaultRoute || null;
+				var i,
+					l,
+					viewGroup,
+					viewGroups = config.viewGroups,
+					defaultRoute = config.defaultRoute || null;
 
-					config.mode = config.mode === "hash" ? "#" : config.mode;
+				config.mode = config.mode === "hash" ? "#" : config.mode;
 
-					TransitionManager	=	config.TransitionManager || TransitionManager;
+				TransitionManager	=	config.TransitionManager || TransitionManager;
 
-					this.mode			=	config.mode || this.mode;
-					this.aliases		=	config.aliases || this.aliases;
-					this.selectors		=	config.selectors || this.selectors;
-					this.activeClass	=	config.activeClass || this.activeClass;
-					this.bubble			=	config.bubble || this.bubble;
-					this.container		=	$(config.container || document);
+				this.mode			=	config.mode || this.mode;
+				this.aliases		=	config.aliases || this.aliases;
+				this.selectors		=	config.selectors || this.selectors;
+				this.activeClass	=	config.activeClass || this.activeClass;
+				this.bubble			=	config.bubble || this.bubble;
+				this.container		=	$(config.container || document);
 
-					for (i = 0, l = viewGroups.length; i < l; i ++) {
-						viewGroup = new ViewGroup(viewGroups[i], this);
+				for (i = 0, l = viewGroups.length; i < l; i ++) {
+					viewGroup = new ViewGroup(viewGroups[i], this);
 
-						viewGroup.config = viewGroup.config || {};
-						viewGroup.config.useHistory = viewGroup.config.useHistory === "hash" ? "#" : viewGroup.config.useHistory;
-						this._viewGroups.push(viewGroup);
+					viewGroup.config = viewGroup.config || {};
+					viewGroup.config.useHistory = viewGroup.config.useHistory === "hash" ? "#" : viewGroup.config.useHistory;
+					this._viewGroups.push(viewGroup);
 
-						if (viewGroup.config.useHistory === "#" && this.mode === "#") {
-							throw new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'");
-						}
+					if (viewGroup.config.useHistory === "#" && this.mode === "#") {
+						throw new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'");
 					}
+				}
 
-					this._router = new ViewRouter(this._viewGroups);
+				this._router = new ViewRouter(this._viewGroups);
 
-					if (HISTORY_SUPPORTED) {
-						window.addEventListener('popstate', this.proxy(this._onStateChange));
-					}
-
-					else {
-						if (this.mode === "#") {
-							HASH_VALUE = window.location.hash;
-							this._pollInterval = this.setInterval(this._pollForHashChange, 100);
-						}
-					}
-
-					this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
-
-					if (defaultRoute) {
-						this._gotoRoute({route : defaultRoute});
-					}
-
-					this._onStateChange(null, true);
-
-					this.initialized = true;
+				if (HISTORY_SUPPORTED) {
+					window.addEventListener('popstate', this.proxy(this._onStateChange));
 				}
 
 				else {
-					throw new Error("ViewManager has already been initialized.");
+					if (this.mode === "#") {
+						HASH_VALUE = window.location.hash;
+						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
+					}
 				}
+
+				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
+
+				if (defaultRoute) {
+					this._gotoRoute({route : defaultRoute});
+				}
+
+				this._onStateChange(null, true);
+
+				this.initialized = true;
 			},
 
 			changeRoute : function (route, transition, cb) {
@@ -198,7 +195,7 @@ define(
 							}
 						}
 					}
-				};
+				}
 			},
 
 			deactivate : function (/*route1, route2, route3, ...*/) {
@@ -275,7 +272,9 @@ define(
 				// If this route is an alias, grab the alias value
 				data.route = this.aliases[data.route] || data.route;
 
-				if (matchedViews = this._router.getViewsByRoute(data.route)) {
+				matchedViews = this._router.getViewsByRoute(data.route);
+
+				if (matchedViews) {
 
 					if (data.event) {
 						data.event.preventDefault();
