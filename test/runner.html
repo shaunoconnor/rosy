@@ -39,11 +39,12 @@
 		<script src="../config.js"></script>
 		<script>
 			require.config({
-				baseUrl : "../",
+				baseUrl : "/",
 				paths: {
 					"project": "__PROJECT_NAME__",
 					"OxBlood": "test/oxblood/OxBlood",
 					"core": "test/oxblood/core",
+					"routing": "test/oxblood/routing",
 					"modules": "test/oxblood/modules"
 				},
 				urlArgs : "cacheBust=" + (new Date()).getTime()
@@ -69,7 +70,10 @@
 				"modules/social/TwitterSocial",
 				"modules/ticker/Ticker",
 				"modules/tracking/GATracking",
-				"modules/tracking/OmnitureTracking"
+				"modules/tracking/OmnitureTracking",
+
+				"routing/Routing"
+
 			], function (OxBlood) {
 				OxBlood.registerTests();
 
