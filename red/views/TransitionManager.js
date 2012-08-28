@@ -134,6 +134,9 @@ define(
 						this._nextInSequence(0, "reverse", transitionObj);
 					}
 				}
+				else {
+					throw new Error("Invalid view group.");
+				}
 			},
 
 			transitionDeferred : function (viewGroup) {
