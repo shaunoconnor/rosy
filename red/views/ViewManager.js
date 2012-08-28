@@ -5,10 +5,11 @@ define(
 		"./ViewGroup",
 		"./ViewRouter",
 		"./TransitionManager",
+		"./ViewNotification",
 		"$",
 	],
 
-	function (Class, ViewGroup, ViewRouter, TransitionManager, $) {
+	function (Class, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
 
 		/*jshint eqnull:true*/
 
@@ -124,6 +125,7 @@ define(
 					history.replaceState(null, title, window.location.href + window.location.hash);
 				}
 				document.title = title;
+				this.publish(ViewNotification.TITLE_CHANGED, {title : title});
 			},
 
 			closeViewGroup : function (viewGroup, cb) {
@@ -305,7 +307,7 @@ define(
 									}
 								}
 
-								else if (!currentView.canClose()) {
+								else if (!currentView.__canClose()) {
 									if (data.cb) {
 										data.cb();
 									}
@@ -378,13 +380,33 @@ define(
 			},
 
 			_changeView : function (matchedView, data) {
+
+				data = data || {};
+
 				if (matchedView.viewClass) {
+
 					require([matchedView.viewClass], this.proxy(function (ViewClass) {
-						TransitionManager.transition(matchedView, data, (data ? data.transition : null), (data ? data.cb : null));
+
+						TransitionManager.transition(matchedView, data, data.transition, this.proxy(function () {
+
+							this.publish(ViewNotification.VIEW_CHANGED, {view : matchedView, viewGroup : matchedView.viewGroup});
+
+							if (data.cb) {
+								data.cb();
+							}
+						}));
 					}));
 				}
 				else {
-					TransitionManager.close(matchedView.viewGroup, data ? data.cb : null);
+
+					TransitionManager.close(matchedView.viewGroup, this.proxy(function () {
+
+						this.publish(ViewNotification.VIEW_CLOSED, {view : matchedView, viewGroup : matchedView.viewGroup});
+
+						if (data.cb) {
+							data.cb();
+						}
+					}));
 				}
 			},
 

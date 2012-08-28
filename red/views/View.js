@@ -1,10 +1,11 @@
 define(
 
 	[
-		"../base/Class"
+		"../base/Class",
+		"./ViewNotification"
 	],
 
-	function (Class) {
+	function (Class, ViewNotification) {
 
 		"use strict";
 
@@ -166,6 +167,8 @@ define(
 					this._loadTimeout = null;
 				}
 
+				this.publish(ViewNotification.VIEW_LOAD_COMPLETED, {view : this, viewGroup: this.viewGroup});
+
 				return this._loadCB ? this._loadCB() : null;
 			},
 
@@ -176,6 +179,8 @@ define(
 					this._inTimeout = null;
 				}
 
+				this.publish(ViewNotification.VIEW_IN_COMPLETED, {view : this, viewGroup: this.viewGroup});
+
 				return this._inCB ? this._inCB() : null;
 			},
 
@@ -185,6 +190,8 @@ define(
 					clearTimeout(this._outTimeout);
 					this._outTimeout = null;
 				}
+
+				this.publish(ViewNotification.VIEW_OUT_COMPLETED, {view : this, viewGroup: this.viewGroup});
 
 				return this._outCB ? this._outCB() : null;
 			},
@@ -197,6 +204,9 @@ define(
 				}
 
 				this.__destroy();
+
+				this.publish(ViewNotification.VIEW_CLEANUP_COMPLETED, {view : this, viewGroup: this.viewGroup});
+
 				return this._cleanupCB ? this._cleanupCB() : null;
 			},
 
@@ -212,6 +222,18 @@ define(
 				this.__update(params, data, true);
 				
 				this.init();
+
+				this.publish(ViewNotification.VIEW_INITIALIZED, {view : this, viewGroup: this.viewGroup});
+			},
+
+			__canClose : function () {
+				var can = this.canClose();
+
+				if (!can) {
+					this.publish(ViewNotification.VIEW_CHANGE_CANCELLED, {view : this, viewGroup: this.viewGroup});
+				}
+
+				return can;
 			},
 
 			__update : function (params, data, isInit) {
@@ -220,6 +242,7 @@ define(
 
 				if (!isInit) {
 					if (this.update(params, data) === false) {
+						this.publish(ViewNotification.VIEW_UPDATE_CANCELLED, {view : this, viewGroup: this.viewGroup});
 						return false;
 					}
 				}
@@ -231,6 +254,8 @@ define(
 				for (p in data) {
 					this.data[p] = data[p];
 				}
+
+				this.publish(ViewNotification.VIEW_UPDATED, {view : this, viewGroup: this.viewGroup});
 			},
 
 			__load : function (cb) {
@@ -240,7 +265,10 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._loadCB = cb;
-				this.load.call(this);
+
+				this.publish(ViewNotification.VIEW_LOAD_STARTED, {view : this, viewGroup: this.viewGroup});
+
+				this.load.call(this);				
 			},
 
 			__transitionIn : function (cb) {
@@ -250,6 +278,9 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._inCB = cb;
+
+				this.publish(ViewNotification.VIEW_IN_STARTED, {view : this, viewGroup: this.viewGroup});
+
 				this.transitionIn.call(this);
 				this.viewGroup.activate();
 			},
@@ -261,6 +292,9 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._outCB = cb;
+
+				this.publish(ViewNotification.VIEW_OUT_STARTED, {view : this, viewGroup: this.viewGroup});
+
 				this.transitionOut.call(this);
 			},
 
@@ -271,6 +305,9 @@ define(
 				}, MAX_WAIT_TIME);
 
 				this._cleanupCB = cb;
+
+				this.publish(ViewNotification.VIEW_CLEANUP_STARTED, {view : this, viewGroup: this.viewGroup});
+
 				this.cleanup.call(this);
 			},
 
