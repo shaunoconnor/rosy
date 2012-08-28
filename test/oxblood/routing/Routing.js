@@ -20,27 +20,29 @@ define(
 
 			describe("View Routing", function () {
 
+				before(function (done) {
+					ViewManager.initialize({
+						// mode					:	hard|soft|hash,
+						// selectors			:	Array,
+						// bubble				:	true|false,
+						// container			:	String|DOMElement,
+						// defaultRoute			:	String,
+						// activeClass			:	String,
+						// disabledClass		:	String,
+						// TransitionManager	:	Class,
+						// defaultRoute : "/test",
+						mode : "soft",
+						aliases : routes.aliases,
+						viewGroups : routes.viewGroups
+					});
+					done();
+				});
+
 				describe("ViewManager Initialization", function () {
 
 					it("should initialize successfully", function (done) {
-						try {
-							ViewManager.initialize({
-								// mode					:	hard|soft|hash,
-								// selectors			:	Array,
-								// bubble				:	true|false,
-								// container			:	String|DOMElement,
-								// defaultRoute			:	String,
-								// activeClass			:	String,
-								// disabledClass		:	String,
-								// TransitionManager	:	Class,
-								// defaultRoute : "/test",
-								mode : "soft",
-								aliases : routes.aliases,
-								viewGroups : routes.viewGroups
-							});
-							done();
-						}
-						catch (e) {throw e;}
+						expect(ViewManager.initialized).to.equal(true);
+						done();
 					});
 				});
 

@@ -98,15 +98,6 @@ define(
 			describe("Transitions", function () {
 
 				before(function(done){
-
-					if (!ViewManager.initialized) {
-
-						ViewManager.initialize({
-							mode : "soft",
-							aliases : routes.aliases,
-							viewGroups : routes.viewGroups
-						});	
-					}
 					
 					ViewManager.getViewGroup("main").config.useHistory = false;
 					ViewManager.changeRoute("/test", "sync", done);

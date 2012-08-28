@@ -18,15 +18,6 @@ define(
 
 			describe("History Management", function () {
 
-				if (!ViewManager.initialized) {
-					ViewManager.initialize({
-						mode : "soft",
-						aliases : routes.aliases,
-						viewGroups : routes.viewGroups
-					});
-				}
-
-
 				describe("useHistory = false", function () {
 
 					before(function (done){
