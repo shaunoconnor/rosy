@@ -4,11 +4,11 @@ define(
 		"OxBlood",
 		"red/base/Class",
 		"red/views/ViewManager",
-		"./State",
+		"red/views/ViewNotification",
 		"./routes"
 	],
 
-	function (OxBlood, Class, ViewManager, State, routes) {
+	function (OxBlood, Class, ViewManager, ViewNotification, routes) {
 
 		var REAL_URL = window.location.pathname + window.location.search,
 			REAL_HASH = window.location.hash = "",
@@ -29,7 +29,6 @@ define(
 
 						ViewManager.changeRoute("/test", null, function () {
 							expect(window.location.pathname + window.location.search).to.equal(REAL_URL);
-							expect(State.currentState).to.equal("home");
 							done();
 						});
 					});
@@ -51,7 +50,6 @@ define(
 
 							ViewManager.changeRoute(route, null, function () {
 								expect(window.location.pathname).to.equal(route);
-								expect(State.currentState).to.equal("about");
 								done();
 							});
 						});
@@ -97,17 +95,21 @@ define(
 
 						var route = "/test/contact";
 
-						window.location.hash = route;
+						var subscriber = new Class();
+						subscriber.subscribe(ViewNotification.VIEW_CHANGED, function (n) {
 
-						State.onChange = function() {
-							expect(State.currentState).to.equal("contact");
-							State.onChange = null;
+							expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("contact");
 
 							if (HISTORY_SUPPORT) {
 								history.pushState(null, null, REAL_URL);
 							}
+
+							subscriber.unsubscribe(ViewNotification.VIEW_CHANGED);
+
 							done();
-						};
+						});
+
+						window.location.hash = route;
 					});
 				});
 			});

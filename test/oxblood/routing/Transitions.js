@@ -4,11 +4,11 @@ define(
 		"OxBlood",
 		"red/base/Class",
 		"red/views/ViewManager",
-		"./State",
+		"red/views/ViewNotification",
 		"./routes"
 	],
 
-	function (OxBlood, Class, ViewManager, State, routes) {
+	function (OxBlood, Class, ViewManager, ViewNotification, routes) {
 
 		var transitions = {
 
@@ -57,6 +57,17 @@ define(
 			]
 		};
 
+		var mappings = {
+			"load"					: ViewNotification.VIEW_LOAD_STARTED,
+			"transitionIn"			: ViewNotification.VIEW_IN_STARTED,
+			"transitionOut"			: ViewNotification.VIEW_OUT_STARTED,
+			"cleanup"				: ViewNotification.VIEW_CLEANUP_STARTED,
+			"loadComplete"			: ViewNotification.VIEW_LOAD_COMPLETED,
+			"transitionInComplete"	: ViewNotification.VIEW_IN_COMPLETED,
+			"transitionOutComplete"	: ViewNotification.VIEW_OUT_COMPLETED,
+			"cleanupComplete" 		: ViewNotification.VIEW_CLEANUP_COMPLETED
+		};
+
 		var positions = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eigth"];
 
 
@@ -65,13 +76,21 @@ define(
 			function testTransition (name) {
 
 				var i,
-					states = [],
+					steps = [],
+					subscriber,
 					transition = transitions[name];
 
 				function testTransitionStep (i) {
 					it("should call " + transition[i] + " " + positions[i], function (done) {
-						expect(states[i]).to.equal(transition[i]);
+						expect(steps[i]).to.equal(transition[i]);
 						done();
+					});
+				}
+
+				function subscribeToStep (m) {
+					subscriber.subscribe(mappings[m], function (n) {
+						steps.push(m);
+						subscriber.unsubscribe(mappings[m]);
 					});
 				}
 
@@ -79,14 +98,22 @@ define(
 
 					before(function(done) {
 
-						State.onTransitionChange = function () {
-							states.push(State.transitionState);
-						};
+						subscriber = new Class();
+
+						for (var m in mappings) {
+							subscribeToStep(m);
+						}
 
 						ViewManager.changeRoute("/transition/" + name,  name, function () {
-							State.onTransitionChange = null;
 							done();
 						});
+					});
+
+					after(function(done) {
+						steps = [];
+						subscriber.unsubscribe();
+						subscriber.destroy();
+						done();
 					});
 
 					for (i = 0; i < transition.length; i ++) {
@@ -97,13 +124,10 @@ define(
 
 			describe("Transitions", function () {
 
-				before(function(done){
-					
+				before(function(done) {					
 					ViewManager.getViewGroup("main").config.useHistory = false;
 					ViewManager.changeRoute("/test", "sync", done);
-
 				});
-
 
 				for (var transition in transitions) {
 					testTransition(transition);
