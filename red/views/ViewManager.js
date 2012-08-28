@@ -257,6 +257,7 @@ define(
 				var i,
 					l,
 					p,
+					skipped,
 					matchedView,
 					matchedViews,
 					viewGroup,
@@ -345,6 +346,17 @@ define(
 								}
 							}
 						}
+
+						else {
+							skipped ++; 
+						}
+					}
+
+					if (skipped === l) {
+						if (data.cb) {
+							data.cb();
+						}
+						return false;
 					}
 
 					/**
