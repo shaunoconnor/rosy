@@ -297,11 +297,17 @@ define(
 
 								if (currentView.viewClass === matchedView.viewClass) {
 									if (currentView.__update(matchedView.params, data) === false) {
+										if (data.cb) {
+											data.cb();
+										}
 										return false;
 									}
 								}
 
 								else if (!currentView.canClose()) {
+									if (data.cb) {
+										data.cb();
+									}
 									return false;
 								}
 							}
