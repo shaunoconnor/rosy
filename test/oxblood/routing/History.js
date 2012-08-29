@@ -82,7 +82,7 @@ define(
 
 					it("should successfully push hash changes", function (done) {
 
-						var route = "/test/contact";
+						var route = "/test";
 
 						ViewManager.changeRoute(route, null, function () {
 							expect(window.location.hash).to.equal('#' + route);
