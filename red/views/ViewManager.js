@@ -24,6 +24,7 @@ define(
 			_router : null,
 			_viewGroups : [],
 			_activeElements : {},
+			_firstPop : true,
 
 			/**
 			*	SUPPORTED MODES:
@@ -111,7 +112,7 @@ define(
 					this._gotoRoute({route : defaultRoute});
 				}
 
-				this._onStateChange(null, true);
+				this._firstPop = !!defaultRoute;
 
 				this.initialized = true;
 			},
@@ -251,11 +252,17 @@ define(
 			},
 
 			_onStateChange : function (e) {
-				this._gotoRoute({route : window.location.pathname, updateHistory : false});
+
+				if (!this._firstPop) {
+					this._gotoRoute({route : window.location.pathname, updateHistory : false});
+					return;
+				}
+
+				this._firstPop = false;
 			},
 
 			_gotoRoute : function (data) {
-
+				console.log(data);
 				var i,
 					l,
 					p,
