@@ -24,6 +24,7 @@ define(
 			_router : null,
 			_viewGroups : [],
 			_activeElements : {},
+			_firstPop : true,
 
 			/**
 			*	SUPPORTED MODES:
@@ -107,12 +108,13 @@ define(
 
 				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
 
-				if (defaultRoute) {
-					this._gotoRoute({route : defaultRoute});
+				this._gotoRoute({route : defaultRoute || window.location.pathname});
+
+				if (window.location.hash) {
+					this._gotoRoute({route : window.location.hash});
 				}
 
-				this._onStateChange(null, true);
-
+				this._firstPop = true;
 				this.initialized = true;
 			},
 
@@ -229,7 +231,12 @@ define(
 					transition = $el.data("transition") || null,
 					viewGroup = $el.data("view-group") || null;
 
-				if (!$el.attr("target") && !$el.hasClass(this.disabledClass)) {
+				if (!$el.attr("target")) {
+
+					if ($el.hasClass(this.disabledClass)) {
+						e.preventDefault();
+						return false;
+					}
 
 					route = $el.data("route") || $el.attr("href");
 
@@ -251,11 +258,16 @@ define(
 			},
 
 			_onStateChange : function (e) {
-				this._gotoRoute({route : window.location.pathname, updateHistory : false});
+
+				if (!this._firstPop) {
+					this._gotoRoute({route : window.location.pathname, updateHistory : false});
+					return;
+				}
+
+				this._firstPop = false;
 			},
 
 			_gotoRoute : function (data) {
-
 				var i,
 					l,
 					p,
