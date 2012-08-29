@@ -40,13 +40,13 @@ define(
 		return (function() {
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
-			var Dummy = function () {};
+			var Prototype = function () {};
 			var MClass = function () {};
 
 			MClass.extend = function (props, staticProps) {
 
-				Dummy.prototype = this.prototype;
-				var p, proto = Utils.extend(new Dummy(), props);
+				Prototype.prototype = this.prototype;
+				var p, proto = Utils.extend(new Prototype(), props);
 
 				function Class (vars) {
 
