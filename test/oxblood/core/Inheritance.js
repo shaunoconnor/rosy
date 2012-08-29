@@ -1,19 +1,19 @@
 define([
 	"OxBlood",
-	"project/base/Page"
-], function (OxBlood, Page) {
+	"./SubClass"
+], function (OxBlood, SubClass) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Inheritance", function () {
 
-			describe("Class Inheritance", function () {
+			describe("SubClass Inheritance", function () {
 
-				it("should create an instance of Page", function () {
-					expect(new Page()).to.be.a(Page);
+				it("should create an instance of SubClass", function () {
+					expect(new SubClass()).to.be.a(SubClass);
 				});
 
 				it("should contain vars.x with a value of 1", function () {
-					var Foo = Page.extend({
+					var Foo = SubClass.extend({
 						vars : {
 							x : 1
 						}
@@ -23,7 +23,7 @@ define([
 				});
 
 				it("should contain scoped vars.x values", function () {
-					var Foo = Page.extend({
+					var Foo = SubClass.extend({
 						vars : {
 							x : 1
 						}
@@ -47,7 +47,7 @@ define([
 
 				describe("Deep Copying", function () {
 
-					var Foo = Page.extend({
+					var Foo = SubClass.extend({
 						vars : {
 							y : {
 								a: 1,

@@ -2,14 +2,14 @@
 
 define([
 	"OxBlood",
-	"project/base/Page"
-], function (OxBlood, Page) {
+	"./SubClass"
+], function (OxBlood, SubClass) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Notifications", function () {
 			var delay = 10;
 
-			var testInstance = new Page();
+			var testInstance = new SubClass();
 
 			describe("Methods", function () {
 				describe(".subscribe()", function () {
@@ -80,7 +80,7 @@ define([
 				});
 
 				describe(".hold()", function () {
-					var holdInstance = new Page();
+					var holdInstance = new SubClass();
 					var doneCalled;
 
 					it("hold should be a function", function (done) {
@@ -118,7 +118,7 @@ define([
 				});
 
 				describe(".release()", function () {
-					var releaseInstance = new Page();
+					var releaseInstance = new SubClass();
 					var doneCalled;
 
 					it("release should be a function", function (done) {
@@ -156,7 +156,7 @@ define([
 				});
 
 				describe(".cancel()", function () {
-					var cancelInstance = new Page();
+					var cancelInstance = new SubClass();
 
 					it("cancel should be a function", function (done) {
 						testInstance.subscribe("cancel-test-1", function (notification) {

@@ -1,11 +1,11 @@
 define([
 	"OxBlood",
-	"project/base/Page"
-], function (OxBlood, Page) {
+	"./SubClass"
+], function (OxBlood, SubClass) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Timers", function () {
-			var testInstance = new Page();
+			var testInstance = new SubClass();
 			var delay = 10;
 
 			describe(".setTimeout()", function () {

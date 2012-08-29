@@ -11,11 +11,16 @@ define([
 	return {
 		tests : {
 			core : [],
+			routing : [],
 			modules : []
 		},
 
 		addCoreTests : function (tests) {
 			this.tests.core.push(tests);
+		},
+
+		addRoutingTests : function (tests) {
+			this.tests.routing.push(tests);			
 		},
 
 		addModuleTests : function (tests) {

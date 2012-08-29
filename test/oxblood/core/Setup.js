@@ -1,7 +1,7 @@
 define([
 	"OxBlood",
-	"project/base/Page"
-], function (OxBlood, Page) {
+	"./SubClass"
+], function (OxBlood, SubClass) {
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Setup", function () {
@@ -9,15 +9,15 @@ define([
 			describe(".setup()", function () {
 
 				it("should setup the class if .setup() exists", function (done) {
-					var testPage = Page.extend({
+					var testPage = SubClass.extend({
 						setup : function () {
-							this.prototype.vars.isSetup = true;
+							this.prototype.isSetup = true;
 						}
 					});
 
-					var testInstance = new Page();
+					var testInstance = new SubClass();
 
-					expect(testInstance.vars.isSetup).to.be.ok();
+					expect(testInstance.isSetup).to.be.ok();
 					done();
 
 				});
