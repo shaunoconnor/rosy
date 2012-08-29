@@ -108,12 +108,13 @@ define(
 
 				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
 
-				if (defaultRoute) {
-					this._gotoRoute({route : defaultRoute});
+				this._gotoRoute({route : defaultRoute || window.location.pathname});
+
+				if (window.location.hash) {
+					this._gotoRoute({route : window.location.hash});
 				}
 
-				this._firstPop = !!defaultRoute;
-
+				this._firstPop = true;
 				this.initialized = true;
 			},
 
@@ -230,7 +231,12 @@ define(
 					transition = $el.data("transition") || null,
 					viewGroup = $el.data("view-group") || null;
 
-				if (!$el.attr("target") && !$el.hasClass(this.disabledClass)) {
+				if (!$el.attr("target")) {
+
+					if ($el.hasClass(this.disabledClass)) {
+						e.preventDefault();
+						return false;
+					}
 
 					route = $el.data("route") || $el.attr("href");
 
@@ -262,7 +268,6 @@ define(
 			},
 
 			_gotoRoute : function (data) {
-				console.log(data);
 				var i,
 					l,
 					p,
