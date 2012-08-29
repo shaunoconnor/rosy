@@ -46,6 +46,39 @@ define([
 					expect(foo.vars.x).to.equal(1);
 				});
 
+				it("should call super methods", function (done) {
+					var SuperClass = SubClass.extend({
+						testMethod : function () {
+							expect(this.testMethod).to.be.a("function");
+							done();
+						}
+					});
+
+					var MiddleClass = SuperClass.extend({
+						testMethod : function () {
+							expect(this.sup).to.be.a("function");
+							this.sup();
+						}
+					});
+
+					var TestClass = MiddleClass.extend({
+						init : function () {
+							this.testMethod();
+						},
+
+						testMethod : function () {
+							expect(this.sup).to.be.a("function");
+							this.sup();
+						}
+					});
+
+					var testInstance = new TestClass();
+
+					expect(testInstance).to.be.a(SuperClass);
+					expect(testInstance).to.be.a(MiddleClass);
+					expect(testInstance).to.be.a(TestClass);
+				});
+
 				describe("Deep Copying", function () {
 
 					var Foo = SubClass.extend({
