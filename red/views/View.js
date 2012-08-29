@@ -1,13 +1,15 @@
 define(
 
 	[
-		"../base/Class",
+		"../dom/DOMClass",
 		"./ViewNotification"
 	],
 
-	function (Class, ViewNotification) {
+	function (DOMClass, ViewNotification) {
 
 		"use strict";
+
+		/*jshint es5:true */
 
 		/**
 		* MAX_WAIT_TIME is used to try and catch uncompleted/improperly
@@ -19,7 +21,7 @@ define(
 		var MAX_WAIT_TIME = 10000,
 			ERROR_HANDLER = function (e) {throw e;};
 
-		return Class.extend({
+		return DOMClass.extend({
 
 			config : {},
 			data : {},
@@ -58,7 +60,7 @@ define(
 			* when the View is instantiated. this.params and this.data
 			* will be set with appropriate values by the time init() is called.
 			**/
-		
+
 			init : function () {
 
 			},
@@ -220,7 +222,7 @@ define(
 				this.viewGroup = viewGroup;
 				this.config = config;
 				this.__update(params, data, true);
-				
+
 				this.init();
 
 				this.publish(ViewNotification.VIEW_INITIALIZED, {view : this, viewGroup: this.viewGroup});
