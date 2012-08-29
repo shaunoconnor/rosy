@@ -15,6 +15,10 @@ define(
 
 		return AbstractClass.extend({
 
+			opts : {
+				autoProxy : true
+			},
+
 			init : function (vars, context) {},
 
 			/**

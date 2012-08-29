@@ -50,6 +50,9 @@ define(
 
 				function Class (vars) {
 
+					var fn,
+						p;
+
 					/**
 					* If the prototype has a vars object and the first argument, is an object,
 					* deep copy it to this.vars
@@ -58,7 +61,15 @@ define(
 						this.vars = Utils.extend({}, true, this.vars, vars);
 					}
 
-					var fn = this.__init || this.init || this.prototype.constructor;
+					if (this.opts && this.opts.autoProxy === true) {
+						for (p in this) {
+							if (typeof this[p] === "function") {
+								this[p] = this[p].bind(this);
+							}
+						}
+					}
+
+					fn = this.__init || this.init || this.prototype.constructor;
 					return fn.apply(this, arguments);
 				}
 
