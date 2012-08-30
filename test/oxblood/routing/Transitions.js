@@ -22,7 +22,7 @@ define(
 				"transitionIn",
 				"transitionInComplete"
 			],
-			
+
 			async : [
 				"load",
 				"loadComplete",
@@ -124,9 +124,9 @@ define(
 
 			describe("Transitions", function () {
 
-				before(function(done) {					
+				before(function(done) {
 					ViewManager.getViewGroup("main").config.useHistory = false;
-					ViewManager.changeRoute("/test", "sync", done);
+					ViewManager.changeRoute("/test1", "sync", done);
 				});
 
 				for (var transition in transitions) {

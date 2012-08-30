@@ -44,8 +44,8 @@ define(
 				});
 
 				it("should be able to change routes programatically", function (done) {
-					ViewManager.changeRoute("/test/about", "sync", function () {
-						expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("about");
+					ViewManager.changeRoute("/test1", "sync", function () {
+						expect(ViewManager.getViewGroup("main").currentView.config.test).to.equal("test1");
 						done();
 					});
 				});
@@ -58,8 +58,8 @@ define(
 				});
 
 				it("should be able to change routes after closing a view group", function (done) {
-					ViewManager.changeRoute("/test", "sync", function () {
-						expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("home");
+					ViewManager.changeRoute("/test2", "sync", function () {
+						expect(ViewManager.getViewGroup("main").currentView.config.test).to.equal("test2");
 						done();
 					});
 				});
@@ -79,10 +79,10 @@ define(
 
 						view.locked = true;
 
-						ViewManager.changeRoute("/test/about", "sync", function () {
+						ViewManager.changeRoute("/test1", "sync", function () {
 							expect(ViewManager.getViewGroup("main").currentView).to.equal(view);
 							view.locked = false;
-							ViewManager.changeRoute("/test/about", "sync", function () {
+							ViewManager.changeRoute("/test2", "sync", function () {
 								expect(ViewManager.getViewGroup("main").currentView).to.not.equal(view);
 								done();
 							});

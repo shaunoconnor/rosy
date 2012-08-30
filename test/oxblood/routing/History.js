@@ -22,7 +22,7 @@ define(
 
 					before(function (done){
 						ViewManager.getViewGroup("main").config.useHistory = false;
-						ViewManager.changeRoute("/test", null, function () {
+						ViewManager.changeRoute("/test5", null, function () {
 							done();
 						});
 					});
@@ -45,7 +45,7 @@ define(
 
 						it("should successfully push state", function (done) {
 
-							var route = "/test/about";
+							var route = "/test1";
 
 							ViewManager.changeRoute(route, null, function () {
 								expect(window.location.pathname).to.equal(route);
@@ -55,12 +55,10 @@ define(
 
 						it("should successfully listen for pop state", function (done) {
 
-							var route = "/test/about";
-
-							ViewManager.changeRoute("/test/contact");
+							ViewManager.changeRoute("/test2");
 
 							var onPopState = function() {
-								expect(window.location.pathname).to.equal(route);
+								expect(window.location.pathname).to.equal("/test1");
 								window.removeEventListener('popstate', onPopState);
 								history.pushState(null, null, REAL_URL);
 								done();
@@ -82,7 +80,7 @@ define(
 
 					it("should successfully push hash changes", function (done) {
 
-						var route = "/test";
+						var route = "/test3";
 
 						ViewManager.changeRoute(route, null, function () {
 							expect(window.location.hash).to.equal('#' + route);
@@ -92,12 +90,12 @@ define(
 
 					it("should successfully listen for hash changes", function (done) {
 
-						var route = "/test/about";
+						var route = "/test4";
 
 						var subscriber = new Class();
 						subscriber.subscribe(ViewNotification.VIEW_CHANGED, function (n) {
 
-							expect(ViewManager.getViewGroup("main").currentView.config.bodyClass).to.equal("about");
+							expect(ViewManager.getViewGroup("main").currentView.config.test).to.equal("test4");
 
 							if (HISTORY_SUPPORT) {
 								history.pushState(null, null, REAL_URL);
