@@ -228,7 +228,7 @@ define(
 			_onLinkClick : function (e) {
 
 				var $el = $(e.currentTarget),
-					data = $el.data;
+					data = $el.data();
 
 				if (!$el.attr("target")) {
 
