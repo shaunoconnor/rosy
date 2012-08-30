@@ -227,10 +227,8 @@ define(
 
 			_onLinkClick : function (e) {
 
-				var route,
-					$el = $(e.currentTarget),
-					transition = $el.data("transition") || null,
-					viewGroup = $el.data("view-group") || null;
+				var $el = $(e.currentTarget),
+					data = $el.data;
 
 				if (!$el.attr("target")) {
 
@@ -239,10 +237,12 @@ define(
 						return false;
 					}
 
-					route = $el.data("route") || $el.attr("href");
+					data.route = data.route || $el.attr("href");
 
-					if (route) {
-						this._gotoRoute({route : route, transition: transition, viewGroup: viewGroup, event: e});
+					if (data.route) {
+
+						data.event = e;
+						this._gotoRoute(data);
 
 						if (!this.bubble) {
 							return false;
