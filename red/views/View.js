@@ -226,8 +226,8 @@ define(
 				this.publish(ViewNotification.VIEW_INITIALIZED, {view : this, viewGroup: this.viewGroup});
 			},
 
-			__canClose : function (route, params, viewClass, viewConfig) {
-				var can = this.canClose(route, params, viewClass, viewConfig);
+			__canClose : function (viewData) {
+				var can = this.canClose(viewData);
 
 				if (!can) {
 					this.publish(ViewNotification.VIEW_CHANGE_CANCELLED, {view : this, viewGroup: this.viewGroup});

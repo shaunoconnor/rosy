@@ -2,14 +2,15 @@ define(
 
 	[
 		"../base/Class",
+		"../utils/Utils",
 		"./ViewGroup",
 		"./ViewRouter",
 		"./TransitionManager",
 		"./ViewNotification",
-		"$",
+		"$"
 	],
 
-	function (Class, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
+	function (Class, Utils, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
 
 		/*jshint eqnull:true*/
 
@@ -275,6 +276,7 @@ define(
 					matchedViews,
 					viewGroup,
 					currentView,
+					viewData,
 					didRoute = false,
 					deactiveRoutes = [],
 					activateRoutes = [];
@@ -318,11 +320,23 @@ define(
 									}
 								}
 
-								else if (!currentView.__canClose(data.route, matchedView.params, matchedView.viewClass, matchedView.viewConfig)) {
-									if (data.cb) {
-										data.cb();
+								else {
+
+									viewData = Utils.extend({}, data, matchedView);
+
+									viewData.cb = null;
+									delete viewData.cb;
+
+									viewData.viewGroup = null;
+									delete viewData.viewGroup;
+
+									if (!currentView.__canClose(viewData)) {
+
+										if (data.cb) {
+											data.cb();
+										}
+										return false;
 									}
-									return false;
 								}
 							}
 						}
