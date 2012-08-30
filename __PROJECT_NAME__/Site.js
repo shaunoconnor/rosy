@@ -11,7 +11,7 @@ define(
 		"use strict";
 
 		return Class.extend({
-					
+
 			init : function () {
 
 				ViewManager.initialize({
