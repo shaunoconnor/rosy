@@ -25,9 +25,16 @@ define([
 							});
 
 							this.setTimeout(function () {
+								this.testScope.call(window);
+								this.testScope.apply(document);
+
 								body.trigger("click");
 								body.trigger("scroll");
 							}, 0);
+						},
+
+						testScope : function () {
+							expect(this).to.eql(testInstance);
 						},
 
 						onClick : function () {
