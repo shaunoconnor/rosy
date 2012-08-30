@@ -10,7 +10,7 @@ define([
 					$("body").off();
 				});
 
-				it ("should report 'this' as Class without", function (done) {
+				it ("should report 'this' as Class without .proxy()", function (done) {
 					var TestClass = SubClass.extend({
 						init : function () {
 							this.setupEvents();
