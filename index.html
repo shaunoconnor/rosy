@@ -26,7 +26,31 @@
 					<li><a href="https://github.com/ff0000/rosy">View On <strong>GitHub</strong></a></li>
 				</ul>
 			</header>
-			<section>
+			<section style="padding-top:20px">
+
+				<h3>Features</h3>
+				<ul>
+					<li>Written in AMD.</li>
+					<li>100+ unit tests and counting.</li>
+					<li>Lightweight</li>
+					<li>Client-side routing</li>
+				</ul>
+
+				<h3>Inheritance Made Easy</h3>
+
+<pre><code>
+define(["red/base/Class"], function (Class) {
+
+  return Class.extend({
+
+    init : function (a, b, c) {
+      console.log(a, b, c);
+    }
+
+  });
+});
+</code></pre>
+
 
 				<h3>Getting Started</h3>
 				<p>Docs for Rosy can be found <a href="https://github.com/ff0000/rosy/wiki">here.</a></p>
