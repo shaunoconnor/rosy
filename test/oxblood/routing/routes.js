@@ -23,28 +23,38 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : namespace + "/views/Home",
-							"route" : "/test",
+							"viewClass" : namespace + "/views/Test1",
+							"route" : "/test1",
 							"config" : {
-								"bodyClass" : "home",
-								"title" : "Home"
+								"test" : "test1"
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/About",
-							"route" : "/test/about/:subSection?",
+							"viewClass" : namespace + "/views/Test2",
+							"route" : "/test2",
 							"config" : {
-								"bodyClass" : "about",
-								"title" : "About"
+								"test" : "test2"
 							}
-
 						},
 						{
-							"viewClass" : namespace + "/views/Contact",
-							"route" : "/test/contact",
+							"viewClass" : namespace + "/views/Test3",
+							"route" : "/test3",
 							"config" : {
-								"bodyClass" : "contact",
-								"title" : "Contact"
+								"test" : "test3"
+							}
+						},
+						{
+							"viewClass" : namespace + "/views/Test4",
+							"route" : "/test4",
+							"config" : {
+								"test" : "test4"
+							}
+						},
+						{
+							"viewClass" : namespace + "/views/Test5",
+							"route" : "/test5",
+							"config" : {
+								"test" : "test5"
 							}
 						},
 						{
