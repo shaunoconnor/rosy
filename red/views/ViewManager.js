@@ -16,7 +16,8 @@ define(
 		"use strict";
 
 		var HISTORY_SUPPORTED = window.history && window.history.pushState,
-			HASH_VALUE;
+			HASH_VALUE,
+			PATH_VALUE;
 
 		var ViewManager = Class.extend({
 
@@ -24,7 +25,6 @@ define(
 			_router : null,
 			_viewGroups : [],
 			_activeElements : {},
-			_firstPop : true,
 
 			/**
 			*	SUPPORTED MODES:
@@ -96,6 +96,7 @@ define(
 				this._router = new ViewRouter(this._viewGroups);
 
 				if (HISTORY_SUPPORTED) {
+					PATH_VALUE = window.location.pathname;
 					window.addEventListener('popstate', this.proxy(this._onStateChange));
 				}
 
@@ -114,7 +115,6 @@ define(
 					this._gotoRoute({route : window.location.hash});
 				}
 
-				this._firstPop = true;
 				this.initialized = true;
 			},
 
@@ -259,12 +259,11 @@ define(
 
 			_onStateChange : function (e) {
 
-				if (!this._firstPop) {
+				if (window.location.pathname !== PATH_VALUE) {
+					PATH_VALUE = window.location.pathname;
 					this._gotoRoute({route : window.location.pathname, updateHistory : false});
 					return;
 				}
-
-				this._firstPop = false;
 			},
 
 			_gotoRoute : function (data) {
@@ -343,7 +342,7 @@ define(
 						if (viewGroup.currentRoute !== data.route) {
 
 							this.deactivate(viewGroup.currentRoute);
-							
+
 							if ((!data.viewGroup || viewGroup.id === data.viewGroup)) {
 
 								viewGroup.changeRoute(data.route);
@@ -423,7 +422,7 @@ define(
 			},
 
 			_updateHistory : function (title, route, useHash) {
-				
+
 				if (HISTORY_SUPPORTED && !useHash) {
 					history.pushState(null, title || "", route + window.location.hash);
 				}
