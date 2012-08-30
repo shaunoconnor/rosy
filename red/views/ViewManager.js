@@ -318,7 +318,7 @@ define(
 									}
 								}
 
-								else if (!currentView.__canClose()) {
+								else if (!currentView.__canClose(data.route, matchedView.params, matchedView.viewClass, matchedView.viewConfig)) {
 									if (data.cb) {
 										data.cb();
 									}

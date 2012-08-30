@@ -58,7 +58,7 @@ define(
 			* when the View is instantiated. this.params and this.data
 			* will be set with appropriate values by the time init() is called.
 			**/
-		
+
 			init : function () {
 
 			},
@@ -220,14 +220,14 @@ define(
 				this.viewGroup = viewGroup;
 				this.config = config;
 				this.__update(params, data, true);
-				
+
 				this.init();
 
 				this.publish(ViewNotification.VIEW_INITIALIZED, {view : this, viewGroup: this.viewGroup});
 			},
 
-			__canClose : function () {
-				var can = this.canClose();
+			__canClose : function (route, params, viewClass, viewConfig) {
+				var can = this.canClose(route, params, viewClass, viewConfig);
 
 				if (!can) {
 					this.publish(ViewNotification.VIEW_CHANGE_CANCELLED, {view : this, viewGroup: this.viewGroup});
