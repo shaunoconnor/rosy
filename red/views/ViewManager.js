@@ -3,6 +3,7 @@ define(
 	[
 		"../base/Class",
 		"../utils/Utils",
+		"./View",
 		"./ViewGroup",
 		"./ViewRouter",
 		"./TransitionManager",
@@ -10,7 +11,7 @@ define(
 		"$"
 	],
 
-	function (Class, Utils, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
+	function (Class, Utils, View, ViewGroup, ViewRouter, TransitionManager, ViewNotification, $) {
 
 		/*jshint eqnull:true*/
 
@@ -18,7 +19,8 @@ define(
 
 		var HISTORY_SUPPORTED = window.history && window.history.pushState,
 			HASH_VALUE,
-			PATH_VALUE;
+			PATH_VALUE,
+			ERROR_HANDLER = function (e) {throw e;};
 
 		var ViewManager = Class.extend({
 
@@ -62,7 +64,7 @@ define(
 			initialize : function (config) {
 
 				if (this.initialized) {
-					throw new Error("ViewManager has already been initialized.");
+					ERROR_HANDLER(new Error("ViewManager has already been initialized."));
 				}
 
 				var i,
@@ -82,6 +84,15 @@ define(
 				this.bubble			=	config.bubble || this.bubble;
 				this.container		=	$(config.container || document);
 
+				if (config.maxWaitTime) {
+					View.setMaxWaitTime(config.maxWaitTime);
+				}
+
+				if (config.errorHandler) {
+					ERROR_HANDLER = config.errorHandler;
+					View.setErrorHandler(config.errorHandler);
+				}
+
 				for (i = 0, l = viewGroups.length; i < l; i ++) {
 					viewGroup = new ViewGroup(viewGroups[i], this);
 
@@ -90,7 +101,7 @@ define(
 					this._viewGroups.push(viewGroup);
 
 					if (viewGroup.config.useHistory === "#" && this.mode === "#") {
-						throw new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'");
+						ERROR_HANDLER(new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'"));
 					}
 				}
 
