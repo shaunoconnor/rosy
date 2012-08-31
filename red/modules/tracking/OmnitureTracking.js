@@ -12,6 +12,10 @@ define(["../Module",
 		// but we do need it to be included in the build
 		"./ssla-analytics/analytics.min"], function (Module) {
 
+	var EVENTS = {
+		TRACK : "module/tracking/omniture/track"
+	};
+
 	return Module.extend({
 
 		_tracker : null,
@@ -30,10 +34,11 @@ define(["../Module",
 
 
 		init : function () {
-			this.subscribe("track", this.track);
+			this.subscribe(EVENTS.TRACK, this.track);
 		},
 
-		track : function (e, data) {
+		track : function (n) {
+			var data = n.data;
 			this.log("o track is not setup yet =(", data.type, data);
 		},
 
@@ -52,11 +57,11 @@ define(["../Module",
 		},
 
 		destroy : function () {
-			this.unsubscribe("track", this.track);
-
 			this.tracker = null;
 			this.vars = null;
+
+			this.sup();
 		}
 
-	});
+	}, EVENTS);
 });

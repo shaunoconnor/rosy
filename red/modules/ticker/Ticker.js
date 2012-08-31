@@ -1,31 +1,33 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* ticker.js */
-
-// ## red.module.Ticker
+// ## Ticker
 // Creates a countdown ticker.
 //
 // Usage:
 //
-//  var ticker = new red.module.Ticker({
+//  var ticker = new Ticker({
 //      now : new Date(),
 //      start : "Sun Jun 12 11:25:00 2011",
 //      end : "Mon Jun 13 11:45:00 2011"
 //  });
 //
-//  ticker.bind("start", function () {
+//  this.subscribe(Ticker.START, function () {
 //      // on start
 //  });
 //
-//  ticker.bind("tick", function (hours, minutes, seconds) {
+//  this.subscribe(Ticker.TICK, function (hours, minutes, seconds) {
 //      console.log(hours, minutes, seconds);
 //  });
 //
-//  ticker.bind("complete", function () {
+//  this.subscribe(Ticker.COMPLETE, function () {
 //      // on complete
 //  });
 define(["../Module"], function (Module) {
 
-	// Extends red.Module
+	var EVENTS = {
+		START : "module/ticker/start",
+		TICK : "module/ticker/tick",
+		COMPLETE : "module/ticker/complete"
+	};
+
 	return Module.extend({
 
 		// now, start & end should be [Date-parseable formats](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date).
@@ -59,14 +61,14 @@ define(["../Module"], function (Module) {
 			this.vars.time = this.getPrettyTime();
 
 			if (Math.max.apply(this, this.vars.time) <= 0) {
-				this.stopTicker("complete");
+				this.stopTicker(EVENTS.COMPLETE);
 			} else if (this.vars.currentTime >= this.vars.startTime) {
 				if (!this.vars.startFired) {
-					this.trigger("start");
+					this.publish(EVENTS.START);
 					this.vars.startFired = true;
 				}
 
-				this.trigger("tick", this.vars.time);
+				this.publish(EVENTS.TICK, this.vars.time);
 			}
 		},
 
@@ -106,7 +108,7 @@ define(["../Module"], function (Module) {
 
 		// Start the necessary timers/intervals
 		startTicker : function () {
-			this.vars.ticker = window.setInterval($.proxy(this.updateTicker, this), 1000);
+			this.vars.ticker = window.setInterval(this.proxy(this.updateTicker), 1000);
 			this.setTimeout(this.updateTicker, 10);
 		},
 
@@ -117,8 +119,17 @@ define(["../Module"], function (Module) {
 				delete this.vars.ticker;
 			}
 
-			this.trigger(event);
+			this.publish(event);
+		},
+
+		destroy : function () {
+			if (this.vars.ticker) {
+				window.clearInterval(this.vars.ticker);
+				delete this.vars.ticker;
+			}
+
+			this.sup();
 		}
-	});
+	}, EVENTS);
 
 });

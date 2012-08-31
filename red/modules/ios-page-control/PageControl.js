@@ -1,25 +1,27 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* page-control.js */
-
-// ## red.module.PageControl
+// ## PageControl
 // An iOS-style Page Control.
 //
 // Usage:
 //
-//  var control = new red.module.PageControl({
+//  var control = PageControl({
 //      parent : $("#controller"),
 //      list : $("#controller > ul"), // optional, assumes parent child as list
 //      items : $("#controller > ul > li") // optional, assumes list children as items
 //  });
 //
-//  control.bind("paginate", function (e) {
+//  this.subscribe(PageControl.PAGINATE, function (e) {
 //      console.log(e);
 //  });
 //
-//  control.bind("touchend", function (e) {
+//  this.subscribe(PageControl.TOUCHEND, function (e) {
 //      console.log(e);
 //  });
 define(["../Module", "$"], function (Module, $) {
+
+	var EVENTS = {
+		TOUCHEND : "module/page-control/touchend",
+		PAGINATE : "module/page-control/paginate"
+	};
 
 	// Extends red.Module
 	return Module.extend({
@@ -31,7 +33,8 @@ define(["../Module", "$"], function (Module, $) {
 			items : null
 		},
 
-		init : function () {
+		init : function (vars) {
+			this.sup(vars);
 			this.setupPageControl();
 		},
 
@@ -102,13 +105,13 @@ define(["../Module", "$"], function (Module, $) {
 				elementWidth, elementThreshold, lockHorizontal,
 				controlRect, listRect;
 
-			list.bind({
+			list.on({
 
 				// - Reset shared variables on touchstart.
 				// - Reset transition duration to 350ms.
 				// - Reset transform values.
 				// - Cache as much information as possible to avoid overloading touchmove event (much more expensive)
-				touchstart : $.proxy(function (e) {
+				touchstart : this.proxy(function (e) {
 					if (!("ontouchstart" in window)) {
 						e.stopPropagation();
 						e.preventDefault();
@@ -143,13 +146,13 @@ define(["../Module", "$"], function (Module, $) {
 
 					elementWidth = elementWidth || activeElement.outerWidth(true);
 					elementThreshold = elementThreshold || elementWidth / 4;
-				}, this),
+				}),
 
 				// - Detect if user is swiping horizontally
 				// - Lock x-axis, track user swipe
 				// - Set CSS transform based on user movement
 				// - Reset CSS transition duration to 0 (don't want it to interfere with user movement)
-				touchmove : $.proxy(function (e) {
+				touchmove : this.proxy(function (e) {
 					if (!touch || touchEndFired || !activeElement || !activeElement.length) {
 						return;
 					}
@@ -187,13 +190,13 @@ define(["../Module", "$"], function (Module, $) {
 					}
 
 					touchMoveFired = true;
-				}, this),
+				}),
 
 				// - Calculate total user movement
 				// - If movement threshold is reached, snap to prev/next sibling
 				// - Else snap to current element
 				// - Triggers touchend event
-				touchend : $.proxy(function () {
+				touchend : this.proxy(function () {
 					if (!activeElement || !activeElement.length) {
 						return;
 					}
@@ -212,13 +215,13 @@ define(["../Module", "$"], function (Module, $) {
 					this.flagActiveItem(element);
 					this.animateTo(element, control, list);
 
-					this.trigger("touchend");
-				}, this),
+					this.publish(EVENTS.TOUCHEND);
+				}),
 
 				// A safety catcher for CSS transitions.
 				// Nutshell: in some cases transitions are offset by ~1px.
 				// This listener fires at the end of a transition event and makes sure the values end on a round number.
-				webkitTransitionEnd : $.proxy(this.roundMatrixValues, this)
+				webkitTransitionEnd : this.proxy(this.roundMatrixValues)
 			});
 		},
 
@@ -334,7 +337,7 @@ define(["../Module", "$"], function (Module, $) {
 				this.resetTransition(el, 0);
 				this.setTransform(el, matrix);
 
-				this.trigger("paginate");
+				this.publish(EVENTS.PAGINATE);
 			}
 		},
 
@@ -361,7 +364,16 @@ define(["../Module", "$"], function (Module, $) {
 
 			this.vars.parent.addClass(this.vars.className);
 			this.vars.parent.addClass(this.vars.className + "-enabled");
+		},
+
+		destroy : function () {
+			var events = "touchstart touchmove touchend webkitTransitionEnd";
+
+			if (this.vars.list) {
+				this.vars.list.off(events);
+			}
+			this.sup();
 		}
-	});
+	}, EVENTS);
 
 });

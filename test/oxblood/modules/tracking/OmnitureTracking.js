@@ -1,8 +1,9 @@
 define([
 	"OxBlood",
+	"red/base/Class",
 	"red/modules/Module",
 	"red/modules/tracking/OmnitureTracking"
-], function (OxBlood, Module, OmnitureTracking) {
+], function (OxBlood, Class, Module, OmnitureTracking) {
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Omniture Tracking", function () {
@@ -21,6 +22,36 @@ define([
 
 				it("should be an instance of Module", function () {
 					expect(testInstance).to.be.a(Module);
+				});
+
+				describe("Notifications", function () {
+
+					it(OmnitureTracking.TRACK, function (done) {
+
+						var TestClass = Class.extend({
+							init : function () {
+								this.subscribe(OmnitureTracking.TRACK, this.onTrack);
+								this.publish(OmnitureTracking.TRACK, {
+									type : "test",
+									category : "test",
+									action : "test",
+									label : "test"
+								});
+							},
+
+							onTrack : function (n) {
+								expect(n.data).to.be.ok();
+								expect(n.data).to.be.an("object");
+								expect(n.data).to.have.keys("type", "category", "action", "label");
+
+								done();
+							}
+						});
+
+						var testClassInstance = new TestClass();
+
+					});
+
 				});
 
 			});

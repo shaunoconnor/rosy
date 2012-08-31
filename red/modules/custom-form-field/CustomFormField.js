@@ -16,6 +16,8 @@ define(["../Module", "$"], function (Module, $) {
 
 		// Home  page level functionality
 		init : function (vars) {
+			this.sup(vars);
+
 			this.setDOMReferences();
 			this.setupCustomFormField();
 		},
@@ -71,11 +73,12 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		setupLabel : function () {
-			var label = $("label[for='" + this.vars.field.attr("id") + "']");
+			this.vars.label = $("label[for='" + this.vars.field.attr("id") + "']");
+			this.vars.label.on("mouseenter mouseleave mousedown mouseup click", this.onLabelAction);
+		},
 
-			label.bind("mouseenter mouseleave mousedown mouseup click", $.proxy(function (e) {
-				this.vars.wrap.trigger(e.type);
-			}, this));
+		onLabelAction : function (e) {
+			this.vars.wrap.trigger(e.type);
 		},
 
 		setupEvents : function () {
@@ -86,7 +89,7 @@ define(["../Module", "$"], function (Module, $) {
 				active = name + "-active",
 				checked = name + "-checked";
 
-			wrap.bind({
+			wrap.on({
 				mouseenter : function (e) {
 					wrap.addClass(hover);
 					e.stopPropagation();
@@ -127,7 +130,7 @@ define(["../Module", "$"], function (Module, $) {
 				name = this.vars.namespace,
 				checked = name + "-checked";
 
-			wrap.bind("click", function (e) {
+			wrap.on("click", function (e) {
 				var radios;
 
 				// Clickage.
@@ -149,7 +152,7 @@ define(["../Module", "$"], function (Module, $) {
 			});
 
 			// Prevent recursive propagation loop.
-			field.bind("click", function (e, triggered) {
+			field.on("click", function (e, triggered) {
 				if (!triggered) {
 					wrap.trigger("click");
 				}
@@ -218,11 +221,11 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		setupSelectEvents : function () {
-			this.vars.field.bind("change", this.onSelectChange);
+			this.vars.field.on("change", this.onSelectChange);
 		},
 
 		setupCustomSelectEvents : function (list) {
-			$(document).bind("click", this.onDocumentClick);
+			$(document).on("click", this.onDocumentClick);
 		},
 
 		onSelectChange : function (e) {
@@ -263,6 +266,26 @@ define(["../Module", "$"], function (Module, $) {
 
 				this.setActiveOption(el);
 			}
+		},
+
+		destroy : function () {
+			var events = "mouseenter mouseleave mousedown mouseup click";
+
+			if (this.vars.label) {
+				this.vars.label.off(events, this.onLabelAction);
+			}
+
+			if (this.vars.wrap) {
+				this.vars.wrap.off(events);
+			}
+
+			if (this.vars.field) {
+				this.vars.field.off(events);
+			}
+
+			$(document).off("click", this.onDocumentClick);
+
+			this.sup();
 		}
 	});
 });
