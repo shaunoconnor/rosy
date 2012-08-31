@@ -50,7 +50,7 @@ define(["../Module", "$"], function (Module, $) {
 		init : function () {
 			this.loadJSDK();
 
-			$(document).on("click", '[data-custom-social="facebook"]', this.proxy(this.customFacebookPost));
+			$(document).on("click", '[data-custom-social="facebook"]', this.customFacebookPost);
 		},
 
 		// this.publish(EVENTS.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
@@ -230,26 +230,26 @@ define(["../Module", "$"], function (Module, $) {
 		onFBInit : function () {
 			FB.Event.unsubscribe("xfbml.render", this.onFBInit); // unregister, we only want to init once
 
-			this.subscribe(EVENTS.POST,  this.proxy(this.customFacebookPost));
-			this.subscribe(EVENTS.RENDER, this.proxy(this.render));
-			this.subscribe(EVENTS.LOGIN, this.proxy(this.getLogin));
-			this.subscribe(EVENTS.LOGOUT, this.proxy(this.getLogout));
-			this.subscribe(EVENTS.GET_STATUS, this.proxy(this.getStatus));
-			this.subscribe(EVENTS.GET_ME, this.proxy(this.getMe));
-			this.subscribe(EVENTS.SET_ACTION, this.proxy(this.setAction));
+			this.subscribe(EVENTS.POST,  this.customFacebookPost);
+			this.subscribe(EVENTS.RENDER, this.render);
+			this.subscribe(EVENTS.LOGIN, this.getLogin);
+			this.subscribe(EVENTS.LOGOUT, this.getLogout);
+			this.subscribe(EVENTS.GET_STATUS, this.getStatus);
+			this.subscribe(EVENTS.GET_ME, this.getMe);
+			this.subscribe(EVENTS.SET_ACTION, this.setAction);
 
 			this.getStatus();
 		},
 
 		fbAsyncInit : function () {
 
-			FB.Event.subscribe("comments.add", this.proxy(this.onAddComment));
-			FB.Event.subscribe("auth.sessionChange", this.proxy(this.onSesionChange));
-			FB.Event.subscribe("auth.statusChange", this.proxy(this.onStatusChange));
-			FB.Event.subscribe("auth.login", this.proxy(this.onLogin));
-			FB.Event.subscribe("edge.create", this.proxy(this.onLike));
-			FB.Event.subscribe("xfbml.render", this.proxy(this.onRender));
-			FB.Event.subscribe("xfbml.render", this.proxy(this.onFBInit));
+			FB.Event.subscribe("comments.add", this.onAddComment);
+			FB.Event.subscribe("auth.sessionChange", this.onSesionChange);
+			FB.Event.subscribe("auth.statusChange", this.onStatusChange);
+			FB.Event.subscribe("auth.login", this.onLogin);
+			FB.Event.subscribe("edge.create", this.onLike);
+			FB.Event.subscribe("xfbml.render", this.onRender);
+			FB.Event.subscribe("xfbml.render", this.onFBInit);
 
 			FB.init({
 				appId      : APP_ID, // App ID
@@ -289,20 +289,20 @@ define(["../Module", "$"], function (Module, $) {
 				throw 'red/modules/social/Facebook.js requires <meta property="fb:app_id" content="none" />';
 			}
 
-			window.fbAsyncInit = this.proxy(this.fbAsyncInit);
+			window.fbAsyncInit = this.fbAsyncInit;
 
 			$.ajax({
 				dataType: "script",
 				url: "//connect.facebook.net/en_US/all.js",
 				cache: true
-			}).done(this.proxy(this.onReady));
+			}).done(this.onReady);
 		},
 
 		destroy : function () {
-			$(document).off("click", '[data-custom-social="facebook"]', this.proxy(this.customFacebookPost));
+			$(document).off("click", '[data-custom-social="facebook"]', this.customFacebookPost);
 
-			this.unsubscribe(EVENTS.POST,  this.proxy(this.customFacebookPost));
-			this.unsubscribe(EVENTS.RENDER, this.proxy(this.render));
+			this.unsubscribe(EVENTS.POST,  this.customFacebookPost);
+			this.unsubscribe(EVENTS.RENDER, this.render);
 		}
 	}, EVENTS);
 

@@ -22,7 +22,7 @@ define(["../Module", "$"], function (Module, $) {
 		init : function () {
 			this.loadJSDK();
 
-			this.subscribe("track", this.proxy(this.track, this));
+			this.subscribe("track", this.track);
 		},
 
 		log : function () {
@@ -85,7 +85,7 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		destroy : function () {
-			this.unsubscribe("track", this.proxy(this.track, this));
+			this.unsubscribe("track", this.track);
 			this.vars = null;
 		}
 

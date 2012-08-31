@@ -218,11 +218,11 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		setupSelectEvents : function () {
-			this.vars.field.bind("change", this.proxy(this.onSelectChange));
+			this.vars.field.bind("change", this.onSelectChange);
 		},
 
 		setupCustomSelectEvents : function (list) {
-			$(document).bind("click", this.proxy(this.onDocumentClick));
+			$(document).bind("click", this.onDocumentClick);
 		},
 
 		onSelectChange : function (e) {

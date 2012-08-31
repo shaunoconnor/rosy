@@ -96,7 +96,7 @@ define(
 				this._router = new ViewRouter(this._viewGroups);
 
 				if (HISTORY_SUPPORTED) {
-					window.addEventListener('popstate', this.proxy(this._onStateChange));
+					window.addEventListener('popstate', this._onStateChange);
 				}
 
 				else {
@@ -106,7 +106,7 @@ define(
 					}
 				}
 
-				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
+				this.container.on("click", this.selectors.join(","), this._onLinkClick);
 
 				this._gotoRoute({route : defaultRoute || window.location.pathname});
 
@@ -343,7 +343,7 @@ define(
 						if (viewGroup.currentRoute !== data.route) {
 
 							this.deactivate(viewGroup.currentRoute);
-							
+
 							if ((!data.viewGroup || viewGroup.id === data.viewGroup)) {
 
 								viewGroup.changeRoute(data.route);
@@ -423,7 +423,7 @@ define(
 			},
 
 			_updateHistory : function (title, route, useHash) {
-				
+
 				if (HISTORY_SUPPORTED && !useHash) {
 					history.pushState(null, title || "", route + window.location.hash);
 				}
