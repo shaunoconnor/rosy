@@ -28,7 +28,7 @@ define(
 				this._interestHandlers = this._interestHandlers || {};
 
 				if (handler && !this._interestHandlers[name]) {
-					handler = this.proxy(handler);
+					handler = handler;
 					NotificationManager.subscribe(name, handler, priority);
 					this._interestHandlers[name] = handler;
 				}
