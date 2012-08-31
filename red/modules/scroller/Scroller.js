@@ -8,23 +8,23 @@
 //
 // Usage:
 //
-//  var scroller = new red.module.Scroller({
+//  var scroller = new Scroller({
 //      target : $('#scrollable')
 //  });
 //
-//  scroller.bind("touchstart", function () {
+//  this.subscribe("touchstart", function () {
 //      // on touch start
 //  });
 //
-//  scroller.bind("touchmove", function () {
+//  this.subscribe("touchmove", function () {
 //      // on touch move
 //  });
 //
-//  scroller.bind("touchend", function () {
+//  this.subscribe("touchend", function () {
 //      // on touch end
 //  });
 //
-//  scroller.bind("touchinertia", function () {
+//  this.subscribe("touchinertia", function () {
 //      // on touch inertia
 //  });
 define([
@@ -87,7 +87,7 @@ define([
 
 					scope.style[transformProperty] = "translate3d(" + (-left) + "px," + (-top) + "px, 0) scale(" + zoom + ")";
 
-					self.trigger("touchinertia", {
+					self.publish("touchinertia", {
 						type: "touchinertia",
 						translateX: left,
 						translateY: top,
@@ -108,7 +108,7 @@ define([
 
 					scope.style[transformProperty] = "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")";
 
-					self.trigger("touchinertia", {
+					self.publish("touchinertia", {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -130,7 +130,7 @@ define([
 					scope.style.marginTop = top ? (-top / zoom) + "px" : "";
 					scope.style.zoom = zoom || "";
 
-					self.trigger("touchinertia", {
+					self.publish("touchinertia", {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -195,7 +195,7 @@ define([
 			}
 
 			this.vars.scroller.doTouchStart(o.touches, o.timeStamp);
-			this.trigger(e.type, e);
+			this.publish(e.type, e);
 
 			e.preventDefault();
 		},
@@ -204,14 +204,14 @@ define([
 			var o = e.originalEvent;
 
 			this.vars.scroller.doTouchMove(o.touches, o.timeStamp, o.scale);
-			this.trigger(e.type, o);
+			this.publish(e.type, o);
 		},
 
 		onTouchEnd : function (e) {
 			var o = e.originalEvent;
 
 			this.vars.scroller.doTouchEnd(o.timeStamp);
-			this.trigger(e.type, o);
+			this.publish(e.type, o);
 		},
 
 		onMouseDown : function (e) {
@@ -227,7 +227,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.trigger("touchstart", e);
+			this.publish("touchstart", e);
 			this.vars.mousedown = true;
 		},
 
@@ -241,7 +241,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.trigger("touchmove", e);
+			this.publish("touchmove", e);
 			this.vars.mousedown = true;
 		},
 
@@ -252,7 +252,7 @@ define([
 
 			this.vars.scroller.doTouchEnd(e.timeStamp);
 
-			this.trigger("touchend", e);
+			this.publish("touchend", e);
 			this.vars.mousedown = false;
 		},
 

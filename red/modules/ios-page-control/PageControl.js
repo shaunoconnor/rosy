@@ -6,17 +6,17 @@
 //
 // Usage:
 //
-//  var control = new red.module.PageControl({
+//  var control = PageControl({
 //      parent : $("#controller"),
 //      list : $("#controller > ul"), // optional, assumes parent child as list
 //      items : $("#controller > ul > li") // optional, assumes list children as items
 //  });
 //
-//  control.bind("paginate", function (e) {
+//  this.subscribe("paginate", function (e) {
 //      console.log(e);
 //  });
 //
-//  control.bind("touchend", function (e) {
+//  this.subscribe("touchend", function (e) {
 //      console.log(e);
 //  });
 define(["../Module", "$"], function (Module, $) {
@@ -213,7 +213,7 @@ define(["../Module", "$"], function (Module, $) {
 					this.flagActiveItem(element);
 					this.animateTo(element, control, list);
 
-					this.trigger("touchend");
+					this.publish("touchend");
 				}),
 
 				// A safety catcher for CSS transitions.
@@ -335,7 +335,7 @@ define(["../Module", "$"], function (Module, $) {
 				this.resetTransition(el, 0);
 				this.setTransform(el, matrix);
 
-				this.trigger("paginate");
+				this.publish("paginate");
 			}
 		},
 

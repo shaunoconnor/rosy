@@ -6,21 +6,21 @@
 //
 // Usage:
 //
-//  var ticker = new red.module.Ticker({
+//  var ticker = new Ticker({
 //      now : new Date(),
 //      start : "Sun Jun 12 11:25:00 2011",
 //      end : "Mon Jun 13 11:45:00 2011"
 //  });
 //
-//  ticker.bind("start", function () {
+//  this.subscribe("start", function () {
 //      // on start
 //  });
 //
-//  ticker.bind("tick", function (hours, minutes, seconds) {
+//  this.subscribe("tick", function (hours, minutes, seconds) {
 //      console.log(hours, minutes, seconds);
 //  });
 //
-//  ticker.bind("complete", function () {
+//  this.subscribe("complete", function () {
 //      // on complete
 //  });
 define(["../Module"], function (Module) {
@@ -62,11 +62,11 @@ define(["../Module"], function (Module) {
 				this.stopTicker("complete");
 			} else if (this.vars.currentTime >= this.vars.startTime) {
 				if (!this.vars.startFired) {
-					this.trigger("start");
+					this.publish("start");
 					this.vars.startFired = true;
 				}
 
-				this.trigger("tick", this.vars.time);
+				this.publish("tick", this.vars.time);
 			}
 		},
 
@@ -117,7 +117,7 @@ define(["../Module"], function (Module) {
 				delete this.vars.ticker;
 			}
 
-			this.trigger(event);
+			this.publish(event);
 		},
 
 		destroy : function () {

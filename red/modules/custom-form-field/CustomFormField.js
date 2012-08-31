@@ -74,7 +74,7 @@ define(["../Module", "$"], function (Module, $) {
 
 		setupLabel : function () {
 			this.vars.label = $("label[for='" + this.vars.field.attr("id") + "']");
-			this.vars.label.on("mouseenter mouseleave mousedown mouseup click", this.proxy(this.onLabelAction));
+			this.vars.label.on("mouseenter mouseleave mousedown mouseup click", this.onLabelAction);
 		},
 
 		onLabelAction : function (e) {
@@ -221,11 +221,11 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		setupSelectEvents : function () {
-			this.vars.field.on("change", this.proxy(this.onSelectChange));
+			this.vars.field.on("change", this.onSelectChange);
 		},
 
 		setupCustomSelectEvents : function (list) {
-			$(document).on("click", this.proxy(this.onDocumentClick));
+			$(document).on("click", this.onDocumentClick);
 		},
 
 		onSelectChange : function (e) {
