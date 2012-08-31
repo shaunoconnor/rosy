@@ -32,14 +32,14 @@ define([
 
 				describe("Notifications", function () {
 
-					it("start", function (done) {
+					it(Ticker.START, function (done) {
 
 						var TestClass = Class.extend({
 							vars : {},
 
 							init : function () {
 								this.vars.ticker = new Ticker(testOptions);
-								this.subscribe("start", this.onStart);
+								this.subscribe(Ticker.START, this.onStart);
 							},
 
 							onStart : function () {
@@ -54,14 +54,14 @@ define([
 
 					});
 
-					it("tick", function (done) {
+					it(Ticker.TICK, function (done) {
 
 						var TestClass = Class.extend({
 							vars : {},
 
 							init : function () {
 								this.vars.ticker = new Ticker(testOptions);
-								this.subscribe("tick", this.onTick);
+								this.subscribe(Ticker.TICK, this.onTick);
 							},
 
 							onTick : function () {
@@ -76,7 +76,7 @@ define([
 
 					});
 
-					it("complete", function (done) {
+					it(Ticker.COMPLETE, function (done) {
 
 						var TestClass = Class.extend({
 							vars : {},
@@ -88,7 +88,7 @@ define([
 									end : new Date(new Date().setSeconds(new Date().getSeconds() + 1))
 								});
 
-								this.subscribe("complete", this.onComplete);
+								this.subscribe(Ticker.COMPLETE, this.onComplete);
 							},
 
 							onComplete : function () {
