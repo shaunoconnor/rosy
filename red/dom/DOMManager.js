@@ -55,10 +55,6 @@ define(["$"], function ($) {
 
 	var DOMManager = {
 		unbindEvents : function (scope) {
-			if (!("$" in window)) {
-				return;
-			}
-
 			for (var key in scope) {
 				if ($.isPlainObject(scope[key])) {
 					_unbindFromObject(scope, scope[key]);
