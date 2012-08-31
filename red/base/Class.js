@@ -19,7 +19,9 @@ define(
 				autoProxy : true
 			},
 
-			init : function (vars, context) {},
+			init : function () {
+
+			},
 
 			/**
 			* Subscribes to a notification.
@@ -28,7 +30,7 @@ define(
 				this._interestHandlers = this._interestHandlers || {};
 
 				if (handler && !this._interestHandlers[name]) {
-					handler = this.proxy(handler);
+					handler = handler;
 					NotificationManager.subscribe(name, handler, priority);
 					this._interestHandlers[name] = handler;
 				}
@@ -82,8 +84,8 @@ define(
 			*/
 			proxy : function (fn) {
 
-				if (window.$ && $.proxy) {
-					return $.proxy(fn, this);
+				if (window.jQuery && jQuery.proxy) {
+					return jQuery.proxy(fn, this);
 				}
 
 				return fn ? fn.bind(this) : fn;

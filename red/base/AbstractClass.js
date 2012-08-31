@@ -58,7 +58,7 @@ define(
 					* deep copy it to this.vars
 					**/
 					if (this.vars && typeof vars === "object") {
-						this.vars = Utils.extend({}, true, this.vars, vars);
+						this.vars = Utils.extend({}, this.vars, vars);
 					}
 
 					if (this.opts && this.opts.autoProxy === true) {

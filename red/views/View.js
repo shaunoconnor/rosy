@@ -23,9 +23,9 @@ define(
 
 		return DOMClass.extend({
 
-			config : {},
-			data : {},
-			params : {},
+			config : null,
+			data : null,
+			params : null,
 			viewGroup : null,
 			viewClass : "",
 
@@ -88,7 +88,7 @@ define(
 			* Returning `false` will cancel the pending route change.
 			**/
 
-			canClose : function () {
+			canClose : function (viewData) {
 				return true;
 			},
 
@@ -218,6 +218,9 @@ define(
 			**/
 
 			__init : function (viewGroup, config, params, data) {
+
+				this.data = {};
+				this.params = {};
 
 				this.viewGroup = viewGroup;
 				this.config = config;
