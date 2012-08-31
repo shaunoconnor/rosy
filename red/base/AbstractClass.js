@@ -40,15 +40,18 @@ define(
 		return (function() {
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
-			var Dummy = function () {};
+			var Prototype = function () {};
 			var MClass = function () {};
 
 			MClass.extend = function (props, staticProps) {
 
-				Dummy.prototype = this.prototype;
-				var p, proto = Utils.extend(new Dummy(), props);
+				Prototype.prototype = this.prototype;
+				var p, proto = Utils.extend(new Prototype(), props);
 
 				function Class (vars) {
+
+					var fn,
+						p;
 
 					/**
 					* If the prototype has a vars object and the first argument, is an object,
@@ -58,7 +61,15 @@ define(
 						this.vars = Utils.extend({}, true, this.vars, vars);
 					}
 
-					var fn = this.__init || this.init || this.prototype.constructor;
+					if (this.opts && this.opts.autoProxy === true) {
+						for (p in this) {
+							if (typeof this[p] === "function") {
+								this[p] = this[p].bind(this);
+							}
+						}
+					}
+
+					fn = this.__init || this.init || this.prototype.constructor;
 					return fn.apply(this, arguments);
 				}
 

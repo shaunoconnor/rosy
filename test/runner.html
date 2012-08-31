@@ -39,11 +39,11 @@
 		<script src="../config.js"></script>
 		<script>
 			require.config({
-				baseUrl : "../",
+				baseUrl : "/",
 				paths: {
-					"project": "__PROJECT_NAME__",
 					"OxBlood": "test/oxblood/OxBlood",
 					"core": "test/oxblood/core",
+					"routing": "test/oxblood/routing",
 					"modules": "test/oxblood/modules"
 				},
 				urlArgs : "cacheBust=" + (new Date()).getTime()
@@ -52,14 +52,16 @@
 		<!-- End Require JS -->
 
 		<script>
+
+
 			require([
 				"OxBlood",
 
-				"core/Inheritance",
+				"core/Initialization",
 				"core/Notifications",
+				"core/Inheritance",
 				"core/Destruction",
 				"core/Timers",
-				"core/Setup",
 				"core/Scope",
 
 				"modules/custom-form-field/CustomFormField",
@@ -69,14 +71,19 @@
 				"modules/social/TwitterSocial",
 				"modules/ticker/Ticker",
 				"modules/tracking/GATracking",
-				"modules/tracking/OmnitureTracking"
+				"modules/tracking/OmnitureTracking",
+
+				"routing/Routing",
+				"$"
+
 			], function (OxBlood) {
 				OxBlood.registerTests();
 
 				if (!(/PhantomJS/).test(window.navigator.userAgent)) {
-					mocha.run();
+					$(mocha.run);
 				}
 			});
+
 		</script>
 
 	</body>

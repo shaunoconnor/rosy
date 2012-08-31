@@ -6,7 +6,7 @@
  * init: new red.module.tracking.GA()
  * publish: this.publish("track", {category:, action:, label:, value: });
  */
-define(["../Module"], function (Module) {
+define(["../Module", "$"], function (Module, $) {
 
 	/*global _gaq:true*/
 	window._gaq = window._gaq || [];
@@ -22,7 +22,7 @@ define(["../Module"], function (Module) {
 		init : function () {
 			this.loadJSDK();
 
-			this.subscribe("track", this.proxy(this.track, this));
+			this.subscribe("track", this.track);
 		},
 
 		log : function () {

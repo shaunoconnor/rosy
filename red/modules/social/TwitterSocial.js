@@ -21,7 +21,7 @@
  *
  */
 
-define(["../Module"], function (Module) {
+define(["../Module", "$"], function (Module, $) {
 
 	var EVENTS = {
 			POST : "social/twitter/post",
@@ -50,13 +50,13 @@ define(["../Module"], function (Module) {
 
 			this.loadJSDK();
 
-			$(document).on("click", '[data-custom-social="twitter"]', this.proxy(this.customTweet));
-			this.subscribe(EVENTS.POST,  this.proxy(this.customTweet));
-			this.subscribe(EVENTS.RENDER, this.proxy(this.render));
+			$("body").on("click", '[data-custom-social="twitter"]', this.customTweet);
+			this.subscribe(EVENTS.POST,  this.customTweet);
+			this.subscribe(EVENTS.RENDER, this.render);
 		},
 
 		onTwitterInit : function () {
-			this.subscribe(EVENTS.LOGOUT, this.proxy(this.getLogout));
+			this.subscribe(EVENTS.LOGOUT, this.getLogout);
 
 			if (window.twttr) {
 				var that = this;
@@ -99,8 +99,8 @@ define(["../Module"], function (Module) {
 
 		getLogout : function (e) {
 			if (window.twttr) {
-				window.twttr.events.bind("tweet",  this.proxy(this.onTweet));
-				window.twttr.events.bind("follow", this.proxy(this.onFollow));
+				window.twttr.events.bind("tweet",  this.onTweet);
+				window.twttr.events.bind("follow", this.onFollow);
 			}
 		},
 
