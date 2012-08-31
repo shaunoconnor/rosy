@@ -88,7 +88,7 @@ define(
 			* Returning `false` will cancel the pending route change.
 			**/
 
-			canClose : function () {
+			canClose : function (viewData) {
 				return true;
 			},
 
