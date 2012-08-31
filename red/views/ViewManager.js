@@ -282,6 +282,7 @@ define(
 				var i,
 					l,
 					p,
+					cb,
 					skipped = 0,
 					matchedView,
 					matchedViews,
@@ -298,6 +299,12 @@ define(
 
 				// If this route is an alias, grab the alias value
 				data.route = this.aliases[data.route] || data.route;
+
+				if (data.cb) {
+					cb = data.cb;
+					data.cb = null;
+					delete data.cb;
+				}
 
 				matchedViews = this._router.getViewsByRoute(data.route);
 
@@ -324,8 +331,8 @@ define(
 
 								if (currentView.viewClass === matchedView.viewClass) {
 									if (currentView.__update(matchedView.params, data) === false) {
-										if (data.cb) {
-											data.cb();
+										if (cb) {
+											cb();
 										}
 										return false;
 									}
@@ -335,16 +342,13 @@ define(
 
 									viewData = Utils.extend({}, data, matchedView);
 
-									viewData.cb = null;
-									delete viewData.cb;
-
 									viewData.viewGroup = null;
 									delete viewData.viewGroup;
 
 									if (!currentView.__canClose(viewData)) {
 
-										if (data.cb) {
-											data.cb();
+										if (cb) {
+											cb();
 										}
 										return false;
 									}
@@ -379,7 +383,7 @@ define(
 										this._updateHistory(data.title || "", data.route, viewGroup.config.useHistory === "#");
 									}
 
-									this._changeView(matchedView, data);
+									this._changeView(matchedView, data, cb);
 									didRoute = true;
 								}
 
@@ -395,8 +399,8 @@ define(
 					}
 
 					if (skipped === l) {
-						if (data.cb) {
-							data.cb();
+						if (cb) {
+							cb();
 						}
 						return false;
 					}
@@ -415,7 +419,7 @@ define(
 				return false;
 			},
 
-			_changeView : function (matchedView, data) {
+			_changeView : function (matchedView, data, cb) {
 
 				data = data || {};
 
@@ -427,8 +431,8 @@ define(
 
 							this.publish(ViewNotification.VIEW_CHANGED, {view : matchedView, viewGroup : matchedView.viewGroup});
 
-							if (data.cb) {
-								data.cb();
+							if (cb) {
+								cb();
 							}
 						}));
 					}));
@@ -439,8 +443,8 @@ define(
 
 						this.publish(ViewNotification.VIEW_CLOSED, {view : matchedView, viewGroup : matchedView.viewGroup});
 
-						if (data.cb) {
-							data.cb();
+						if (cb) {
+							cb();
 						}
 					}));
 				}
