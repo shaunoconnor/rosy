@@ -1,9 +1,4 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* scroller.js */
-
-
-
-// ## red.Scroller
+// ## Scroller
 // Creates a countdown scroller.
 //
 // Usage:
@@ -12,26 +7,33 @@
 //      target : $('#scrollable')
 //  });
 //
-//  this.subscribe("touchstart", function () {
+//  this.subscribe(Scroller.TOUCHSTART, function () {
 //      // on touch start
 //  });
 //
-//  this.subscribe("touchmove", function () {
+//  this.subscribe(Scroller.TOUCHMOVE, function () {
 //      // on touch move
 //  });
 //
-//  this.subscribe("touchend", function () {
+//  this.subscribe(Scroller.TOUCHEND, function () {
 //      // on touch end
 //  });
 //
-//  this.subscribe("touchinertia", function () {
+//  this.subscribe(Scroller.TOUCHINERTIA, function () {
 //      // on touch inertia
 //  });
 define([
-		"../Module",
-		"./zynga/ZyngaScroller",
-		"$"
-	], function (Module, Scroller, $) {
+	"../Module",
+	"./zynga/ZyngaScroller",
+	"$"
+], function (Module, Scroller, $) {
+
+	var EVENTS = {
+		TOUCHINERTIA : "module/scroller/touchinertia",
+		TOUCHSTART : "module/scroller/touchstart",
+		TOUCHMOVE : "module/scroller/touchmove",
+		TOUCHEND : "module/scroller/touchend"
+	};
 
 	// Extends red.Module
 	return Module.extend({
@@ -87,7 +89,7 @@ define([
 
 					scope.style[transformProperty] = "translate3d(" + (-left) + "px," + (-top) + "px, 0) scale(" + zoom + ")";
 
-					self.publish("touchinertia", {
+					self.publish(EVENTS.TOUCHINERTIA, {
 						type: "touchinertia",
 						translateX: left,
 						translateY: top,
@@ -108,7 +110,7 @@ define([
 
 					scope.style[transformProperty] = "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")";
 
-					self.publish("touchinertia", {
+					self.publish(EVENTS.TOUCH, {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -130,7 +132,7 @@ define([
 					scope.style.marginTop = top ? (-top / zoom) + "px" : "";
 					scope.style.zoom = zoom || "";
 
-					self.publish("touchinertia", {
+					self.publish(EVENTS.TOUCH, {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -187,35 +189,37 @@ define([
 		},
 
 		onTouchStart : function (e) {
-			var o = e.originalEvent;
+			var o = e.originalEvent || e;
+			var touches = o.touches || [{}];
 
 			// Don't react if initial down happens on a form element
 			if (o.target.tagName.match(/input|textarea|select/i)) {
 				return;
 			}
 
-			this.vars.scroller.doTouchStart(o.touches, o.timeStamp);
-			this.publish(e.type, e);
+			this.vars.scroller.doTouchStart(touches, o.timeStamp);
+			this.publish(EVENTS.TOUCHSTART, e);
 
 			e.preventDefault();
 		},
 
 		onTouchMove : function (e) {
-			var o = e.originalEvent;
+			var o = e.originalEvent || e;
+			var touches = o.touches || [{}];
 
-			this.vars.scroller.doTouchMove(o.touches, o.timeStamp, o.scale);
-			this.publish(e.type, o);
+			this.vars.scroller.doTouchMove(touches, o.timeStamp, o.scale);
+			this.publish(EVENTS.TOUCHMOVE, o);
 		},
 
 		onTouchEnd : function (e) {
-			var o = e.originalEvent;
+			var o = e.originalEvent || e;
 
 			this.vars.scroller.doTouchEnd(o.timeStamp);
-			this.publish(e.type, o);
+			this.publish(EVENTS.TOUCHEND, o);
 		},
 
 		onMouseDown : function (e) {
-			var o = e.originalEvent;
+			var o = e.originalEvent || e;
 
 			// Don't react if initial down happens on a form element
 			if (o.target.tagName.match(/input|textarea|select/i)) {
@@ -227,7 +231,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.publish("touchstart", e);
+			this.publish(EVENTS.TOUCHSTART, e);
 			this.vars.mousedown = true;
 		},
 
@@ -241,7 +245,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.publish("touchmove", e);
+			this.publish(EVENTS.TOUCHMOVE, e);
 			this.vars.mousedown = true;
 		},
 
@@ -252,7 +256,7 @@ define([
 
 			this.vars.scroller.doTouchEnd(e.timeStamp);
 
-			this.publish("touchend", e);
+			this.publish(EVENTS.TOUCHEND, e);
 			this.vars.mousedown = false;
 		},
 
@@ -290,6 +294,6 @@ define([
 
 			this.sup();
 		}
-	});
+	}, EVENTS);
 
 });

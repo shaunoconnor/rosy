@@ -1,6 +1,3 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* TwitterSocial.js */
-
 /**
  *	Requires DOM elements:
  *	<meta property="twitter:app_id" content="XXXXXX"	/>
@@ -17,26 +14,31 @@
  *	Also, you can this.publish() a "custom-twitter-post" event to fire customTweet()
  *
  *	Example
- *	this.publish("custom-twitter-post", {url:"http://example.com", text : "Some Tweet Message"})
+ *	this.publish(TwitterSocial.POST, {url:"http://example.com", text : "Some Tweet Message"})
  *
  */
 
-define(["../Module", "$"], function (Module, $) {
+define([
+	"../Module",
+	"$"
+	// Tracking stuff? Add it here
+	// ("../tracking/GATracking" || "../tracking/OmnitureTracking")
+], function (Module, $, Tracking) {
 
 	var EVENTS = {
-			POST : "social/twitter/post",
-			RENDER : "social/twitter/render",
+		POST : "module/social/twitter/post",
+		RENDER : "module/social/twitter/render",
 
-			LOGIN : "social/twitter/login",
-			LOGOUT : "social/twitter/logout",
+		LOGIN : "module/social/twitter/login",
+		LOGOUT : "module/social/twitter/logout",
 
-			HANDLE_LOGIN : "social/twitter/handle-login",
-			HANDLE_LOGOUT : "social/twitter/handle-logout",
-			GET_STATUS : "social/twitter/get-status",
-			POST_STATUS : "social/twitter/post-status"
-		},
+		HANDLE_LOGIN : "module/social/twitter/handle-login",
+		HANDLE_LOGOUT : "module/social/twitter/handle-logout",
+		GET_STATUS : "module/social/twitter/get-status",
+		POST_STATUS : "module/social/twitter/post-status"
+	},
 
-		APP_ID = $('[property="twitter:app_id"]').attr("content");
+	APP_ID = $('[property="twitter:app_id"]').attr("content");
 
 	return Module.extend({
 
@@ -136,7 +138,7 @@ define(["../Module", "$"], function (Module, $) {
 				url = el.attr("src"),
 				tweeturl = this.querystring(url).url;
 
-			this.publish("track", [{
+			this.publish(Tracking.TRACK, [{
 				type : "event",
 				category: "twitter",
 				action : "on-tweet",
@@ -150,7 +152,7 @@ define(["../Module", "$"], function (Module, $) {
 			var el = $(e.currentTarget),
 				data = eData || el.data();
 
-			this.publish("track", [{
+			this.publish(Tracking.TRACK, [{
 				type : "event",
 				category: "twitter",
 				action : "on-follow",

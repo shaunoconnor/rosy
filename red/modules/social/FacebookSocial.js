@@ -1,5 +1,3 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* facebook.social.js */
 /*global FB*/
 
 /**
@@ -12,34 +10,39 @@
 	<a data-custom-post="facebook"></a> // fires customFacebookPost
 
  *	How to Use
-		var FB = new red.module.social.Facebook({debug:false}); //
-		this.publish(red.module.social.Facebook.LOGIN); // will launch authenticate-dialog (check popup blocker)
-		this.subscribe(red.module.social.Facebook.HANDLE_LOGIN, function (e, response) {}));
+		var FB = new FacebookSocial({debug:false}); //
+		this.publish(FacebookSocial.LOGIN); // will launch authenticate-dialog (check popup blocker)
+		this.subscribe(FacebookSocial.HANDLE_LOGIN, function (e, response) {}));
 
 
  *	Refer to http://yoast.com/social-buttons/ for more information on social-tracking-events
  */
 
-define(["../Module", "$"], function (Module, $) {
+define([
+	"../Module",
+	"$"
+	// Tracking stuff? Add it here
+	// ("../tracking/GATracking" || "../tracking/OmnitureTracking")
+], function (Module, $, Tracking) {
 
 	var EVENTS = {
-			POST : "social/facebook/post",
-			RENDER : "social/facebook/render",
-			LOGIN : "social/facebook/login",
-			LOGOUT : "social/facebook/logout",
-			GET_STATUS : "social/facebook/get-status",
-			GET_ME : "social/facebook/get-me",
-			SET_ACTION : "social/facebook/set-action",
-			HANDLE_ACTION : "social/facebook/handle-action",
-			HANDLE_ME : "social/facebook/handle-me",
-			HANDLE_LOGIN : "social/facebook/handle-login",
-			HANDLE_LOGOUT : "social/facebook/handle-logout"
-		},
+		POST : "social/facebook/post",
+		RENDER : "social/facebook/render",
+		LOGIN : "social/facebook/login",
+		LOGOUT : "social/facebook/logout",
+		GET_STATUS : "social/facebook/get-status",
+		GET_ME : "social/facebook/get-me",
+		SET_ACTION : "social/facebook/set-action",
+		HANDLE_ACTION : "social/facebook/handle-action",
+		HANDLE_ME : "social/facebook/handle-me",
+		HANDLE_LOGIN : "social/facebook/handle-login",
+		HANDLE_LOGOUT : "social/facebook/handle-logout"
+	},
 
-		IS_CONNECTED = false,
-		APP_ID = $('[property="fb:app_id"]').attr("content"),
-		NAMESPACE = $('[property="og:namespace"]').attr("content"),
-		STATIC_URL = $('link[rel="static-url"]').attr("href");
+	IS_CONNECTED = false,
+	APP_ID = $('[property="fb:app_id"]').attr("content"),
+	NAMESPACE = $('[property="og:namespace"]').attr("content"),
+	STATIC_URL = $('link[rel="static-url"]').attr("href");
 
 	return Module.extend({
 
@@ -88,7 +91,7 @@ define(["../Module", "$"], function (Module, $) {
 				IS_CONNECTED = false;
 
 				this.publish(EVENTS.HANDLE_LOGOUT, [response]);
-				this.publish("track", [{
+				this.publish(Tracking.TRACK, [{
 					type : "event",
 					category: "facebook",
 					action : "logout",
@@ -101,7 +104,7 @@ define(["../Module", "$"], function (Module, $) {
 			if (IS_CONNECTED) {
 				FB.api('/me', function(response) {
 					this.publish(EVENTS.HANDLE_ME, [response]);
-					this.publish("track", [{
+					this.publish(Tracking.TRACK, [{
 						type : "event",
 						category: "facebook",
 						action : "me",
@@ -117,14 +120,14 @@ define(["../Module", "$"], function (Module, $) {
 				if (response.authResponse) {
 					IS_CONNECTED = true;
 					this.publish(EVENTS.HANDLE_LOGIN, [response]);
-					this.publish("track", [{
+					this.publish(Tracking.TRACK, [{
 						type : "event",
 						category: "facebook",
 						action : "login:accepted",
 						label : "user connected w/ fb"
 					}]);
 				} else {
-					this.publish("track", [{
+					this.publish(Tracking.TRACK, [{
 						type : "event",
 						category: "facebook",
 						action : "login:canceled",
@@ -157,7 +160,7 @@ define(["../Module", "$"], function (Module, $) {
 			// tracls as facebook-like-profile or facebook-like-other (for custom page liking)
 			var action = "on-like-" + ((URL.indexOf("seed") > 0) ? "profile" : "other");
 
-			this.publish("track", [{
+			this.publish(Tracking.TRACK, [{
 				type : "event",
 				category : "facebook",
 				action : action,
@@ -196,7 +199,7 @@ define(["../Module", "$"], function (Module, $) {
 
 			FB.ui(publishObj);
 
-			this.publish("track", [{
+			this.publish(Tracking.TRACK, [{
 				type : "event",
 				category : "facebook",
 				action : "on-post",

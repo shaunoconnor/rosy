@@ -1,7 +1,4 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-/* page-control.js */
-
-// ## red.module.PageControl
+// ## PageControl
 // An iOS-style Page Control.
 //
 // Usage:
@@ -12,14 +9,19 @@
 //      items : $("#controller > ul > li") // optional, assumes list children as items
 //  });
 //
-//  this.subscribe("paginate", function (e) {
+//  this.subscribe(PageControl.PAGINATE, function (e) {
 //      console.log(e);
 //  });
 //
-//  this.subscribe("touchend", function (e) {
+//  this.subscribe(PageControl.TOUCHEND, function (e) {
 //      console.log(e);
 //  });
 define(["../Module", "$"], function (Module, $) {
+
+	var EVENTS = {
+		TOUCHEND : "module/page-control/touchend",
+		PAGINATE : "module/page-control/paginate"
+	};
 
 	// Extends red.Module
 	return Module.extend({
@@ -213,7 +215,7 @@ define(["../Module", "$"], function (Module, $) {
 					this.flagActiveItem(element);
 					this.animateTo(element, control, list);
 
-					this.publish("touchend");
+					this.publish(EVENTS.TOUCHEND);
 				}),
 
 				// A safety catcher for CSS transitions.
@@ -335,7 +337,7 @@ define(["../Module", "$"], function (Module, $) {
 				this.resetTransition(el, 0);
 				this.setTransform(el, matrix);
 
-				this.publish("paginate");
+				this.publish(EVENTS.PAGINATE);
 			}
 		},
 
@@ -372,6 +374,6 @@ define(["../Module", "$"], function (Module, $) {
 			}
 			this.sup();
 		}
-	});
+	}, EVENTS);
 
 });

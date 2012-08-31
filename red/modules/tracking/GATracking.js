@@ -1,15 +1,18 @@
-// ### Part of the [Rosy Framework](http://github.com/ff0000/rosy)
-// Google Analytics Tracking
+// ### Google Analytics Tracking
 
 /**
  * Omniture and GA tracking event wrappers
- * init: new red.module.tracking.GA()
- * publish: this.publish("track", {category:, action:, label:, value: });
+ * init: GATracking()
+ * publish: this.publish(GATracking.TRACK, {category:, action:, label:, value: });
  */
 define(["../Module", "$"], function (Module, $) {
 
 	/*global _gaq:true*/
 	window._gaq = window._gaq || [];
+
+	var EVENTS = {
+		TRACK : "module/tracking/google-analytics/track"
+	};
 
 	return Module.extend({
 
@@ -22,7 +25,7 @@ define(["../Module", "$"], function (Module, $) {
 		init : function () {
 			this.loadJSDK();
 
-			this.subscribe("track", this.track);
+			this.subscribe(EVENTS.TRACK, this.track);
 		},
 
 		log : function () {
@@ -33,9 +36,8 @@ define(["../Module", "$"], function (Module, $) {
 			}
 		},
 
-		track : function (e, eData) {
-			var el = $(e.currentTarget),
-			data = eData || el.data();
+		track : function (n) {
+			var data = n.data;
 
 			data.type = data.type || "event"; // default to an event tracking type
 
@@ -65,7 +67,7 @@ define(["../Module", "$"], function (Module, $) {
 			}
 
 			if (!this.vars.domain) {
-				throw 'tracking:GA missing DOMAIN  <meta property="ga:domain" content="xxxxx.com"/>';
+				throw 'tracking:GA missing DOMAIN <meta property="ga:domain" content="xxxxx.com"/>';
 			}
 
 			this.log("ga.tracking:: " + this.vars.property_id);
@@ -89,5 +91,5 @@ define(["../Module", "$"], function (Module, $) {
 			this.sup();
 		}
 
-	});
+	}, EVENTS);
 });
