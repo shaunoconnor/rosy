@@ -30,7 +30,7 @@ define(["../Module",
 
 
 		init : function () {
-			this.subscribe("track", this.proxy(this.track));
+			this.subscribe("track", this.track);
 		},
 
 		track : function (e, data) {
@@ -52,7 +52,7 @@ define(["../Module",
 		},
 
 		destroy : function () {
-			this.unsubscribe("track", this.proxy(this.track));
+			this.unsubscribe("track", this.track);
 
 			this.tracker = null;
 			this.vars = null;

@@ -262,13 +262,13 @@ define([
 
 			// Event Handler
 			if ("ontouchstart" in window) {
-				container.on("touchstart", this.proxy(this.onTouchStart));
-				doc.on("touchmove", this.proxy(this.onTouchMove));
-				doc.on("touchend", this.proxy(this.onTouchEnd));
+				container.on("touchstart", this.onTouchStart);
+				doc.on("touchmove", this.onTouchMove);
+				doc.on("touchend", this.onTouchEnd);
 			} else {
-				container.on("mousedown", this.proxy(this.onMouseDown));
-				doc.on("mousemove", this.proxy(this.onMouseMove));
-				doc.on("mouseup", this.proxy(this.onMouseUp));
+				container.on("mousedown", this.onMouseDown);
+				doc.on("mousemove", this.onMouseMove);
+				doc.on("mouseup", this.onMouseUp);
 			}
 		},
 

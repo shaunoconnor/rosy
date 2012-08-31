@@ -98,7 +98,7 @@ define(
 
 				if (HISTORY_SUPPORTED) {
 					PATH_VALUE = window.location.pathname;
-					window.addEventListener('popstate', this.proxy(this._onStateChange));
+					window.addEventListener('popstate', this._onStateChange);
 				}
 
 				else {
@@ -108,7 +108,7 @@ define(
 					}
 				}
 
-				this.container.on("click", this.selectors.join(","), this.proxy(this._onLinkClick));
+				this.container.on("click", this.selectors.join(","), this._onLinkClick);
 
 				this._gotoRoute({route : defaultRoute || window.location.pathname});
 
