@@ -376,12 +376,12 @@ define(
 
 								viewGroup.changeRoute(data.route);
 
-								if (!currentView || currentView.viewClass !== matchedView.viewClass) {
+								// If a route maps to a View, and that View's ViewGroup has useHistory = true
+								if (viewGroup.config.useHistory && data.updateHistory !== false) {
+									this._updateHistory(data.title || "", data.route, viewGroup.config.useHistory === "#");
+								}
 
-									// If a route maps to a View, and that View's ViewGroup has useHistory = true
-									if (viewGroup.config.useHistory && data.updateHistory !== false) {
-										this._updateHistory(data.title || "", data.route, viewGroup.config.useHistory === "#");
-									}
+								if (!currentView || currentView.viewClass !== matchedView.viewClass) {
 
 									this._changeView(matchedView, data, cb);
 									didRoute = true;
@@ -398,19 +398,19 @@ define(
 						}
 					}
 
-					if (skipped === l) {
-						if (cb) {
-							cb();
-						}
-						return false;
-					}
-
 					/**
 					* Lastly, loop through all view groups and activate all active routes
 					**/
 
 					for (i = 0, l = this._viewGroups.length; i < l; i ++) {
 						this.activate(this._viewGroups[i].currentRoute);
+					}
+
+					if (skipped === l) {
+						if (cb) {
+							cb();
+						}
+						return false;
 					}
 
 					return didRoute;
