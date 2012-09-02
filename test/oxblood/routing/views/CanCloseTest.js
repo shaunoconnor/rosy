@@ -26,7 +26,7 @@ define(
 			transitionOut : function () {
 				this.sup();
 			},
-						
+
 			destroy : function () {
 				this.sup();
 			}

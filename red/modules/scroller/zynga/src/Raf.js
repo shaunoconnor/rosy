@@ -10,7 +10,7 @@
  * http://unify-project.org
  * Copyright 2011, Deutsche Telekom AG
  * License: MIT + Apache (V2)
- * 
+ *
  * Inspired by: https://github.com/inexorabletash/raf-shim/blob/master/raf.js
  */
 
@@ -21,32 +21,32 @@
 	if (global.requestAnimationFrame) {
 		return;
 	}
-	
+
 	// Basic emulation of native methods for internal use
-	
+
 	var now = Date.now || function () {
 		return new Date().getTime();
 	};
-	
+
 	var getKeys = Object.keys || function (obj) {
-		
+
 		var keys = {};
 		for (var key in obj) {
 			keys[key] = true;
 		}
-		
+
 		return keys;
-		
+
 	};
-	
+
 	var isEmpty = Object.empty || function (obj) {
-		
+
 		for (var key in obj) {
 			return false;
 		}
-		
+
 		return true;
-		
+
 	};
 
 	// Custom implementation
@@ -57,7 +57,7 @@
 
 	global.requestAnimationFrame = function (callback, root) {
 		var callbackHandle = rafHandle++;
-		
+
 		// Store callback
 		requests[callbackHandle] = callback;
 

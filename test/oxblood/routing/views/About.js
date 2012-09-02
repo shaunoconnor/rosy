@@ -26,7 +26,7 @@ define(
 			update : function (params, data) {
 
 			},
-			
+
 			destroy : function () {
 				this.sup();
 			}

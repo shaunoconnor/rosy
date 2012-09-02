@@ -11,7 +11,7 @@ define(
 		return Class.extend({
 
 			_routes : [],
-		
+
 			init : function (viewGroups) {
 
 				var i,
@@ -51,7 +51,7 @@ define(
 					params,
 					paramVals,
 					views = [];
-				
+
 				for (l = this._routes.length, i = 0; i < l; i ++) {
 
 					r = this._routes[i];

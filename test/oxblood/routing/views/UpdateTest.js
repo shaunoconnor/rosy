@@ -33,7 +33,7 @@ define(
 
 				return false;
 			},
-			
+
 			destroy : function () {
 				this.sup();
 			}
