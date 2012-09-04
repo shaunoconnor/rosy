@@ -3,6 +3,8 @@
 
 define(["../Module", "$"], function (Module, $) {
 
+	"use strict";
+
 	// Extends red.Module
 	return Module.extend({
 
@@ -83,11 +85,9 @@ define(["../Module", "$"], function (Module, $) {
 
 		setupEvents : function () {
 			var wrap = this.vars.wrap,
-				field = this.vars.field,
 				name = this.vars.namespace,
 				hover = name + "-hover",
-				active = name + "-active",
-				checked = name + "-checked";
+				active = name + "-active";
 
 			wrap.on({
 				mouseenter : function (e) {
@@ -114,8 +114,7 @@ define(["../Module", "$"], function (Module, $) {
 		},
 
 		setupCheckbox : function () {
-			var field = this.vars.field,
-				checked = this.vars.namespace + "-checked";
+			var checked = this.vars.namespace + "-checked";
 
 			if (this.vars.field.is(":checked")) {
 				this.vars.wrap.addClass(checked);
@@ -177,13 +176,13 @@ define(["../Module", "$"], function (Module, $) {
 			this.setActiveOption(active);
 
 			if (this.vars.customSelect) {
-				this.buildCustomSelect(select, options, index);
+				this.buildCustomSelect(select);
 			} else {
 				this.setupSelectEvents();
 			}
 		},
 
-		buildCustomSelect : function (select, options, index) {
+		buildCustomSelect : function (select) {
 			var wrap = this.vars.wrap,
 				html = select.html(),
 				list = $('<ul></ul>');
@@ -224,7 +223,7 @@ define(["../Module", "$"], function (Module, $) {
 			this.vars.field.on("change", this.onSelectChange);
 		},
 
-		setupCustomSelectEvents : function (list) {
+		setupCustomSelectEvents : function () {
 			$(document).on("click", this.onDocumentClick);
 		},
 

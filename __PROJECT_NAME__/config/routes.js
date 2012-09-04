@@ -6,7 +6,7 @@ define(
 
 		var namespace = "__PROJECT_NAME__";
 
-		function ns (route) {
+		function ns(route) {
 			return namespace + route;
 		}
 

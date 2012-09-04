@@ -3,6 +3,11 @@ define([
 	"red/modules/Module",
 	"red/modules/social/TwitterSocial"
 ], function (OxBlood, Module, TwitterSocial) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Twitter Social", function () {

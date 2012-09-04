@@ -1,4 +1,10 @@
 (function () {
+
+	/*jshint bitwise: false */
+	/*global process */
+
+	"use strict";
+
 	var optimist = require("optimist");
 	var union = require("union");
 	var ecstatic = require("ecstatic");

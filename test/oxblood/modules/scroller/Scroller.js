@@ -2,8 +2,14 @@ define([
 	"OxBlood",
 	"red/base/Class",
 	"red/modules/Module",
-	"red/modules/scroller/Scroller"
-], function (OxBlood, Class, Module, Scroller) {
+	"red/modules/scroller/Scroller",
+	"$"
+], function (OxBlood, Class, Module, Scroller, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Scroller", function () {

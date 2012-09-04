@@ -5,6 +5,11 @@ define([
 	"./SubClass",
 	"$"
 ], function (OxBlood, Class, DOMClass, SubClass, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Teardown", function () {
@@ -12,7 +17,7 @@ define([
 			describe("Class Destruction", function () {
 
 				it("should teardown the created Class", function (done) {
-					var testClass = SubClass.extend({
+					var TestClass = SubClass.extend({
 						vars : {
 							x : 1,
 							y : 2,
@@ -37,7 +42,7 @@ define([
 						}
 					});
 
-					var testInstance = new testClass();
+					var testInstance = new TestClass();
 
 					expect(testInstance).to.be.a(SubClass);
 					expect(testInstance).to.be.a(Class);
@@ -46,7 +51,7 @@ define([
 				});
 
 				it("should unsubscribe all notifications", function (done) {
-					var testClass = SubClass.extend({
+					var TestClass = SubClass.extend({
 
 						vars : {
 							x : 0
@@ -79,7 +84,7 @@ define([
 						}
 					});
 
-					var testInstance = new testClass();
+					var testInstance = new TestClass();
 
 					expect(testInstance).to.be.a(SubClass);
 					expect(testInstance).to.be.a(Class);
@@ -88,7 +93,7 @@ define([
 				});
 
 				it("should unbind all events", function (done) {
-					var testClass = DOMClass.extend({
+					var TestClass = DOMClass.extend({
 						vars : {},
 
 						init : function () {
@@ -145,13 +150,13 @@ define([
 						return (el.data("events") || $._data(el, "events"));
 					};
 
-					var testInstance = new testClass();
+					var testInstance = new TestClass();
 					expect(testInstance).to.be.a(DOMClass);
 					testInstance.destroy();
 				});
 
 				it("should not unbind sibling class events", function (done) {
-					var testClass = DOMClass.extend({
+					var TestClass = DOMClass.extend({
 						vars : {},
 
 						init : function () {
@@ -169,7 +174,7 @@ define([
 						onClick : function () {}
 					});
 
-					var testSiblingClass = DOMClass.extend({
+					var TestSiblingClass = DOMClass.extend({
 						vars : {},
 
 						init : function () {
@@ -213,8 +218,8 @@ define([
 						return (el.data("events") || $._data(el, "events"));
 					};
 
-					var testInstance = new testClass();
-					var testSiblingInstance = new testSiblingClass();
+					var testInstance = new TestClass();
+					var testSiblingInstance = new TestSiblingClass();
 
 					expect(testInstance).to.be.a(DOMClass);
 					expect(testSiblingInstance).to.be.a(DOMClass);

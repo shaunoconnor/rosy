@@ -4,6 +4,11 @@ define([
 	"red/modules/Module",
 	"red/modules/ticker/Ticker"
 ], function (OxBlood, Class, Module, Ticker) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Ticker", function () {

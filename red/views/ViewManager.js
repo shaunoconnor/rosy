@@ -20,7 +20,7 @@ define(
 		var HISTORY_SUPPORTED = window.history && window.history.pushState,
 			HASH_VALUE,
 			PATH_VALUE,
-			ERROR_HANDLER = function (e) {throw e;};
+			ERROR_HANDLER = function (e) { throw e; };
 
 		var ViewManager = Class.extend({
 
@@ -269,8 +269,7 @@ define(
 				}
 			},
 
-			_onStateChange : function (e) {
-
+			_onStateChange : function () {
 				if (window.location.pathname !== PATH_VALUE) {
 					PATH_VALUE = window.location.pathname;
 					this._gotoRoute({route : window.location.pathname, updateHistory : false});
@@ -281,7 +280,6 @@ define(
 			_gotoRoute : function (data) {
 				var i,
 					l,
-					p,
 					cb,
 					skipped = 0,
 					matchedView,
@@ -289,13 +287,11 @@ define(
 					viewGroup,
 					currentView,
 					viewData,
-					didRoute = false,
-					deactiveRoutes = [],
-					activateRoutes = [];
+					didRoute = false;
 
 				// Force all routes to begin with a "/" and have no hashtag
 				data.route = data.route.replace("#", "");
-				data.route = ((data.route.substr(0,1) !== "/") ? "/" : "") + data.route;
+				data.route = ((data.route.substr(0, 1) !== "/") ? "/" : "") + data.route;
 
 				// If this route is an alias, grab the alias value
 				data.route = this.aliases[data.route] || data.route;
@@ -425,7 +421,7 @@ define(
 
 				if (matchedView.viewClass) {
 
-					require([matchedView.viewClass], this.proxy(function (ViewClass) {
+					require([matchedView.viewClass], this.proxy(function () {
 
 						TransitionManager.transition(matchedView, data, data.transition, this.proxy(function () {
 
@@ -475,8 +471,8 @@ define(
 				m = m.concat();
 				m2 = m2.concat();
 
-				m.splice(0,1);
-				m2.splice(0,1);
+				m.splice(0, 1);
+				m2.splice(0, 1);
 
 				for (l = m.length, i = l; i >= 0; i --) {
 					if (m[i] !== m2[i] && typeof m2[i] !== "undefined") {

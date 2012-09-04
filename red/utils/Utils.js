@@ -3,11 +3,10 @@ define(
 	function () {
 
 		/*jshint eqeqeq:false, noempty:false, eqnull:true */
-		/*global $, window */
 
 		"use strict";
 
-		function extend (target) {
+		function extend(target) {
 
 			var deep, options, name, src, copy, copyIsArray, clone, i, length;
 
@@ -64,7 +63,7 @@ define(
 			return target;
 		}
 
-		function isObject (obj) {
+		function isObject(obj) {
 
 			var objectTypes = {
 				'function': true,
@@ -75,7 +74,7 @@ define(
 			return obj ? !!objectTypes[typeof obj] : false;
 		}
 
-		function isFunction (obj) {
+		function isFunction(obj) {
 			return typeof obj == "function";
 		}
 
@@ -86,7 +85,7 @@ define(
 			return false;
 		};
 
-		function isPlainObject (obj) {
+		function isPlainObject(obj) {
 
 			var hasOwn = Object.prototype.hasOwnProperty;
 

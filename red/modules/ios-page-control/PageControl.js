@@ -18,6 +18,8 @@
 //  });
 define(["../Module", "$"], function (Module, $) {
 
+	"use strict";
+
 	var EVENTS = {
 		TOUCHEND : "module/page-control/touchend",
 		PAGINATE : "module/page-control/paginate"

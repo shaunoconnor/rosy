@@ -3,6 +3,10 @@ define([
 	"./SubClass"
 ], function (OxBlood, SubClass) {
 
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Initialization", function () {
@@ -10,13 +14,13 @@ define([
 			describe(".setup()", function () {
 
 				it("should setup the class if .setup() exists", function (done) {
-					var testSubClass = SubClass.extend({
+					var TestSubClass = SubClass.extend({
 						setup : function () {
 							this.prototype.isSetup = true;
 						}
 					});
 
-					var testInstance = new testSubClass();
+					var testInstance = new TestSubClass();
 
 					expect(testInstance.isSetup).to.be.ok();
 					done();
@@ -28,7 +32,7 @@ define([
 			describe(".init()", function () {
 
 				it("should run on SubClass initialization", function (done) {
-					var testSubClass = SubClass.extend({
+					var TestSubClass = SubClass.extend({
 						vars : {
 							x : 0,
 							y : 0,
@@ -49,7 +53,7 @@ define([
 						}
 					});
 
-					var testInstance = new testSubClass();
+					var testInstance = new TestSubClass();
 
 				});
 
@@ -58,7 +62,7 @@ define([
 			describe(".__init()", function () {
 
 				it("should run before .init()", function (done) {
-					var testSubClass = SubClass.extend({
+					var TestSubClass = SubClass.extend({
 						vars : {
 							hasRun : false
 						},
@@ -73,14 +77,14 @@ define([
 						}
 					});
 
-					var testExtendSubClass = testSubClass.extend({
+					var TestExtendSubClass = TestSubClass.extend({
 						init : function () {
 							expect(this.vars.hasRun).to.be.ok();
 							done();
 						}
 					});
 
-					var testInstance = new testExtendSubClass();
+					var testInstance = new TestExtendSubClass();
 
 				});
 

@@ -25,6 +25,8 @@ define([
 	// ("../tracking/GATracking" || "../tracking/OmnitureTracking")
 ], function (Module, $, Tracking) {
 
+	"use strict";
+
 	var EVENTS = {
 		POST : "module/social/twitter/post",
 		RENDER : "module/social/twitter/render",
@@ -63,12 +65,12 @@ define([
 			if (window.twttr) {
 				var that = this;
 				window.twttr.anywhere(function (T) {
-					T.bind("tweet",that.proxy(that.onTweet));
-					T.bind("follow", that.proxy(that.onFollow));
-					T.bind("authComplete", that.proxy(that.onAuthComplete));
-					T.bind("signOut", that.proxy(that.onSignOut));
+					T.bind("tweet", that.onTweet);
+					T.bind("follow", that.onFollow);
+					T.bind("authComplete", that.onAuthComplete);
+					T.bind("signOut", that.onSignOut);
 
-					that.subscribe(EVENTS.LOGIN, function (e) {
+					that.subscribe(EVENTS.LOGIN, function () {
 						T.signIn();
 					});
 
@@ -80,7 +82,7 @@ define([
 						}
 					});
 
-					that.subscribe(EVENTS.GET_STATUS, function (e) {
+					that.subscribe(EVENTS.GET_STATUS, function () {
 						if (T.isConnected()) {
 							that.onAuthComplete(null, T.currentUser);
 						} else {
@@ -95,11 +97,11 @@ define([
 			this.publish(EVENTS.HANDLE_LOGIN, [eData]);
 		},
 
-		onSignOut : function (e) {
+		onSignOut : function () {
 			this.publish(EVENTS.HANDLE_LOGOUT);
 		},
 
-		getLogout : function (e) {
+		getLogout : function () {
 			if (window.twttr) {
 				window.twttr.events.bind("tweet",  this.onTweet);
 				window.twttr.events.bind("follow", this.onFollow);
@@ -198,7 +200,7 @@ define([
 				dataType: "script",
 				url: "//platform.twitter.com/anywhere.js?id=" + APP_ID + "&v=1",
 				cache: true
-			}).done($.proxy(this.onTwitterInit, this));
+			}).done(this.onTwitterInit);
 		},
 
 		destroy : function () {

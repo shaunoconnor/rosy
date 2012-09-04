@@ -1,7 +1,7 @@
 define(["$"], function ($) {
 	"use strict";
 
-	function _matchJQueryGUIDs (instance, jqObj, events) {
+	function _matchJQueryGUIDs(instance, jqObj, events) {
 		var type, i, j, event;
 		var func;
 		var f;
@@ -31,7 +31,7 @@ define(["$"], function ($) {
 		}
 	}
 
-	function _unbindFromObject (instance, obj) {
+	function _unbindFromObject(instance, obj) {
 		if (!obj) {
 			return;
 		}

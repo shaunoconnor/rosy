@@ -3,6 +3,11 @@ define([
 	"./SubClass",
 	"$"
 ], function (OxBlood, SubClass, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Inheritance", function () {

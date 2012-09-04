@@ -7,6 +7,8 @@
  */
 define(["../Module", "$"], function (Module, $) {
 
+	"use strict";
+
 	/*global _gaq:true*/
 	window._gaq = window._gaq || [];
 
@@ -73,17 +75,17 @@ define(["../Module", "$"], function (Module, $) {
 			this.log("ga.tracking:: " + this.vars.property_id);
 
 			_gaq.push(["_setAccount", this.vars.property_id]);
-			_gaq.push(['_setDomainName', this.vars.domain]);
-			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(["_setDomainName", this.vars.domain]);
+			_gaq.push(["_setAllowLinker", true]);
 			_gaq.push(["_trackPageview"]);
 			_gaq.push(["_trackPageLoadTime"]);
 
-			(function(d,t){
+			(function (d, t) {
 				var g = d.createElement(t),
 					s = d.getElementsByTagName(t)[0];
-				g.src = ('https:' === location.protocol?'//ssl':'//www') + '.google-analytics.com/ga.js';
+				g.src = ("https:" === location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
 				s.parentNode.insertBefore(g, s);
-			}(document, 'script'));
+			}(document, "script"));
 		},
 
 		destroy : function () {

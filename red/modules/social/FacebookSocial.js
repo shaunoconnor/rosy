@@ -25,6 +25,8 @@ define([
 	// ("../tracking/GATracking" || "../tracking/OmnitureTracking")
 ], function (Module, $, Tracking) {
 
+	"use strict";
+
 	var EVENTS = {
 		POST : "social/facebook/post",
 		RENDER : "social/facebook/render",
@@ -57,7 +59,9 @@ define([
 		},
 
 		// this.publish(EVENTS.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
-		setAction : function (e, options) {
+		setAction : function (n) {
+			var options = n.data;
+
 			if (IS_CONNECTED) {
 
 				var action = options.action || (NAMESPACE + ":" + options.custom_action);
@@ -102,7 +106,7 @@ define([
 
 		getMe : function () {
 			if (IS_CONNECTED) {
-				FB.api('/me', function(response) {
+				FB.api('/me', function (response) {
 					this.publish(EVENTS.HANDLE_ME, [response]);
 					this.publish(Tracking.TRACK, [{
 						type : "event",
@@ -141,15 +145,15 @@ define([
 
 
 		// stubs ment for overwriting when extending this module
-		onShare : function (e) {},
+		onShare : function () {},
 
-		onAddComment : function (e) {},
+		onAddComment : function () {},
 
-		onSesionChange : function (e) {},
+		onSesionChange : function () {},
 
-		onStatusChange : function (e) {},
+		onStatusChange : function () {},
 
-		onLogin : function (e) {
+		onLogin : function () {
 			IS_CONNECTED = true;
 		},
 

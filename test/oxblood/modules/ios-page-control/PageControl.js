@@ -2,8 +2,14 @@ define([
 	"OxBlood",
 	"red/base/Class",
 	"red/modules/Module",
-	"red/modules/ios-page-control/PageControl"
-], function (OxBlood, Class, Module, PageControl) {
+	"red/modules/ios-page-control/PageControl",
+	"$"
+], function (OxBlood, Class, Module, PageControl, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: iOS Page Controller", function () {

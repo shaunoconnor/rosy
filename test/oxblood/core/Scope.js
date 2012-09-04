@@ -1,7 +1,13 @@
 define([
 	"OxBlood",
-	"./SubClass"
-], function (OxBlood, SubClass) {
+	"./SubClass",
+	"$"
+], function (OxBlood, SubClass, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addCoreTests(function () {
 
 		describe("Rosy Scope", function () {
@@ -10,7 +16,7 @@ define([
 					$("body").off();
 				});
 
-				it ("should report 'this' as Class without .proxy()", function (done) {
+				it("should report 'this' as Class without .proxy()", function (done) {
 					var TestClass = SubClass.extend({
 						init : function () {
 							this.setupEvents();

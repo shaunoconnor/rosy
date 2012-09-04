@@ -4,6 +4,11 @@ define([
 	"red/modules/Module",
 	"red/modules/tracking/GATracking"
 ], function (OxBlood, Class, Module, GATracking) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Google Analytics Tracking", function () {

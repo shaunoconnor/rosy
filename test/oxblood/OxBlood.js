@@ -3,6 +3,11 @@ define([
 	"test/lib/expect",
 	"test/lib/mocha/mocha"
 ], function () {
+
+	/*global mocha */
+
+	"use strict";
+
 	mocha.setup({
 		ui: "bdd",
 		ignoreLeaks: true
@@ -20,7 +25,7 @@ define([
 		},
 
 		addRoutingTests : function (tests) {
-			this.tests.routing.push(tests);			
+			this.tests.routing.push(tests);
 		},
 
 		addModuleTests : function (tests) {

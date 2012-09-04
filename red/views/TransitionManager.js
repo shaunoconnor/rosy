@@ -48,8 +48,7 @@ define(
 
 				var oldView,
 					newView,
-					transitionObj,
-					deferredTransition;
+					transitionObj;
 
 				if (view.viewGroup.transitioning === true) {
 					view.viewGroup.deferredTransition = {
@@ -155,7 +154,6 @@ define(
 					l,
 					cbCount = 0,
 					sequence = transitionSequences[transition],
-					nextInSequence = this._nextInSequence,
 
 					callFn = this.proxy(function (fn) {
 

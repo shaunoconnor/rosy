@@ -7,10 +7,14 @@
 	- ssla-analytics/  (this file loads ssla-analytics/analytics.min.js)
 
  */
-define(["../Module",
-		// we don't need an AMD reference to the scroller file,
-		// but we do need it to be included in the build
-		"./ssla-analytics/analytics.min"], function (Module) {
+define([
+	"../Module",
+	// we don't need an AMD reference to the scroller file,
+	// but we do need it to be included in the build
+	"./ssla-analytics/analytics.min"
+], function (Module) {
+
+	"use strict";
 
 	var EVENTS = {
 		TRACK : "module/tracking/omniture/track"

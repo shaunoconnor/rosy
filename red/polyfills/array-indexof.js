@@ -1,6 +1,8 @@
 define(
 	function () {
 
+		"use strict";
+
 		if (!Array.prototype.indexOf) {
 
 			Array.prototype.indexOf = function (a, b) {
