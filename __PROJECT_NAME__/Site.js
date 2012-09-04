@@ -10,10 +10,9 @@ define(
 
 		"use strict";
 
-		return Class.extend({
+		var Site = Class.extend({
 
 			init : function () {
-
 				ViewManager.initialize({
 					// mode					:	hard|soft|hash,
 					// selectors			:	Array,
@@ -27,7 +26,8 @@ define(
 					viewGroups : routes.viewGroups
 				});
 			}
-
 		});
+
+		return new Site();
 	}
 );
