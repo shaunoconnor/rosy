@@ -1,8 +1,9 @@
 define([
 	"OxBlood",
 	"red/modules/Module",
-	"red/modules/social/TwitterSocial"
-], function (OxBlood, Module, TwitterSocial) {
+	"red/modules/social/TwitterSocial",
+	"$"
+], function (OxBlood, Module, TwitterSocial, $) {
 
 	/*global describe, expect, it, before, beforeEach, after, afterEach */
 
@@ -26,6 +27,26 @@ define([
 
 				it("should be an instance of Module", function () {
 					expect(testInstance).to.be.a(Module);
+				});
+
+				describe("Notifications", function () {
+
+					it(TwitterSocial.POST, function () {});
+
+					it(TwitterSocial.RENDER, function () {});
+
+					it(TwitterSocial.LOGIN, function () {});
+
+					it(TwitterSocial.LOGOUT, function () {});
+
+					it(TwitterSocial.HANDLE_LOGIN, function () {});
+
+					it(TwitterSocial.HANDLE_LOGOUT, function () {});
+
+					it(TwitterSocial.GET_STATUS, function () {});
+
+					it(TwitterSocial.POST_STATUS, function () {});
+
 				});
 
 			});

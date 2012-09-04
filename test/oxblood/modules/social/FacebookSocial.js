@@ -1,8 +1,10 @@
 define([
 	"OxBlood",
+	"red/base/Class",
 	"red/modules/Module",
-	"red/modules/social/FacebookSocial"
-], function (OxBlood, Module, FacebookSocial) {
+	"red/modules/social/FacebookSocial",
+	"$"
+], function (OxBlood, Class, Module, FacebookSocial, $) {
 
 	/*global describe, expect, it, before, beforeEach, after, afterEach */
 
@@ -26,6 +28,32 @@ define([
 
 				it("should be an instance of Module", function () {
 					expect(testInstance).to.be.a(Module);
+				});
+
+				describe("Notifications", function () {
+
+					it(FacebookSocial.POST, function () {});
+
+					it(FacebookSocial.RENDER, function () {});
+
+					it(FacebookSocial.LOGIN, function () {});
+
+					it(FacebookSocial.LOGOUT, function () {});
+
+					it(FacebookSocial.GET_STATUS, function () {});
+
+					it(FacebookSocial.GET_ME, function () {});
+
+					it(FacebookSocial.SET_ACTION, function () {});
+
+					it(FacebookSocial.HANDLE_ACTION, function () {});
+
+					it(FacebookSocial.HANDLE_ME, function () {});
+
+					it(FacebookSocial.HANDLE_LOGIN, function () {});
+
+					it(FacebookSocial.HANDLE_LOGOUT, function () {});
+
 				});
 
 			});

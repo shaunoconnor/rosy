@@ -34,6 +34,14 @@ define([
 					expect(testInstance).to.be.a(Module);
 				});
 
+				describe("Notifications", function () {
+
+					it(PageControl.TOUCHEND, function () {});
+
+					it(PageControl.PAGINATE, function () {});
+
+				});
+
 			});
 
 		});
