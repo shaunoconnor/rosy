@@ -81,11 +81,6 @@ define(
 			* or rather, $.proxy(func, this) in jQuery terms
 			*/
 			proxy : function (fn) {
-
-				if (window.jQuery && jQuery.proxy) {
-					return jQuery.proxy(fn, this);
-				}
-
 				return fn ? fn.bind(this) : fn;
 			},
 
