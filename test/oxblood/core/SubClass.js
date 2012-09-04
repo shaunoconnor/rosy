@@ -1,10 +1,11 @@
 define(
-
 	[
 		"red/base/Class"
 	],
 
 	function (Class) {
+
+		"use strict";
 
 		return Class.extend({
 

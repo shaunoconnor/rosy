@@ -50,7 +50,7 @@ define(
 		};
 
 
-		Notification.prototype.respond = function (obj) {
+		Notification.prototype.respond = function () {
 			if (this.callback) {
 				this.callback.apply(this.dispatcher, arguments);
 				this.cancel();
@@ -60,13 +60,12 @@ define(
 		var _pendingNotifications = [];
 		var _interests = {};
 
-		function _publishNotification (notification) {
-			var name = notification.name;
+		function _publishNotification(notification) {
 			_pendingNotifications.push(notification);
 			_notifyObjects(notification);
 		}
 
-		function _notifyObjects (notification) {
+		function _notifyObjects(notification) {
 
 			var name = notification.name;
 
@@ -75,12 +74,11 @@ define(
 				var subs = _interests[name].slice(0);
 				var len = subs.length;
 
-				while(notification.pointer < len) {
+				while (notification.pointer < len) {
 					if (notification.status === 1) {
 						subs[notification.pointer](notification);
 						notification.pointer ++;
-					}
-					else{
+					} else {
 						return;
 					}
 				}
@@ -106,8 +104,7 @@ define(
 
 			if (priority <= -1 || priority >= _interests[name].length) {
 				_interests[name].push(fn);
-			}
-			else{
+			} else {
 				_interests[name].splice(priority, 0, fn);
 			}
 		};
@@ -135,7 +132,6 @@ define(
 		};
 
 		NotificationManager.cancelNotification = function (notification) {
-			var name = notification.name;
 			_pendingNotifications.splice(_pendingNotifications.indexOf(notification), 1);
 			notification = null;
 		};

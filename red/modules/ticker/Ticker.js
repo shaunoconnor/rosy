@@ -22,6 +22,8 @@
 //  });
 define(["../Module"], function (Module) {
 
+	"use strict";
+
 	var EVENTS = {
 		START : "module/ticker/start",
 		TICK : "module/ticker/tick",
@@ -37,7 +39,7 @@ define(["../Module"], function (Module) {
 			end : null
 		},
 
-		init : function (vars) {
+		init : function () {
 			this.setupTicker();
 		},
 

@@ -28,6 +28,8 @@ define([
 	"$"
 ], function (Module, Scroller, $) {
 
+	"use strict";
+
 	var EVENTS = {
 		TOUCHINERTIA : "module/scroller/touchinertia",
 		TOUCHSTART : "module/scroller/touchstart",
@@ -40,7 +42,7 @@ define([
 
 		vars : {},
 
-		init : function (vars) {
+		init : function () {
 			this.setDOMReferences();
 			this.setupScroller();
 		},

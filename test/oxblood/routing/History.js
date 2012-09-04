@@ -10,6 +10,10 @@ define(
 
 	function (OxBlood, Class, ViewManager, ViewNotification, routes) {
 
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+		"use strict";
+
 		var REAL_URL = window.location.pathname + window.location.search,
 			REAL_HASH = window.location.hash = "",
 			HISTORY_SUPPORT = window.history && window.history.pushState;
@@ -20,7 +24,7 @@ define(
 
 				describe("useHistory = false", function () {
 
-					before(function (done){
+					before(function (done) {
 						ViewManager.getViewGroup("main").config.useHistory = false;
 						ViewManager.changeRoute("/test5", null, function () {
 							done();
@@ -38,7 +42,7 @@ define(
 
 					describe("useHistory = true", function () {
 
-						before(function(done){
+						before(function (done) {
 							ViewManager.getViewGroup("main").config.useHistory = true;
 							done();
 						});
@@ -57,7 +61,7 @@ define(
 
 							ViewManager.changeRoute("/test2");
 
-							var onPopState = function() {
+							var onPopState = function () {
 								expect(window.location.pathname).to.equal("/test1");
 								window.removeEventListener('popstate', onPopState);
 								history.pushState(null, null, REAL_URL);
@@ -73,7 +77,7 @@ define(
 
 				describe("useHistory = '#'", function () {
 
-					before(function(done){
+					before(function (done) {
 						ViewManager.getViewGroup("main").config.useHistory = "#";
 						done();
 					});

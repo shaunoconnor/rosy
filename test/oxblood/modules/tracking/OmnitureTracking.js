@@ -4,6 +4,11 @@ define([
 	"red/modules/Module",
 	"red/modules/tracking/OmnitureTracking"
 ], function (OxBlood, Class, Module, OmnitureTracking) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Omniture Tracking", function () {

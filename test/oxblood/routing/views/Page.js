@@ -9,26 +9,26 @@ define(
 		"use strict";
 
 		return View.extend({
-		
+
 			init : function () {
 
 			},
 
 			load : function () {
-				this.setTimeout(this.loadComplete,0);
+				this.setTimeout(this.loadComplete, 0);
 			},
 
 			transitionIn : function () {
-				this.setTimeout(this.transitionInComplete,0);
+				this.setTimeout(this.transitionInComplete, 0);
 			},
 
 			transitionOut : function () {
-				this.setTimeout(this.transitionOutComplete,0);
+				this.setTimeout(this.transitionOutComplete, 0);
 			},
 
 			cleanup : function () {
 				this.unsubscribe();
-				this.setTimeout(this.cleanupComplete,0);
+				this.setTimeout(this.cleanupComplete, 0);
 			},
 
 			loadComplete : function () {

@@ -9,8 +9,6 @@ define(
 
 	function (AbstractClass, NotificationManager) {
 
-		/*global $, window */
-
 		"use strict";
 
 		return AbstractClass.extend({
@@ -26,7 +24,7 @@ define(
 			/**
 			* Subscribes to a notification.
 			*/
-			subscribe : function(name, handler, priority) {
+			subscribe : function (name, handler, priority) {
 				this._interestHandlers = this._interestHandlers || {};
 
 				if (handler && !this._interestHandlers[name]) {
@@ -39,7 +37,7 @@ define(
 			/**
 			* Unsubscribes from a notification.
 			*/
-			unsubscribe : function(name) {
+			unsubscribe : function (name) {
 				if (!name) {
 					return this.unsubscribeAll();
 				}
@@ -55,7 +53,7 @@ define(
 			/**
 			* Unsubscribes from all notifications registered via this.subscribe();
 			*/
-			unsubscribeAll : function() {
+			unsubscribeAll : function () {
 				for (var interest in this._interestHandlers) {
 					if (this._interestHandlers.hasOwnProperty(interest)) {
 						this.unsubscribe(interest);
@@ -67,7 +65,7 @@ define(
 			/**
 			* Publishes a notification with the specified data.
 			*/
-			publish : function(name, data, callback) {
+			publish : function (name, data, callback) {
 				NotificationManager.publish(name, data, callback, this);
 			},
 

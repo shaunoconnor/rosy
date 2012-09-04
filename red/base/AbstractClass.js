@@ -13,31 +13,34 @@ define(
 
 		/*=========================== HELPER FUNCTIONS ===========================*/
 
-			var _createSuperFunction = function (fn, superFn) {
-				return function() {
-					var r, tmp = this.sup || null;
+		var _createSuperFunction = function (fn, superFn) {
+			return function () {
+				var r, tmp = this.sup || null;
 
-					// Reference the prototypes method, as super temporarily
-					this.sup = superFn;
+				// Reference the prototypes method, as super temporarily
+				this.sup = superFn;
 
-					r = fn.apply(this, arguments);
+				r = fn.apply(this, arguments);
 
-					// Reset this.sup
-					this.sup = tmp;
-					return r;
-				};
+				// Reset this.sup
+				this.sup = tmp;
+				return r;
 			};
+		};
 
-			/*
-			If Function.toString() works as expected, return a regex that checks for `sup()`
-			otherwise return a regex that passes everything.
-			*/
+		/*
+		If Function.toString() works as expected, return a regex that checks for `sup()`
+		otherwise return a regex that passes everything.
+		*/
 
-			var _doesCallSuper = /xyz/.test(function(){var xyz;}) ? /\bthis\.sup\b/ : /.*/;
+		var _doesCallSuper = (/xyz/).test(function () {
+			var xyz;
+			xyz = true;
+		}) ? (/\bthis\.sup\b/) : (/.*/);
 
 		/*=========================== END OF HELPER FUNCTIONS ===========================*/
 
-		return (function() {
+		return (function () {
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
 			var Prototype = function () {};
@@ -48,7 +51,7 @@ define(
 				Prototype.prototype = this.prototype;
 				var p, proto = Utils.extend(new Prototype(), props);
 
-				function Class (vars) {
+				function Class(vars) {
 
 					var fn,
 						p;

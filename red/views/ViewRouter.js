@@ -11,7 +11,7 @@ define(
 		return Class.extend({
 
 			_routes : [],
-		
+
 			init : function (viewGroups) {
 
 				var i,
@@ -49,9 +49,8 @@ define(
 					m,
 					param,
 					params,
-					paramVals,
 					views = [];
-				
+
 				for (l = this._routes.length, i = 0; i < l; i ++) {
 
 					r = this._routes[i];
@@ -62,7 +61,7 @@ define(
 						params = {};
 
 						for (j = 1, l2 = m.length; j < l2; j ++) {
-							param = r.params[j -1];
+							param = r.params[j - 1];
 							params[param.name] = m[j] || null;
 						}
 
@@ -131,8 +130,11 @@ define(
 					.replace(/\/\(/g, '(?:/')
 					.replace(/\+/g, '__plus__')
 					.replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g,
-						function(_, slash, format, key, capture, optional){
-							params.push({ name: key, optional: !! optional });
+						function (_, slash, format, key, capture, optional) {
+							params.push({
+								name : key,
+								optional : !! optional
+							});
 							slash = slash || '';
 							return '' +
 							(optional ? '' : slash) +
@@ -146,7 +148,7 @@ define(
 					.replace(/__plus__/g, '(.+)')
 					.replace(/\*/g, '(.*)');
 
-					return [new RegExp('^' + path + '$', sensitive ? '' : 'i'), params];
+				return [new RegExp('^' + path + '$', sensitive ? '' : 'i'), params];
 			}
 
 		});

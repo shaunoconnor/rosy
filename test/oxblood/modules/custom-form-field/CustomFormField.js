@@ -1,8 +1,14 @@
 define([
 	"OxBlood",
 	"red/modules/Module",
-	"red/modules/custom-form-field/CustomFormField"
-], function (OxBlood, Module, CustomFormField) {
+	"red/modules/custom-form-field/CustomFormField",
+	"$"
+], function (OxBlood, Module, CustomFormField, $) {
+
+	/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+	"use strict";
+
 	OxBlood.addModuleTests(function () {
 
 		describe("Module: Custom Form Field", function () {

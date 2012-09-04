@@ -11,6 +11,10 @@ define(
 
 	function (OxBlood, Class, ViewManager, History, Transitions, routes) {
 
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
+
+		"use strict";
+
 		var REAL_URL = window.location.pathname + window.location.search,
 			REAL_HASH = window.location.hash = "",
 			HISTORY_SUPPORT = window.history && window.history.pushState;
@@ -106,8 +110,8 @@ define(
 					});
 				});
 
-				History();
-				Transitions();
+				var history = new History();
+				var transitions = new Transitions();
 
 			});
 		});

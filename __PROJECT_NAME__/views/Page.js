@@ -10,7 +10,7 @@ define(
 		"use strict";
 
 		return View.extend({
-		
+
 			$content : "",
 
 			init : function () {
@@ -20,7 +20,7 @@ define(
 			load : function () {
 
 				var selector = this.viewGroup.config.selector;
-				
+
 				if (this.viewGroup.currentView !== null) {
 
 					/**
