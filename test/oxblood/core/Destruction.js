@@ -16,6 +16,10 @@ define([
 
 			describe("Class Destruction", function () {
 
+				var _getEvents = function (el) {
+					return $._data(el.get(0), "events");
+				};
+
 				it("should teardown the created Class", function (done) {
 					var TestClass = SubClass.extend({
 						vars : {
@@ -146,10 +150,6 @@ define([
 						}
 					});
 
-					var _getEvents = function (el) {
-						return (el.data("events") || $._data(el, "events"));
-					};
-
 					var testInstance = new TestClass();
 					expect(testInstance).to.be.a(DOMClass);
 					testInstance.destroy();
@@ -213,10 +213,6 @@ define([
 							done();
 						}
 					});
-
-					var _getEvents = function (el) {
-						return (el.data("events") || $._data(el, "events"));
-					};
 
 					var testInstance = new TestClass();
 					var testSiblingInstance = new TestSiblingClass();

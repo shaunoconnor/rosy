@@ -42,10 +42,16 @@ define(["$"], function ($) {
 			jqObj = obj[key];
 
 			if (jqObj instanceof $) {
-				events = jqObj.data("events") || $._data(jqObj, "events");
 
-				if (events) {
-					_matchJQueryGUIDs(instance, jqObj, events);
+				var i, j, el;
+
+				for (i = 0, j = jqObj.length; i < j; i++) {
+					el = jqObj[i];
+					events = $._data(el, "events");
+
+					if (events) {
+						_matchJQueryGUIDs(instance, jqObj.eq(i), events);
+					}
 				}
 			} else if ($.isPlainObject(jqObj)) {
 				_unbindFromObject(instance, jqObj);
