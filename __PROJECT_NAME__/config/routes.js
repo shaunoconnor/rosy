@@ -21,7 +21,7 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : "__PROJECT_NAME__/views/Home"),
+							"viewClass" : "__PROJECT_NAME__/views/Home",
 							"route" : "/index.html",
 							"config" : {
 								"bodyClass" : "home",
@@ -29,7 +29,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : "__PROJECT_NAME__/views/About"),
+							"viewClass" : "__PROJECT_NAME__/views/About",
 							"route" : "/about.html",
 							"config" : {
 								"bodyClass" : "about",
@@ -37,7 +37,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : "__PROJECT_NAME__/views/Contact"),
+							"viewClass" : "__PROJECT_NAME__/views/Contact",
 							"route" : "/contact.html",
 							"config" : {
 								"bodyClass" : "contact",
