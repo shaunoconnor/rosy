@@ -52,11 +52,11 @@ define(
 			},
 
 			transitionIn : function () {
-				this.$content.animate({opacity : 1}, this.transitionInComplete);
+				this.$content.animate({opacity : 1}, 500, this.transitionInComplete);
 			},
 
 			transitionOut : function () {
-				this.$content.animate({opacity : 0}, this.transitionOutComplete);
+				this.$content.animate({opacity : 0}, 500, this.transitionOutComplete);
 			},
 
 			destroy : function () {
