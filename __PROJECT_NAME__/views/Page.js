@@ -35,7 +35,7 @@ define(
 						this.$content = $(data).find(selector);
 						this.$content.css("opacity", "0");
 
-						$(selector).parent().append(this.$content);
+						$(selector).replaceWith(this.$content);
 						this.loadComplete();
 					}));
 				}
@@ -52,16 +52,16 @@ define(
 			},
 
 			transitionIn : function () {
-				this.$content.show(500, this.transitionInComplete);
+				this.$content.animate({opacity : 1}, this.transitionInComplete);
 			},
 
 			transitionOut : function () {
-				this.$content.hide(500, this.transitionOutComplete);
+				this.$content.animate({opacity : 0}, this.transitionOutComplete);
 			},
 
 			destroy : function () {
 				this.$content = null;
-				this.unsubscribe();
+				this.sup();
 			}
 		});
 	}
