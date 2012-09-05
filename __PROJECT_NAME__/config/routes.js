@@ -7,7 +7,7 @@ define(
 		return {
 
 			"aliases" : {
-
+				"/" : "/index.html"
 			},
 
 			"viewGroups" : [
