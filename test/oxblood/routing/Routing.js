@@ -26,16 +26,7 @@ define(
 
 				before(function (done) {
 					ViewManager.initialize({
-						// mode					:	hard|soft|hash,
-						// selectors			:	Array,
-						// bubble				:	true|false,
-						// container			:	String|DOMElement,
-						// defaultRoute			:	String,
-						// activeClass			:	String,
-						// disabledClass		:	String,
-						// TransitionManager	:	Class,
-						// defaultRoute : "/test",
-						mode : "soft",
+						fallbackMode : "soft",
 						aliases : routes.aliases,
 						viewGroups : routes.viewGroups
 					});

@@ -15,7 +15,7 @@ define(
 			initialize : function () {
 
 				ViewManager.initialize({
-					// mode					:	hard|soft|hash,
+					// fallbackMode			:	hard|soft|hash,
 					// selectors			:	Array,
 					// bubble				:	true|false,
 					// container			:	String|DOMElement,

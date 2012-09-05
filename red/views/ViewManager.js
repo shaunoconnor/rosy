@@ -30,14 +30,14 @@ define(
 			_activeElements : {},
 
 			/**
-			*	SUPPORTED MODES:
+			*	SUPPORTED FALLBACK MODES:
 			*
 			*	soft	- If the History API is not supported, changes state without url change.
 			*	hard	- If the History API is not supported, forces hard reloads on all links.
 			*	hash|#	- If the History API is not supported, falls back to hash tags.
 			**/
 
-			mode : "hard",
+			fallbackMode : "hard",
 			aliases : [],
 			selectors : ["[data-route]", "a[href^='#']", "a[href^='/']"],
 			activeClass : "active",
@@ -50,7 +50,7 @@ define(
 			*	CONFIG OPTIONS:
 			*
 			*	viewGroups			:	Array
-			*	mode				:	hard|soft|hash
+			*	fallbackMode			:	hard|soft|hash
 			*	aliases				:	Array
 			*	selectors			:	Array
 			*	bubble				:	true|false
@@ -73,11 +73,11 @@ define(
 					viewGroups = config.viewGroups,
 					defaultRoute = config.defaultRoute || null;
 
-				config.mode = config.mode === "hash" ? "#" : config.mode;
+				config.fallbackMode = config.fallbackMode === "hash" ? "#" : config.fallbackMode;
 
 				TransitionManager	=	config.TransitionManager || TransitionManager;
 
-				this.mode			=	config.mode || this.mode;
+				this.fallbackMode	=	config.fallbackMode || this.fallbackMode;
 				this.aliases		=	config.aliases || this.aliases;
 				this.selectors		=	config.selectors || this.selectors;
 				this.activeClass	=	config.activeClass || this.activeClass;
@@ -100,7 +100,7 @@ define(
 					viewGroup.config.useHistory = viewGroup.config.useHistory === "hash" ? "#" : viewGroup.config.useHistory;
 					this._viewGroups.push(viewGroup);
 
-					if (viewGroup.config.useHistory === "#" && this.mode === "#") {
+					if (viewGroup.config.useHistory === "#" && this.fallbackMode === "#") {
 						ERROR_HANDLER(new Error("You can't use the 'hash' fallback mode in conjunction with useHistory = 'hash'"));
 					}
 				}
@@ -113,7 +113,7 @@ define(
 				}
 
 				else {
-					if (this.mode === "#") {
+					if (this.fallbackMode === "#") {
 						HASH_VALUE = window.location.hash;
 						this._pollInterval = this.setInterval(this._pollForHashChange, 100);
 					}
@@ -452,7 +452,7 @@ define(
 					history.pushState(null, title || "", route + window.location.hash);
 				}
 
-				else if (useHash || this.mode === "#") {
+				else if (useHash || this.fallbackMode === "#") {
 
 					if (!this._pollInterval) {
 						HASH_VALUE = HASH_VALUE || window.location.hash;
