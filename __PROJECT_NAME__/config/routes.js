@@ -4,12 +4,6 @@ define(
 
 		"use strict";
 
-		var namespace = "routingExample";
-
-		function ns(route) {
-			return namespace + route;
-		}
-
 		return {
 
 			"aliases" : {
@@ -27,7 +21,7 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : ns("/views/Home"),
+							"viewClass" : "__PROJECT_NAME__/views/Home"),
 							"route" : "/index.html",
 							"config" : {
 								"bodyClass" : "home",
@@ -35,7 +29,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : ns("/views/About"),
+							"viewClass" : "__PROJECT_NAME__/views/About"),
 							"route" : "/about.html",
 							"config" : {
 								"bodyClass" : "about",
@@ -43,7 +37,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : ns("/views/Contact"),
+							"viewClass" : "__PROJECT_NAME__/views/Contact"),
 							"route" : "/contact.html",
 							"config" : {
 								"bodyClass" : "contact",
