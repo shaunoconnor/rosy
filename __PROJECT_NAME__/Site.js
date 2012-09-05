@@ -12,20 +12,27 @@ define(
 
 		var Site = Class.extend({
 
+			initialized : false,
+
 			initialize : function () {
 
-				ViewManager.initialize({
-					// fallbackMode			:	hard|soft|hash,
-					// selectors			:	Array,
-					// bubble				:	true|false,
-					// container			:	String|DOMElement,
-					// defaultRoute			:	String,
-					// activeClass			:	String,
-					// disabledClass		:	String,
-					// TransitionManager	:	Class,
-					aliases : routes.aliases,
-					viewGroups : routes.viewGroups
-				});
+				if (!this.initialized) {
+
+					ViewManager.initialize({
+						// fallbackMode			:	hard|soft|hash,
+						// selectors			:	Array,
+						// bubble				:	true|false,
+						// container			:	String|DOMElement,
+						// defaultRoute			:	String,
+						// activeClass			:	String,
+						// disabledClass		:	String,
+						// TransitionManager	:	Class,
+						aliases : routes.aliases,
+						viewGroups : routes.viewGroups
+					});
+
+					this.initialized = true;
+				}
 			}
 		});
 
