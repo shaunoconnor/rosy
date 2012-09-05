@@ -29,8 +29,6 @@ define(
 			}
 		});
 
-		});
-
 		return new Site();
 	}
 );
