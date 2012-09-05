@@ -10,9 +10,9 @@ define(
 
 		"use strict";
 
-		return Class.extend({
+		var Site = Class.extend({
 
-			init : function () {
+			initialize : function () {
 
 				ViewManager.initialize({
 					// mode					:	hard|soft|hash,
@@ -29,5 +29,7 @@ define(
 			}
 
 		});
+
+		return new Site();
 	}
 );
