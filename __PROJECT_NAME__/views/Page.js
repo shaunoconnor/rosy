@@ -61,7 +61,6 @@ define(
 
 			destroy : function () {
 				this.$content = null;
-				this.sup();
 			}
 		});
 	}

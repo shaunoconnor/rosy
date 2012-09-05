@@ -2,10 +2,11 @@ define(
 
 	[
 		"../dom/DOMClass",
+		"../dom/DOMManager",
 		"./ViewNotification"
 	],
 
-	function (DOMClass, ViewNotification) {
+	function (DOMClass, DOMManager, ViewNotification) {
 
 		"use strict";
 
@@ -365,6 +366,10 @@ define(
 				this._loadCB = null;
 				this._inCB = null;
 				this._outCB = null;
+
+				if (DOMManager) {
+					DOMManager.unbindEvents(this);
+				}
 
 				this.unsubscribe();
 			}
