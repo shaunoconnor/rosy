@@ -51,10 +51,6 @@ console.log("");
 			} else if (jslibs.length) {
 				downloadLib();
 			} else {
-				if (fs.existsSync("libs.js")) {
-					fs.unlinkSync(("libs.js"));
-				}
-
 				process.exit();
 			}
 		});
