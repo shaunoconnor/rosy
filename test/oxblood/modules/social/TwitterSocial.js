@@ -1,7 +1,7 @@
 define([
 	"OxBlood",
-	"red/modules/Module",
-	"red/modules/social/TwitterSocial",
+	"rosy/modules/Module",
+	"rosy/modules/social/TwitterSocial",
 	"$"
 ], function (OxBlood, Module, TwitterSocial, $) {
 

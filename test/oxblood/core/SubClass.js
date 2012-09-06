@@ -1,6 +1,6 @@
 define(
 	[
-		"red/base/Class"
+		"rosy/base/Class"
 	],
 
 	function (Class) {

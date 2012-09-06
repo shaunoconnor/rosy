@@ -1,8 +1,8 @@
 define([
 	"OxBlood",
-	"red/base/Class",
-	"red/modules/Module",
-	"red/modules/scroller/Scroller",
+	"rosy/base/Class",
+	"rosy/modules/Module",
+	"rosy/modules/scroller/Scroller",
 	"$"
 ], function (OxBlood, Class, Module, Scroller, $) {
 

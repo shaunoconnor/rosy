@@ -1,8 +1,8 @@
 define([
 	"OxBlood",
-	"red/base/Class",
-	"red/modules/Module",
-	"red/modules/ios-page-control/PageControl",
+	"rosy/base/Class",
+	"rosy/modules/Module",
+	"rosy/modules/ios-page-control/PageControl",
 	"$"
 ], function (OxBlood, Class, Module, PageControl, $) {
 

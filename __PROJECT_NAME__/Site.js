@@ -1,8 +1,8 @@
 define(
 
 	[
-		"red/base/Class",
-		"red/views/ViewManager",
+		"rosy/base/Class",
+		"rosy/views/ViewManager",
 		"./config/routes"
 	],
 

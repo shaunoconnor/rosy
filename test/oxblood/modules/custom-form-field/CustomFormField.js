@@ -1,7 +1,7 @@
 define([
 	"OxBlood",
-	"red/modules/Module",
-	"red/modules/custom-form-field/CustomFormField",
+	"rosy/modules/Module",
+	"rosy/modules/custom-form-field/CustomFormField",
 	"$"
 ], function (OxBlood, Module, CustomFormField, $) {
 

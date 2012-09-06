@@ -2,8 +2,8 @@ define(
 
 	[
 		"OxBlood",
-		"red/base/Class",
-		"red/views/ViewManager",
+		"rosy/base/Class",
+		"rosy/views/ViewManager",
 		"./History",
 		"./Transitions",
 		"./routes"

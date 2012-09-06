@@ -2,9 +2,9 @@ define(
 
 	[
 		"OxBlood",
-		"red/base/Class",
-		"red/views/ViewManager",
-		"red/views/ViewNotification",
+		"rosy/base/Class",
+		"rosy/views/ViewManager",
+		"rosy/views/ViewNotification",
 		"./routes"
 	],
 

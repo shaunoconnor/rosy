@@ -1,8 +1,8 @@
 define([
 	"OxBlood",
-	"red/base/Class",
-	"red/modules/Module",
-	"red/modules/ticker/Ticker"
+	"rosy/base/Class",
+	"rosy/modules/Module",
+	"rosy/modules/ticker/Ticker"
 ], function (OxBlood, Class, Module, Ticker) {
 
 	/*global describe, expect, it, before, beforeEach, after, afterEach */

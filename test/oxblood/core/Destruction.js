@@ -1,7 +1,7 @@
 define([
 	"OxBlood",
-	"red/base/Class",
-	"red/dom/DOMClass",
+	"rosy/base/Class",
+	"rosy/dom/DOMClass",
 	"./SubClass",
 	"$"
 ], function (OxBlood, Class, DOMClass, SubClass, $) {

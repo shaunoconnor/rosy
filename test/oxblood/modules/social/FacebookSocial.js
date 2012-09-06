@@ -1,8 +1,8 @@
 define([
 	"OxBlood",
-	"red/base/Class",
-	"red/modules/Module",
-	"red/modules/social/FacebookSocial",
+	"rosy/base/Class",
+	"rosy/modules/Module",
+	"rosy/modules/social/FacebookSocial",
 	"$"
 ], function (OxBlood, Class, Module, FacebookSocial, $) {
 

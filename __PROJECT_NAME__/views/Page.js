@@ -1,7 +1,7 @@
 define(
 
 	[
-		"red/views/View",
+		"rosy/views/View",
 		"$"
 	],
 

@@ -6,8 +6,8 @@
 
 	require.config({
 		shim : {
-			"red/modules/scroller/zynga/src/Raf" : ["red/modules/scroller/zynga/src/Scroller"],
-			"red/modules/scroller/zynga/src/Animate" : ["red/modules/scroller/zynga/src/Raf"]
+			"rosy/modules/scroller/zynga/src/Raf" : ["rosy/modules/scroller/zynga/src/Scroller"],
+			"rosy/modules/scroller/zynga/src/Animate" : ["rosy/modules/scroller/zynga/src/Raf"]
 		}
 	});
 
