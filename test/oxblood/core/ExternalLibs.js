@@ -2,9 +2,9 @@ define([
 	"OxBlood",
 	"./SubClass",
 	"Handlebars",
-	"$",
-	"libs/json3"
-], function (OxBlood, SubClass, Handlebars, $) {
+	"libs/json3",
+	"$"
+], function (OxBlood, SubClass, Handlebars, JSON, $) {
 
 	/*global Modernizr, describe, expect, it, before, beforeEach, after, afterEach */
 

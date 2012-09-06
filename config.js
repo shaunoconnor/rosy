@@ -17,6 +17,9 @@ require.config({
 		"$" : {
 			exports : "jQuery"
 		},
+		"libs/json3" : {
+			exports : "JSON"
+		},
 		"CFInstall" : {
 			exports : "CFInstall"
 		},
