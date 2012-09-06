@@ -6,9 +6,10 @@ require.config({
 		"Cookies" : "libs/cookies",
 		"Handlebars" : "libs/handlebars",
 		"templates" : "../../templates",
+		"json" : "libs/json3",
 		"$plugin" : "libs/plugins/amd/jquery-plugin",
 		"text" : "libs/plugins/require/text",
-		"json" : "libs/plugins/require/json"
+		"jsonFile" : "libs/plugins/require/json"
 	},
 
 	waitSeconds : 15,
@@ -17,9 +18,7 @@ require.config({
 		"$" : {
 			exports : "jQuery"
 		},
-		"libs/json3" : {
-			exports : "JSON"
-		},
+
 		"CFInstall" : {
 			exports : "CFInstall"
 		},
