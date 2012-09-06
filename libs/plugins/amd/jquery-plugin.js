@@ -1,34 +1,57 @@
-(function () {
+define(
 
-	var prefix = "libs/plugins/jquery/jquery.";
+	[
+		"module",
+		"text"
+	],
 
-	define({
-		load : function (name, req, load, config) {
-			req(["$"], function ($) {
-				if (!config.isBuild) {
-					req([prefix + name], function (val) {
-						load(val);
-					});
-				} else {
-					load("");
-				}
-			});
-		},
+	function (module, text) {
 
-		loadFromFileSystem : function (plugin, name) {
-			var fs = nodeRequire("fs");
-			var file = require.toUrl(prefix + name) + ".js";
-			var text = fs.readFileSync(file).toString();
+		var prefix = "libs/plugins/jquery/jquery.";
 
-			text = "define('" + plugin + "!" + name  +
-			"', ['jquery'], function () {\n" + text + "\nreturn jQuery;\n});\n";
+		return {
 
-			return text;
-		},
+			load: function (name, req, load, config) {
 
-		write : function (pluginName, moduleName, write, config) {
-			write(this.loadFromFileSystem(pluginName, moduleName));
-		}
-	});
+				req(['$'], function ($) {
 
-})();
+					if (!config.isBuild) {
+
+						req(["text!" + prefix + name + ".js"], function (val) {
+
+							var contents = "define('" + module.id + "!" + name  +
+							"', ['$'], function ($) {\nvar jQuery = $;\n" + val + ";\nreturn $;\n});\n";
+
+							eval(contents);
+
+							req([module.id + "!" + name], function (val) {
+								load(val);
+							});
+
+						});
+
+					}
+					else {
+						load("");
+					}
+				});
+			},
+
+			loadFromFileSystem : function (plugin, name) {
+				var fs = nodeRequire('fs');
+				var file = require.toUrl(prefix + name) + ".js";
+				var contents = fs.readFileSync(file).toString();
+
+				contents = "define('" + plugin + "!" + name  +
+				"', ['$'], function ($) {\nvar jQuery = $;\n" + contents + ";\nreturn $;\n});\n";
+
+				return contents;
+			},
+
+			write: function (pluginName, moduleName, write, config) {
+				write(this.loadFromFileSystem(pluginName, moduleName));
+			}
+
+		};
+	}
+);
