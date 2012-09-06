@@ -18,9 +18,7 @@ define(
 				autoProxy : true
 			},
 
-			init : function () {
-
-			},
+			init : function () {},
 
 			/**
 			* Subscribes to a notification.
