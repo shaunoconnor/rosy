@@ -13,7 +13,7 @@ define([
 		COOKIE_NAME : "noChromeFrame"
 	};
 
-	return Module.extend({
+	var ChromeFrame = Module.extend({
 		vars : {},
 
 		"static" : STATIC,
@@ -143,4 +143,6 @@ define([
 			this.vars.frame.remove();
 		}
 	});
+
+	return new ChromeFrame();
 });
