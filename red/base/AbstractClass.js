@@ -42,6 +42,19 @@ define(
 
 		return (function () {
 
+			/**
+			* Allows us to store module id's on Classes for easier debugging, See;
+			* https://github.com/jrburke/requirejs/wiki/Internal-API:-onResourceLoad
+			**/
+
+			require.onResourceLoad = function (context, map, dependencies) {
+				var module = context.require(map.id);
+
+				if (module && module._isRosyClass) {
+					module._moduleID = module.prototype._moduleID = map.id;
+				}
+			}
+
 			// Setup a dummy constructor for prototype-chaining without any overhead.
 			var Prototype = function () {};
 			var MClass = function () {};
@@ -108,6 +121,7 @@ define(
 
 				Class.prototype = proto;
 				Utils.extend(Class, this, props.static, staticProps);
+				Class._isRosyClass = true;
 
 				Class.prototype.constructor = Class.prototype.static = Class;
 
