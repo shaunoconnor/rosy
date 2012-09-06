@@ -26,20 +26,6 @@ define(
 				return $.proxy(fn, this);
 			},
 
-			/**
-			* Middleware setTimeout method. Allows for scope retention inside timers.
-			*/
-			setTimeout : function (func, delay) {
-				return window.setTimeout(this.proxy(func), delay);
-			},
-
-			/**
-			* Middleware setInterval method. Allows for scope retention inside timers.
-			*/
-			setInterval : function (func, delay) {
-				return window.setInterval(this.proxy(func), delay);
-			},
-
 			destroy : function () {
 				if (DOMManager) {
 					DOMManager.unbindEvents(this);

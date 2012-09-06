@@ -76,6 +76,20 @@ define(
 				return fn ? fn.bind(this) : fn;
 			},
 
+			/**
+			* Middleware setTimeout method. Allows for scope retention inside timers.
+			*/
+			setTimeout : function (func, delay) {
+				return window.setTimeout(this.proxy(func), delay);
+			},
+
+			/**
+			* Middleware setInterval method. Allows for scope retention inside timers.
+			*/
+			setInterval : function (func, delay) {
+				return window.setInterval(this.proxy(func), delay);
+			},
+
 			destroy : function () {
 				this.unsubscribe();
 			}
