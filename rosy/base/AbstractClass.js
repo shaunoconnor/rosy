@@ -107,9 +107,15 @@ define(
 						}
 
 						else if (props[p] !== null) {
+
 							if (p === "vars") {
 								proto[p] = Utils.extend({}, true, this.prototype[p], props[p]);
 							}
+
+							else if (p === "static") {
+								proto[p] = Utils.extend({}, this.prototype[p], props[p]);
+							}
+
 							else {
 								proto[p] = Utils.extend({}, props[p]);
 							}
@@ -120,10 +126,10 @@ define(
 				proto.extend = MClass.extend.bind(Class);
 
 				Class.prototype = proto;
-				Utils.extend(Class, this, props["static"], staticProps);
+				Utils.extend(Class, this, proto["static"], staticProps);
 				Class._isRosyClass = true;
 
-				Class.prototype.constructor = Class.prototype["static"] = Class;
+				Class.prototype.constructor = Class;
 
 				if (typeof Class.prototype.setup === "function") {
 					Class.prototype.setup.call(Class);
