@@ -5,12 +5,7 @@ module.exports = {
 	}, {
 		"name" : "Handlebars",
 		"filename" : "handlebars.js",
-		"src" : "https://raw.github.com/SlexAxton/require-handlebars-plugin/master/Handlebars.js",
-		"pluginsPath" : "handlebars",
-		"plugins" : [{
-			"name" : "Require Handlebars Plugin",
-			"src" : "https://raw.github.com/SlexAxton/require-handlebars-plugin/master/hbs.js"
-		}]
+		"src" : "http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"
 	}, {
 		"name" : "JSON3",
 		"src" : "http://bestiejs.github.com/json3/lib/json3.js"
