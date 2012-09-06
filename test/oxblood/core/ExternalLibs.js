@@ -2,7 +2,7 @@ define([
 	"OxBlood",
 	"./SubClass",
 	"Handlebars",
-	"libs/json3",
+	"json",
 	"$"
 ], function (OxBlood, SubClass, Handlebars, JSON, $) {
 
