@@ -1,10 +1,10 @@
 define([
-	"../Module",
-	"../tracking/GATracking",
+	"rosy/modules/Module",
+	"rosy/modules/tracking/GATracking",
 	"CFInstall",
 	"Cookies",
 	"$",
-	"text!./template/chrome-frame.html"
+	"text!rosy/modules/google-chrome-frame/template/chrome-frame.html"
 ], function (Module, GATracking, CFInstall, Cookies, $, html) {
 
 	"use strict";
