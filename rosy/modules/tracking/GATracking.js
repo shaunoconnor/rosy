@@ -29,14 +29,6 @@ define(["../Module", "$"], function (Module, $) {
 		init : function () {
 			this.loadJSDK();
 
-		},
-
-		log : function () {
-			if (this.vars.debug) {
-				try {
-					console.log(arguments);
-				} catch (e) {}
-			}
 			this.subscribe(STATIC.TRACK, this.track);
 		},
 
@@ -45,14 +37,11 @@ define(["../Module", "$"], function (Module, $) {
 
 			data.type = data.type || "event"; // default to an event tracking type
 
-			this.log("ga track", data.type, data);
-
 			switch (data.type) {
 			case 'event':
 				_gaq.push(['_trackEvent', data.category, data.action, data.label, data.value]);
 				break;
 			case 'social':
-				this.log("Tracking: GA social (not hooked up yet)::", data);
 				//_gaq.push(['_trackSocial', network, socialAction, opt_target, opt_pagePath]);
 				break;
 			default:
@@ -73,8 +62,6 @@ define(["../Module", "$"], function (Module, $) {
 			if (!this.vars.domain) {
 				throw 'tracking:GA missing DOMAIN <meta property="ga:domain" content="xxxxx.com"/>';
 			}
-
-			this.log("ga.tracking:: " + this.vars.property_id);
 
 			_gaq.push(["_setAccount", this.vars.property_id]);
 			_gaq.push(["_setDomainName", this.vars.domain]);

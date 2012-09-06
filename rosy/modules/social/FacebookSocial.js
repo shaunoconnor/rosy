@@ -72,8 +72,6 @@ define([
 					FB.api("/me/" + action, 'post', options.properties, function (response) {
 						this.publish(STATIC.HANDLE_ACTION, [response]);
 					});
-				} else {
-					this.log("Facebook: You're doing actions wrong");
 				}
 			}
 		},
@@ -87,8 +85,6 @@ define([
 					IS_CONNECTED = false;
 					this.publish(STATIC.HANDLE_LOGOUT, [response]);
 				}
-
-				this.log(response);
 			}));
 		},
 
@@ -122,7 +118,6 @@ define([
 
 		getLogin : function () {
 			FB.login(function (response) {
-				this.log(response);
 				if (response.authResponse) {
 					IS_CONNECTED = true;
 					this.publish(STATIC.HANDLE_LOGIN, [response]);
@@ -272,14 +267,6 @@ define([
 
 		render : function () {
 			FB.XFBML.parse();
-		},
-
-		log : function () {
-			if (this.vars.debug) {
-				try {
-					console.log(arguments);
-				} catch (e) {}
-			}
 		},
 
 		loadJSDK : function () {

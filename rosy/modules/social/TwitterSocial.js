@@ -128,12 +128,6 @@ define([
 			return qs;
 		},
 
-		log : function () {
-			if (this.vars.debug && window.console) {
-				console.log(arguments);
-			}
-		},
-
 		// override this for tracking and such
 		// fires from custom tweet AND from @anywhere plugins
 		onTweet: function (e, eData) {
