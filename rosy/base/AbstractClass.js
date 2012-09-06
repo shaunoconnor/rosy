@@ -59,7 +59,7 @@ define(
 			var Prototype = function () {};
 			var MClass = function () {};
 
-			MClass.extend = function (props, staticProps) {
+			MClass.extend = function (props) {
 
 				Prototype.prototype = this.prototype;
 				var p, proto = Utils.extend(new Prototype(), props);
@@ -126,7 +126,7 @@ define(
 				proto.extend = MClass.extend.bind(Class);
 
 				Class.prototype = proto;
-				Utils.extend(Class, this, proto["static"], staticProps);
+				Utils.extend(Class, this, proto["static"]);
 				Class._isRosyClass = true;
 
 				Class.prototype.constructor = Class;
