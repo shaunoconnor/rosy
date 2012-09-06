@@ -1,4 +1,4 @@
-![Rosy](http://ff0000.github.com/rosy/rosy.png)
+![Rosy](http://ff0000.github.com/rosy/rosy.png?)
 
 ##### An inheritable AMD Framework.
 
