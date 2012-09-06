@@ -1,6 +1,26 @@
 ![Rosy](http://ff0000.github.com/rosy/rosy.png)
 ##### An inheritable AMD Framework.
 
+### Support
+
+Rosy is [verified to work](https://github.com/ff0000/rosy/wiki/Unit-Tests) in the following browsers:
+
+#### Desktop:
+
+- Chrome (latest)
+- Safari (latest)
+- Firefox (latest)
+- Internet Explorer 7, 8, 9, 10
+
+#### iOS:
+
+- Safari (latest)
+- Chrome (latest)
+
+#### Android:
+
+- Chrome (Nexus 7)
+
 ### Documentation
 
 For documentation and implementation details, check out the [wiki.](https://github.com/ff0000/rosy/wiki)
