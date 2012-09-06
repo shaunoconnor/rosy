@@ -120,10 +120,10 @@ define(
 				proto.extend = MClass.extend.bind(Class);
 
 				Class.prototype = proto;
-				Utils.extend(Class, this, props.static, staticProps);
+				Utils.extend(Class, this, props["static"], staticProps);
 				Class._isRosyClass = true;
 
-				Class.prototype.constructor = Class.prototype.static = Class;
+				Class.prototype.constructor = Class.prototype["static"] = Class;
 
 				if (typeof Class.prototype.setup === "function") {
 					Class.prototype.setup.call(Class);

@@ -40,7 +40,7 @@ define(
 			_outTimeout : null,
 			_cleanupTimeout : null,
 
-			static : {
+			"static" : {
 				setMaxWaitTime : function (ms) {
 					MAX_WAIT_TIME = ms;
 				},
