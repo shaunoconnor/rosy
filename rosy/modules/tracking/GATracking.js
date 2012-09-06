@@ -12,11 +12,13 @@ define(["../Module", "$"], function (Module, $) {
 	/*global _gaq:true*/
 	window._gaq = window._gaq || [];
 
-	var EVENTS = {
+	var STATIC = {
 		TRACK : "module/tracking/google-analytics/track"
 	};
 
 	return Module.extend({
+
+		"static" : STATIC,
 
 		vars : {
 			debug : true,
@@ -27,7 +29,6 @@ define(["../Module", "$"], function (Module, $) {
 		init : function () {
 			this.loadJSDK();
 
-			this.subscribe(EVENTS.TRACK, this.track);
 		},
 
 		log : function () {
@@ -36,6 +37,7 @@ define(["../Module", "$"], function (Module, $) {
 					console.log(arguments);
 				} catch (e) {}
 			}
+			this.subscribe(STATIC.TRACK, this.track);
 		},
 
 		track : function (n) {
@@ -93,5 +95,5 @@ define(["../Module", "$"], function (Module, $) {
 			this.sup();
 		}
 
-	}, EVENTS);
+	});
 });

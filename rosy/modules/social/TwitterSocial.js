@@ -27,7 +27,7 @@ define([
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		POST : "module/social/twitter/post",
 		RENDER : "module/social/twitter/render",
 
@@ -44,6 +44,8 @@ define([
 
 	return Module.extend({
 
+		"static" : STATIC,
+
 		_twitter_url : "https://twitter.com/share?",
 
 		vars : {
@@ -55,12 +57,12 @@ define([
 			this.loadJSDK();
 
 			$("body").on("click", '[data-custom-social="twitter"]', this.customTweet);
-			this.subscribe(EVENTS.POST,  this.customTweet);
-			this.subscribe(EVENTS.RENDER, this.render);
+			this.subscribe(STATIC.POST,  this.customTweet);
+			this.subscribe(STATIC.RENDER, this.render);
 		},
 
 		onTwitterInit : function () {
-			this.subscribe(EVENTS.LOGOUT, this.getLogout);
+			this.subscribe(STATIC.LOGOUT, this.getLogout);
 
 			if (window.twttr) {
 				var that = this;
@@ -70,11 +72,11 @@ define([
 					T.bind("authComplete", that.onAuthComplete);
 					T.bind("signOut", that.onSignOut);
 
-					that.subscribe(EVENTS.LOGIN, function () {
+					that.subscribe(STATIC.LOGIN, function () {
 						T.signIn();
 					});
 
-					that.subscribe(EVENTS.POST_STATUS, function (e, data) {
+					that.subscribe(STATIC.POST_STATUS, function (e, data) {
 						if (T.isConnected()) {
 							T.Status.update(data.text);
 						} else {
@@ -82,7 +84,7 @@ define([
 						}
 					});
 
-					that.subscribe(EVENTS.GET_STATUS, function () {
+					that.subscribe(STATIC.GET_STATUS, function () {
 						if (T.isConnected()) {
 							that.onAuthComplete(null, T.currentUser);
 						} else {
@@ -94,11 +96,11 @@ define([
 		},
 
 		onAuthComplete : function (e, eData) {
-			this.publish(EVENTS.HANDLE_LOGIN, [eData]);
+			this.publish(STATIC.HANDLE_LOGIN, [eData]);
 		},
 
 		onSignOut : function () {
-			this.publish(EVENTS.HANDLE_LOGOUT);
+			this.publish(STATIC.HANDLE_LOGOUT);
 		},
 
 		getLogout : function () {
@@ -209,6 +211,6 @@ define([
 			this.sup();
 		}
 
-	}, EVENTS);
+	});
 
 });

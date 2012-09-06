@@ -24,13 +24,15 @@ define(["../Module"], function (Module) {
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		START : "module/ticker/start",
 		TICK : "module/ticker/tick",
 		COMPLETE : "module/ticker/complete"
 	};
 
 	return Module.extend({
+
+		"static" : STATIC,
 
 		// now, start & end should be [Date-parseable formats](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date).
 		vars : {
@@ -63,14 +65,14 @@ define(["../Module"], function (Module) {
 			this.vars.time = this.getPrettyTime();
 
 			if (Math.max.apply(this, this.vars.time) <= 0) {
-				this.stopTicker(EVENTS.COMPLETE);
+				this.stopTicker(STATIC.COMPLETE);
 			} else if (this.vars.currentTime >= this.vars.startTime) {
 				if (!this.vars.startFired) {
-					this.publish(EVENTS.START);
+					this.publish(STATIC.START);
 					this.vars.startFired = true;
 				}
 
-				this.publish(EVENTS.TICK, this.vars.time);
+				this.publish(STATIC.TICK, this.vars.time);
 			}
 		},
 
@@ -132,6 +134,6 @@ define(["../Module"], function (Module) {
 
 			this.sup();
 		}
-	}, EVENTS);
+	});
 
 });

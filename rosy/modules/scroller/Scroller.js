@@ -30,7 +30,7 @@ define([
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		TOUCHINERTIA : "module/scroller/touchinertia",
 		TOUCHSTART : "module/scroller/touchstart",
 		TOUCHMOVE : "module/scroller/touchmove",
@@ -39,6 +39,8 @@ define([
 
 	// Extends red.Module
 	return Module.extend({
+
+		"static" : STATIC,
 
 		vars : {},
 
@@ -91,7 +93,7 @@ define([
 
 					scope.style[transformProperty] = "translate3d(" + (-left) + "px," + (-top) + "px, 0) scale(" + zoom + ")";
 
-					self.publish(EVENTS.TOUCHINERTIA, {
+					self.publish(STATIC.TOUCHINERTIA, {
 						type: "touchinertia",
 						translateX: left,
 						translateY: top,
@@ -112,7 +114,7 @@ define([
 
 					scope.style[transformProperty] = "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")";
 
-					self.publish(EVENTS.TOUCH, {
+					self.publish(STATIC.TOUCH, {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -134,7 +136,7 @@ define([
 					scope.style.marginTop = top ? (-top / zoom) + "px" : "";
 					scope.style.zoom = zoom || "";
 
-					self.publish(EVENTS.TOUCH, {
+					self.publish(STATIC.TOUCH, {
 						translateX: left,
 						translateY: top,
 						zoom: zoom
@@ -200,7 +202,7 @@ define([
 			}
 
 			this.vars.scroller.doTouchStart(touches, o.timeStamp);
-			this.publish(EVENTS.TOUCHSTART, e);
+			this.publish(STATIC.TOUCHSTART, e);
 
 			e.preventDefault();
 		},
@@ -210,14 +212,14 @@ define([
 			var touches = o.touches || [{}];
 
 			this.vars.scroller.doTouchMove(touches, o.timeStamp, o.scale);
-			this.publish(EVENTS.TOUCHMOVE, o);
+			this.publish(STATIC.TOUCHMOVE, o);
 		},
 
 		onTouchEnd : function (e) {
 			var o = e.originalEvent || e;
 
 			this.vars.scroller.doTouchEnd(o.timeStamp);
-			this.publish(EVENTS.TOUCHEND, o);
+			this.publish(STATIC.TOUCHEND, o);
 		},
 
 		onMouseDown : function (e) {
@@ -233,7 +235,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.publish(EVENTS.TOUCHSTART, e);
+			this.publish(STATIC.TOUCHSTART, e);
 			this.vars.mousedown = true;
 		},
 
@@ -247,7 +249,7 @@ define([
 				pageY: e.pageY
 			}], e.timeStamp);
 
-			this.publish(EVENTS.TOUCHMOVE, e);
+			this.publish(STATIC.TOUCHMOVE, e);
 			this.vars.mousedown = true;
 		},
 
@@ -258,7 +260,7 @@ define([
 
 			this.vars.scroller.doTouchEnd(e.timeStamp);
 
-			this.publish(EVENTS.TOUCHEND, e);
+			this.publish(STATIC.TOUCHEND, e);
 			this.vars.mousedown = false;
 		},
 
@@ -296,6 +298,6 @@ define([
 
 			this.sup();
 		}
-	}, EVENTS);
+	});
 
 });

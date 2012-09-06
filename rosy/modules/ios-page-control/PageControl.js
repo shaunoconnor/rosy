@@ -20,13 +20,15 @@ define(["../Module", "$"], function (Module, $) {
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		TOUCHEND : "module/page-control/touchend",
 		PAGINATE : "module/page-control/paginate"
 	};
 
 	// Extends red.Module
 	return Module.extend({
+
+		"static" : STATIC,
 
 		vars : {
 			className : "page-control",
@@ -217,7 +219,7 @@ define(["../Module", "$"], function (Module, $) {
 					this.flagActiveItem(element);
 					this.animateTo(element, control, list);
 
-					this.publish(EVENTS.TOUCHEND);
+					this.publish(STATIC.TOUCHEND);
 				}),
 
 				// A safety catcher for CSS transitions.
@@ -339,7 +341,7 @@ define(["../Module", "$"], function (Module, $) {
 				this.resetTransition(el, 0);
 				this.setTransform(el, matrix);
 
-				this.publish(EVENTS.PAGINATE);
+				this.publish(STATIC.PAGINATE);
 			}
 		},
 
@@ -376,6 +378,6 @@ define(["../Module", "$"], function (Module, $) {
 			}
 			this.sup();
 		}
-	}, EVENTS);
+	});
 
 });

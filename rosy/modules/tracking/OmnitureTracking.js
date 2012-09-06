@@ -16,11 +16,13 @@ define([
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		TRACK : "module/tracking/omniture/track"
 	};
 
 	return Module.extend({
+
+		"static" : STATIC,
 
 		_tracker : null,
 
@@ -28,22 +30,12 @@ define([
 			debug : true // set to false for production
 		},
 
-		log : function () {
-			if (this.vars.debug) {
-				try {
-					console.log(arguments);
-				} catch (e) {}
-			}
-		},
-
-
 		init : function () {
-			this.subscribe(EVENTS.TRACK, this.track);
+			this.subscribe(STATIC.TRACK, this.track);
 		},
 
 		track : function (n) {
 			var data = n.data;
-			this.log("o track is not setup yet =(", data.type, data);
 		},
 
 		onReady : function () {
@@ -67,5 +59,5 @@ define([
 			this.sup();
 		}
 
-	}, EVENTS);
+	});
 });

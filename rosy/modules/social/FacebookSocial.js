@@ -27,7 +27,7 @@ define([
 
 	"use strict";
 
-	var EVENTS = {
+	var STATIC = {
 		POST : "social/facebook/post",
 		RENDER : "social/facebook/render",
 		LOGIN : "social/facebook/login",
@@ -48,6 +48,8 @@ define([
 
 	return Module.extend({
 
+		"static" : STATIC,
+
 		vars : {
 			debug : true
 		},
@@ -58,7 +60,7 @@ define([
 			$(document).on("click", '[data-custom-social="facebook"]', this.customFacebookPost);
 		},
 
-		// this.publish(EVENTS.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
+		// this.publish(STATIC.SET_ACTION, {custom_action:"rsvp", type :properties: {event:"http://shum-harden.com/meta?"}})
 		setAction : function (n) {
 			var options = n.data;
 
@@ -68,7 +70,7 @@ define([
 
 				if (action && options.properties) {
 					FB.api("/me/" + action, 'post', options.properties, function (response) {
-						this.publish(EVENTS.HANDLE_ACTION, [response]);
+						this.publish(STATIC.HANDLE_ACTION, [response]);
 					});
 				} else {
 					this.log("Facebook: You're doing actions wrong");
@@ -80,10 +82,10 @@ define([
 			FB.getLoginStatus(this.proxy(function (response) {
 				if (response.session || response.status === "connected") {// user has a session, make sure they are "FULLY REGSITERED"
 					IS_CONNECTED = true;
-					this.publish(EVENTS.HANDLE_LOGIN, [response]);
+					this.publish(STATIC.HANDLE_LOGIN, [response]);
 				} else {
 					IS_CONNECTED = false;
-					this.publish(EVENTS.HANDLE_LOGOUT, [response]);
+					this.publish(STATIC.HANDLE_LOGOUT, [response]);
 				}
 
 				this.log(response);
@@ -94,7 +96,7 @@ define([
 			FB.logout(function (response) {
 				IS_CONNECTED = false;
 
-				this.publish(EVENTS.HANDLE_LOGOUT, [response]);
+				this.publish(STATIC.HANDLE_LOGOUT, [response]);
 				this.publish(Tracking.TRACK, [{
 					type : "event",
 					category: "facebook",
@@ -107,7 +109,7 @@ define([
 		getMe : function () {
 			if (IS_CONNECTED) {
 				FB.api('/me', function (response) {
-					this.publish(EVENTS.HANDLE_ME, [response]);
+					this.publish(STATIC.HANDLE_ME, [response]);
 					this.publish(Tracking.TRACK, [{
 						type : "event",
 						category: "facebook",
@@ -123,7 +125,7 @@ define([
 				this.log(response);
 				if (response.authResponse) {
 					IS_CONNECTED = true;
-					this.publish(EVENTS.HANDLE_LOGIN, [response]);
+					this.publish(STATIC.HANDLE_LOGIN, [response]);
 					this.publish(Tracking.TRACK, [{
 						type : "event",
 						category: "facebook",
@@ -237,13 +239,13 @@ define([
 		onFBInit : function () {
 			FB.Event.unsubscribe("xfbml.render", this.onFBInit); // unregister, we only want to init once
 
-			this.subscribe(EVENTS.POST,  this.customFacebookPost);
-			this.subscribe(EVENTS.RENDER, this.render);
-			this.subscribe(EVENTS.LOGIN, this.getLogin);
-			this.subscribe(EVENTS.LOGOUT, this.getLogout);
-			this.subscribe(EVENTS.GET_STATUS, this.getStatus);
-			this.subscribe(EVENTS.GET_ME, this.getMe);
-			this.subscribe(EVENTS.SET_ACTION, this.setAction);
+			this.subscribe(STATIC.POST,  this.customFacebookPost);
+			this.subscribe(STATIC.RENDER, this.render);
+			this.subscribe(STATIC.LOGIN, this.getLogin);
+			this.subscribe(STATIC.LOGOUT, this.getLogout);
+			this.subscribe(STATIC.GET_STATUS, this.getStatus);
+			this.subscribe(STATIC.GET_ME, this.getMe);
+			this.subscribe(STATIC.SET_ACTION, this.setAction);
 
 			this.getStatus();
 		},
@@ -310,6 +312,6 @@ define([
 
 			this.sup();
 		}
-	}, EVENTS);
+	});
 
 });
