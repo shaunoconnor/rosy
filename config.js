@@ -8,6 +8,8 @@ require.config({
 		"templates" : "../../templates"
 		"CFInstall" : "//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min",
 		"Cookies" : "libs/cookies",
+		"text" : "libs/plugins/require/text",
+		"json" : "libs/plugins/require/json"
 	},
 
 	waitSeconds: 15,
