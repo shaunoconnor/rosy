@@ -53,7 +53,7 @@ define(
 				if (module && module._isRosyClass) {
 					module._moduleID = module.prototype._moduleID = map.id;
 				}
-			}
+			};
 
 			// Setup a dummy constructor for prototype-chaining without any overhead.
 			var Prototype = function () {};
