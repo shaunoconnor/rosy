@@ -6,6 +6,8 @@ require.config({
 		"$plugin": "libs/plugins/amd/jquery-plugin",
 		"Handlebars": "libs/handlebars",
 		"templates" : "../../templates"
+		"CFInstall" : "//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min",
+		"Cookies" : "libs/cookies",
 	},
 
 	waitSeconds: 15,
@@ -13,6 +15,9 @@ require.config({
 	shim : {
 		"$" : {
 			exports : "jQuery"
+		},
+		"CFInstall" : {
+			exports : "CFInstall"
 		},
 		"Handlebars" : {
 			exports : "Handlebars"
