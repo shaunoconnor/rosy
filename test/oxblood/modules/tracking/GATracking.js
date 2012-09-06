@@ -15,7 +15,15 @@ define([
 
 			describe("GATracking", function () {
 
-				var testInstance = new GATracking();
+				var testInstance;
+
+				beforeEach(function () {
+					testInstance = new GATracking();
+				});
+
+				afterEach(function () {
+					testInstance.destroy();
+				});
 
 				it("GATracking should be a function", function () {
 					expect(GATracking).to.be.a("function");
@@ -49,6 +57,7 @@ define([
 								expect(n.data).to.be.an("object");
 								expect(n.data).to.have.keys("type", "category", "action", "label");
 
+								this.destroy();
 								done();
 							}
 						});

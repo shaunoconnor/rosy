@@ -3,6 +3,13 @@ module.exports = {
 		"name" : "jQuery",
 		"src" : "http://code.jquery.com/jquery.js"
 	}, {
+		name : "Google Chrome Frame",
+		"filename" : "cfinstall.js",
+		"src" : "http://ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"
+	}, {
+		"name" : "Cookies.js",
+		"src" : "https://raw.github.com/ScottHamper/Cookies/master/cookies.js"
+	}, {
 		"name" : "Handlebars",
 		"filename" : "handlebars.js",
 		"src" : "http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"
