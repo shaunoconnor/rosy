@@ -35,9 +35,6 @@ module.exports = {
 		"plugins" : [{
 			"name" : "text",
 			"src" : "https://raw.github.com/requirejs/text/latest/text.js"
-		}, {
-			"name" : "json",
-			"src" : "https://raw.github.com/millermedeiros/requirejs-plugins/master/src/json.js"
 		}]
 	}]
 };

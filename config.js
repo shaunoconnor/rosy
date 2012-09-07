@@ -10,8 +10,8 @@ require.config({
 		"templates" : "../../templates",
 		"json" : "libs/json3",
 		"$plugin" : "libs/plugins/amd/jquery-plugin",
-		"text" : "libs/plugins/require/text",
-		"jsonFile" : "libs/plugins/require/json"
+		"jsonFile" : "libs/plugins/amd/jsonFile",
+		"text" : "libs/plugins/require/text"
 	},
 
 	waitSeconds : 15,
