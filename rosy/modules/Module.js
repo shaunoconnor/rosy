@@ -1,4 +1,4 @@
-define(["../dom/DOMClass"], function (DOMClass) {
+define(["../base/DOMClass"], function (DOMClass) {
 
 	"use strict";
 
