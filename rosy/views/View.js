@@ -154,6 +154,10 @@ define(
 				this.cleanupComplete();
 			},
 
+			changeRoute : function () {
+				this.viewGroup.viewManager.changeRoute.apply(null, arguments);
+			},
+
 			updateTitle : function (title) {
 				this.viewGroup.viewManager.updateTitle(title);
 			},
