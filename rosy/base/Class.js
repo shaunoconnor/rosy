@@ -4,8 +4,7 @@ define(
 		"./AbstractClass",
 		"./NotificationManager",
 		"../polyfills/function-bind",
-		"../polyfills/array-indexof",
-		"../polyfills/request-animation-frame"
+		"../polyfills/array-indexof"
 	],
 
 	function (AbstractClass, NotificationManager) {
