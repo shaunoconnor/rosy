@@ -130,8 +130,17 @@ define(
 				this.initialized = true;
 			},
 
-			changeRoute : function (route, transition, cb) {
-				this._gotoRoute({route: route, transition: transition, cb : cb});
+			changeRoute : function (route/*, data|transition, cb*/) {
+
+				var data = Utils.isObject(arguments[1]) ? arguments[1] : {};
+				data.route = route;
+
+				data.transition = typeof arguments[1] === "string" ? arguments[1] : null;
+				data.cb = Utils.isFunction(arguments[1]) ? arguments[1] : (arguments[2] || null);
+
+				console.log(data);
+
+				this._gotoRoute(data);
 			},
 
 			updateTitle : function (title) {
