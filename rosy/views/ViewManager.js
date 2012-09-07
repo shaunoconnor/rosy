@@ -332,7 +332,7 @@ define(
 
 							if (currentView) {
 
-								if (currentView.viewClass === matchedView.viewClass) {
+								if (currentView.routeRegEx === matchedView.regex) {
 									if (currentView.__update(matchedView.params, data) === false) {
 										if (cb) {
 											cb();
