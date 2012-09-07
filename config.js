@@ -11,7 +11,7 @@ require.config({
 		"json" : "libs/json3",
 		"$plugin" : "libs/plugins/amd/jquery-plugin",
 		"jsonFile" : "libs/plugins/amd/jsonFile",
-		"text" : "libs/plugins/require/text"
+		"text" : "libs/plugins/amd/text"
 	},
 
 	waitSeconds : 15,

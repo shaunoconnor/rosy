@@ -31,7 +31,7 @@ module.exports = {
 	}, {
 		"name" : "Require.js",
 		"src" : "https://raw.github.com/jrburke/requirejs/master/require.js",
-		"pluginsPath" : "require",
+		"pluginsPath" : "amd",
 		"plugins" : [{
 			"name" : "text",
 			"src" : "https://raw.github.com/requirejs/text/latest/text.js"
