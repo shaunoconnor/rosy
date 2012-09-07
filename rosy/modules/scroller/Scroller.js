@@ -244,10 +244,12 @@ define([
 				return;
 			}
 
+			var timeStamp = e.timeStamp || (new Date().getTime());
+
 			this.vars.scroller.doTouchMove([{
-				pageX: e.pageX,
-				pageY: e.pageY
-			}], e.timeStamp);
+				pageX: e.pageX || 0,
+				pageY: e.pageY || 0
+			}], timeStamp);
 
 			this.publish(STATIC.TOUCHMOVE, e);
 			this.vars.mousedown = true;
@@ -284,15 +286,19 @@ define([
 			var container = $(this.vars.target),
 				doc = this.vars.doc;
 
-			if (container.length && doc) {
+			if (container) {
 				if ("ontouchstart" in window) {
 					container.off("touchstart", this.onTouchStart);
-					doc.off("touchmove", this.onTouchMove);
-					doc.off("touchend", this.onTouchEnd);
+					if (doc) {
+						doc.off("touchmove", this.onTouchMove);
+						doc.off("touchend", this.onTouchEnd);
+					}
 				} else {
 					container.off("mousedown", this.onMouseDown);
-					doc.off("mousemove", this.onMouseMove);
-					doc.off("mouseup", this.onMouseUp);
+					if (doc) {
+						doc.off("mousemove", this.onMouseMove);
+						doc.off("mouseup", this.onMouseUp);
+					}
 				}
 			}
 
