@@ -20,6 +20,15 @@ module.exports = {
 		"name" : "Modernizr",
 		"src" : "http://modernizr.com/downloads/modernizr.js"
 	}, {
+		"name" : "Zynga Scroller",
+		"src" : "https://raw.github.com/zynga/scroller/master/src/Scroller.js",
+		"filename" : "zynga/Scroller.js",
+		"pluginsPath" : "../zynga",
+		"plugins" : [{
+			"name" : "Animate",
+			"src" : "https://raw.github.com/zynga/scroller/master/src/Animate.js"
+		}]
+	}, {
 		"name" : "Require.js",
 		"src" : "https://raw.github.com/jrburke/requirejs/master/require.js",
 		"pluginsPath" : "require",

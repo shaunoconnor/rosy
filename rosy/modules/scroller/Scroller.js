@@ -24,7 +24,7 @@
 //  });
 define([
 	"../Module",
-	"./zynga/ZyngaScroller",
+	"zynga/Scroller",
 	"$"
 ], function (Module, Scroller, $) {
 

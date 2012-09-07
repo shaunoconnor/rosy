@@ -30,6 +30,8 @@ console.log("");
 	var filename = curr.filename || (options.pathname.split("/").reverse()[0]);
 	var pluginspath;
 
+	wrench.mkdirSyncRecursive(path.join(libpath, path.dirname(filename)));
+
 	if (plugin) {
 		pluginspath = path.join(libpath, "plugins", lib.pluginsPath);
 		wrench.mkdirSyncRecursive(pluginspath);
