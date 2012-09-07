@@ -7,57 +7,62 @@
 	- ssla-analytics/  (this file loads ssla-analytics/analytics.min.js)
 
  */
-define([
-	"../Module",
-	// we don't need an AMD reference to the scroller file,
-	// but we do need it to be included in the build
-	"./ssla-analytics/analytics.min"
-], function (Module) {
+define(
 
-	"use strict";
+	[
+		"../Module",
+		// we don't need an AMD reference to the scroller file,
+		// but we do need it to be included in the build
+		"./ssla-analytics/analytics.min"
+	],
 
-	var STATIC = {
-		TRACK : "module/tracking/omniture/track"
-	};
+	function (Module) {
 
-	return Module.extend({
+		"use strict";
 
-		"static" : STATIC,
+		var STATIC = {
+			TRACK : "module/tracking/omniture/track"
+		};
 
-		_tracker : null,
+		return Module.extend({
 
-		vars : {
-			debug : true // set to false for production
-		},
+			"static" : STATIC,
 
-		init : function () {
-			this.subscribe(STATIC.TRACK, this.track);
-		},
+			_tracker : null,
 
-		track : function (n) {
-			var data = n.data;
-		},
+			vars : {
+				debug : true // set to false for production
+			},
 
-		onReady : function () {
-			var i,
-				account;
+			init : function () {
+				this.subscribe(STATIC.TRACK, this.track);
+			},
 
-			this.tracker = new window.ssla.analytics.Omniture({}, window.s); // pass in an optional Library object
+			track : function (n) {
+				var data = n.data;
+			},
 
-			if (this.vars.accounts) { // set account relationships passed in init()
-				for (i = this.vars.accounts.length - 1; i >= 0; i--) {
-					account = this.vars.accounts[i];
-					window.ssla.analytics.Omniture.addAccount(account[0], account[1]);
+			onReady : function () {
+				var i,
+					account;
+
+				this.tracker = new window.ssla.analytics.Omniture({}, window.s); // pass in an optional Library object
+
+				if (this.vars.accounts) { // set account relationships passed in init()
+					for (i = this.vars.accounts.length - 1; i >= 0; i--) {
+						account = this.vars.accounts[i];
+						window.ssla.analytics.Omniture.addAccount(account[0], account[1]);
+					}
 				}
+			},
+
+			destroy : function () {
+				this.tracker = null;
+				this.vars = null;
+
+				this.sup();
 			}
-		},
 
-		destroy : function () {
-			this.tracker = null;
-			this.vars = null;
-
-			this.sup();
-		}
-
-	});
-});
+		});
+	}
+);

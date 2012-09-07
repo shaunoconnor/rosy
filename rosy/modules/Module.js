@@ -1,13 +1,20 @@
-define(["../base/DOMClass"], function (DOMClass) {
+define(
 
-	"use strict";
+	[
+		"../base/DOMClass"
+	],
 
-	// Extend Class
-	return DOMClass.extend({
+	function (DOMClass) {
 
-		destroy : function () {
-			this.sup();
-		}
+		"use strict";
 
-	});
-});
+		// Extend Class
+		return DOMClass.extend({
+
+			destroy : function () {
+				this.sup();
+			}
+
+		});
+	}
+);
