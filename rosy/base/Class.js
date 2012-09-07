@@ -2,7 +2,7 @@ define(
 
 	[
 		"./AbstractClass",
-		"../notifications/NotificationManager",
+		"./NotificationManager",
 		"../polyfills/function-bind",
 		"../polyfills/array-indexof",
 		"../polyfills/request-animation-frame"
