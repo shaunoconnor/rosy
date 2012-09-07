@@ -28,7 +28,8 @@ define(
 			data : null,
 			params : null,
 			viewGroup : null,
-			viewClass : "",
+			viewClass : null,
+			routeRegEx : null,
 
 			_loadCB : null,
 			_inCB : null,

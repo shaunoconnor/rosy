@@ -69,7 +69,8 @@ define(
 							params : params,
 							viewClass : r.viewClass,
 							viewGroup : r.viewGroup,
-							viewConfig : r.viewConfig
+							viewConfig : r.viewConfig,
+							regex : r.path
 						});
 					}
 				}

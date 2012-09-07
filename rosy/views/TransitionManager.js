@@ -72,6 +72,7 @@ define(
 
 					newView = new ViewClass(view.viewGroup, view.viewConfig, view.params, data);
 					newView.viewClass = view.viewClass;
+					newView.routeRegEx = view.regex;
 
 					view.viewGroup.newView = newView;
 

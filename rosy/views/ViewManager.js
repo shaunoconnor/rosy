@@ -138,8 +138,6 @@ define(
 				data.transition = typeof arguments[1] === "string" ? arguments[1] : null;
 				data.cb = Utils.isFunction(arguments[1]) ? arguments[1] : (arguments[2] || null);
 
-				console.log(data);
-
 				this._gotoRoute(data);
 			},
 
@@ -386,7 +384,7 @@ define(
 									this._updateHistory(data.title || "", data.route, viewGroup.config.useHistory === "#");
 								}
 
-								if (!currentView || currentView.viewClass !== matchedView.viewClass) {
+								if (!currentView || currentView.routeRegEx !== matchedView.regex) {
 
 									this._changeView(matchedView, data, cb);
 									didRoute = true;
