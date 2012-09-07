@@ -1,8 +1,6 @@
 /*
 File: _chrome-frame.scss
 
-Project: RED
-
 Description:
 	Chrome Frame styles
 
@@ -13,11 +11,7 @@ Requires:
 */
 
 // Save this file to resources/sass/compass/modules/_chrome-frame.scss
-
-// See modules/_base.scss
-@import "compass";
-
-// @import "modules/base";
+// Then @import from your ie.scss file
 
 $cf-font-family: bold Arial;
 $cf-foreground-color: #bbc3c6 !default;
