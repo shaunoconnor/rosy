@@ -1,9 +1,16 @@
 define(
-	function () {
+
+	[
+		"module"
+	],
+
+	function (module) {
 
 		"use strict";
 
-		var namespace = "routing";
+		var prefix = module.id.split("/");
+			prefix.splice(prefix.length-3, 2, "");
+			prefix = prefix.join("/");
 
 		return {
 
@@ -22,35 +29,35 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : namespace + "/views/Test1",
+							"viewClass" : prefix + "views/Test1",
 							"route" : "/test1",
 							"config" : {
 								"test" : "test1"
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/Test2",
+							"viewClass" : prefix + "views/Test2",
 							"route" : "/test2",
 							"config" : {
 								"test" : "test2"
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/Test3",
+							"viewClass" : prefix + "views/Test3",
 							"route" : "/test3",
 							"config" : {
 								"test" : "test3"
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/Test4",
+							"viewClass" : prefix + "views/Test4",
 							"route" : "/test4",
 							"config" : {
 								"test" : "test4"
 							}
 						},
 						{
-							"viewClass" : namespace + "/views/Test5",
+							"viewClass" : prefix + "views/Test5",
 							"route" : "/test5",
 							"config" : {
 								"test" : "test5"
@@ -61,27 +68,27 @@ define(
 							"route" : "/nothing"
 						},
 						{
-							"viewClass" : namespace + "/views/UpdateTest",
+							"viewClass" : prefix + "views/UpdateTest",
 							"route" : "/update/:something?"
 						},
 						{
-							"viewClass" : namespace + "/views/CanCloseTest",
+							"viewClass" : prefix + "views/CanCloseTest",
 							"route" : "/canClose"
 						},
 						{
-							"viewClass" : namespace + "/views/Sync",
+							"viewClass" : prefix + "views/Sync",
 							"route" : "/transition/sync"
 						},
 						{
-							"viewClass" : namespace + "/views/Async",
+							"viewClass" : prefix + "views/Async",
 							"route" : "/transition/async"
 						},
 						{
-							"viewClass" : namespace + "/views/Preload",
+							"viewClass" : prefix + "views/Preload",
 							"route" : "/transition/preload"
 						},
 						{
-							"viewClass" : namespace + "/views/Reverse",
+							"viewClass" : prefix + "views/Reverse",
 							"route" : "/transition/reverse"
 						}
 					]

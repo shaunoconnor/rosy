@@ -1,8 +1,16 @@
 define(
 
-	function () {
+	[
+		"module"
+	],
+
+	function (module) {
 
 		"use strict";
+
+		var prefix = module.id.split("/");
+			prefix.splice(prefix.length-3, 2, "");
+			prefix = prefix.join("/");
 
 		return {
 
@@ -21,7 +29,7 @@ define(
 
 					"routes" : [
 						{
-							"viewClass" : "__PROJECT_NAME__/views/Home",
+							"viewClass" : prefix + "views/Home",
 							"route" : "/index.html",
 							"config" : {
 								"bodyClass" : "home",
@@ -29,7 +37,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : "__PROJECT_NAME__/views/About",
+							"viewClass" : prefix + "views/About",
 							"route" : "/about.html",
 							"config" : {
 								"bodyClass" : "about",
@@ -37,7 +45,7 @@ define(
 							}
 						},
 						{
-							"viewClass" : "__PROJECT_NAME__/views/Contact",
+							"viewClass" : prefix + "views/Contact",
 							"route" : "/contact.html",
 							"config" : {
 								"bodyClass" : "contact",
