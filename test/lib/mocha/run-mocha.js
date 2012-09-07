@@ -60,6 +60,7 @@
 			// setup mocha with the [spec reporter](http://visionmedia.github.com/mocha/#spec-reporter)
 			mocha.setup({
 				ui: 'bdd',
+				ignoreLeaks: true,
 
 				// TODO: it could be great to pass `spec` has an option in the command line.
 				// <https://github.com/ariya/phantomjs/commit/81794f90960>
