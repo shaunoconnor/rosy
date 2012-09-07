@@ -1,172 +1,177 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/scroller/Scroller",
-	"$"
-], function (OxBlood, Class, Module, Scroller, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/scroller/Scroller",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, Scroller, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Scroller", function () {
+		"use strict";
 
-			describe("Scroller", function () {
+		OxBlood.addModuleTests(function () {
 
-				var doc = $(document);
-				var dummyTarget = $("<div><div></div></div>");
+			describe("Module: Scroller", function () {
 
-				var testInstance = new Scroller({
-					target : dummyTarget,
-					doc : doc
-				});
+				describe("Scroller", function () {
 
-				it("Scroller should be a function", function () {
-					expect(Scroller).to.be.a("function");
-				});
+					var doc = $(document);
+					var dummyTarget = $("<div><div></div></div>");
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					var testInstance = new Scroller({
+						target : dummyTarget,
+						doc : doc
+					});
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("Scroller should be a function", function () {
+						expect(Scroller).to.be.a("function");
+					});
 
-				testInstance.destroy();
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-				describe("Notifications", function () {
-					var TestClass = Class.extend({
-						vars : {},
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-						init : function () {
-							this.vars.scroller = new Scroller({
-								target : dummyTarget,
-								doc: doc
+					testInstance.destroy();
+
+					describe("Notifications", function () {
+						var TestClass = Class.extend({
+							vars : {},
+
+							init : function () {
+								this.vars.scroller = new Scroller({
+									target : dummyTarget,
+									doc: doc
+								});
+
+								this.setupNotifications();
+								this.testScroller();
+							},
+
+							setupNotifications : function () {
+
+							},
+
+							testScroller : function () {}
+						});
+
+						it(Scroller.TOUCHSTART, function (done) {
+							var StartClass = TestClass.extend({
+								setupNotifications : function () {
+									this.sup();
+									this.subscribe(Scroller.TOUCHSTART, this.onTouchStart);
+								},
+
+								onTouchStart : function (n) {
+									expect(n.dispatcher).to.be.a(Scroller);
+									expect(n.name).to.equal(Scroller.TOUCHSTART);
+									expect(n.data.target).to.equal(dummyTarget.get(0));
+
+									this.unsubscribeAll();
+									this.vars.scroller.destroy();
+
+									done();
+								},
+
+								testScroller : function () {
+
+									if ("ontouchstart" in window) {
+										var e = $.Event("touchstart", {
+											touches : []
+										});
+
+										dummyTarget.trigger("touchstart", e);
+									} else {
+										dummyTarget.trigger("mousedown");
+									}
+
+									this.sup();
+								}
 							});
 
-							this.setupNotifications();
-							this.testScroller();
-						},
-
-						setupNotifications : function () {
-
-						},
-
-						testScroller : function () {}
-					});
-
-					it(Scroller.TOUCHSTART, function (done) {
-						var StartClass = TestClass.extend({
-							setupNotifications : function () {
-								this.sup();
-								this.subscribe(Scroller.TOUCHSTART, this.onTouchStart);
-							},
-
-							onTouchStart : function (n) {
-								expect(n.dispatcher).to.be.a(Scroller);
-								expect(n.name).to.equal(Scroller.TOUCHSTART);
-								expect(n.data.target).to.equal(dummyTarget.get(0));
-
-								this.unsubscribeAll();
-								this.vars.scroller.destroy();
-
-								done();
-							},
-
-							testScroller : function () {
-
-								if ("ontouchstart" in window) {
-									var e = $.Event("touchstart", {
-										touches : []
-									});
-
-									dummyTarget.trigger("touchstart", e);
-								} else {
-									dummyTarget.trigger("mousedown");
-								}
-
-								this.sup();
-							}
+							var startInstance = new StartClass();
 						});
 
-						var startInstance = new StartClass();
-					});
+						it(Scroller.TOUCHMOVE, function (done) {
+							var StartClass = TestClass.extend({
+								setupNotifications : function () {
+									this.sup();
+									this.subscribe(Scroller.TOUCHMOVE, this.onTouchMove);
+								},
 
-					it(Scroller.TOUCHMOVE, function (done) {
-						var StartClass = TestClass.extend({
-							setupNotifications : function () {
-								this.sup();
-								this.subscribe(Scroller.TOUCHMOVE, this.onTouchMove);
-							},
+								onTouchMove : function (n) {
+									expect(n.dispatcher).to.be.a(Scroller);
+									expect(n.name).to.equal(Scroller.TOUCHMOVE);
 
-							onTouchMove : function (n) {
-								expect(n.dispatcher).to.be.a(Scroller);
-								expect(n.name).to.equal(Scroller.TOUCHMOVE);
+									this.unsubscribeAll();
+									this.vars.scroller.destroy();
 
-								this.unsubscribeAll();
-								this.vars.scroller.destroy();
+									done();
+								},
 
-								done();
-							},
+								testScroller : function () {
 
-							testScroller : function () {
+									if ("ontouchstart" in window) {
+										doc.trigger("touchmove");
+									} else {
+										dummyTarget.trigger("mousedown");
+										doc.trigger("mousemove");
+										doc.trigger("mouseup");
+									}
 
-								if ("ontouchstart" in window) {
-									doc.trigger("touchmove");
-								} else {
-									dummyTarget.trigger("mousedown");
-									doc.trigger("mousemove");
-									doc.trigger("mouseup");
+									this.sup();
 								}
+							});
 
-								this.sup();
-							}
+							var startInstance = new StartClass();
 						});
 
-						var startInstance = new StartClass();
-					});
+						it(Scroller.TOUCHEND, function (done) {
+							var StartClass = TestClass.extend({
+								setupNotifications : function () {
+									this.sup();
+									this.subscribe(Scroller.TOUCHEND, this.onTouchEnd);
+								},
 
-					it(Scroller.TOUCHEND, function (done) {
-						var StartClass = TestClass.extend({
-							setupNotifications : function () {
-								this.sup();
-								this.subscribe(Scroller.TOUCHEND, this.onTouchEnd);
-							},
+								onTouchEnd : function (n) {
+									expect(n.dispatcher).to.be.a(Scroller);
+									expect(n.name).to.equal(Scroller.TOUCHEND);
 
-							onTouchEnd : function (n) {
-								expect(n.dispatcher).to.be.a(Scroller);
-								expect(n.name).to.equal(Scroller.TOUCHEND);
+									this.unsubscribeAll();
+									this.vars.scroller.destroy();
 
-								this.unsubscribeAll();
-								this.vars.scroller.destroy();
+									done();
+								},
 
-								done();
-							},
+								testScroller : function () {
 
-							testScroller : function () {
+									if ("ontouchstart" in window) {
+										doc.trigger("touchend");
+									} else {
+										dummyTarget.trigger("mousedown");
+										doc.trigger("mouseup");
+									}
 
-								if ("ontouchstart" in window) {
-									doc.trigger("touchend");
-								} else {
-									dummyTarget.trigger("mousedown");
-									doc.trigger("mouseup");
+									this.sup();
 								}
+							});
 
-								this.sup();
-							}
+							var startInstance = new StartClass();
 						});
-
-						var startInstance = new StartClass();
 					});
+
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

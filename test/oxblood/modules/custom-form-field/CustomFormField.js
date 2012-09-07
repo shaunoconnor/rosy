@@ -1,39 +1,44 @@
-define([
-	"OxBlood",
-	"rosy/modules/Module",
-	"rosy/modules/custom-form-field/CustomFormField",
-	"$"
-], function (OxBlood, Module, CustomFormField, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/modules/Module",
+		"rosy/modules/custom-form-field/CustomFormField",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Module, CustomFormField, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Custom Form Field", function () {
+		"use strict";
 
-			var testInstance = new CustomFormField({
-				field : $('<input type="checkbox" />')
-			});
+		OxBlood.addModuleTests(function () {
 
-			describe("CustomFormField", function () {
+			describe("Module: Custom Form Field", function () {
 
-				it("CustomFormField should be a function", function () {
-					expect(CustomFormField).to.be.a("function");
+				var testInstance = new CustomFormField({
+					field : $('<input type="checkbox" />')
 				});
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+				describe("CustomFormField", function () {
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
+					it("CustomFormField should be a function", function () {
+						expect(CustomFormField).to.be.a("function");
+					});
+
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
+
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
+
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

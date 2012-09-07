@@ -1,64 +1,69 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/social/FacebookSocial",
-	"$"
-], function (OxBlood, Class, Module, FacebookSocial, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/social/FacebookSocial",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, FacebookSocial, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Facebook Social", function () {
+		"use strict";
 
-			describe("FacebookSocial", function () {
+		OxBlood.addModuleTests(function () {
 
-				var testInstance = new FacebookSocial();
+			describe("Module: Facebook Social", function () {
 
-				it("FacebookSocial should be a function", function () {
-					expect(FacebookSocial).to.be.a("function");
-				});
+				describe("FacebookSocial", function () {
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					var testInstance = new FacebookSocial();
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("FacebookSocial should be a function", function () {
+						expect(FacebookSocial).to.be.a("function");
+					});
 
-				describe("Notifications", function () {
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-					it(FacebookSocial.POST, function () {});
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-					it(FacebookSocial.RENDER, function () {});
+					describe("Notifications", function () {
 
-					it(FacebookSocial.LOGIN, function () {});
+						it(FacebookSocial.POST, function () {});
 
-					it(FacebookSocial.LOGOUT, function () {});
+						it(FacebookSocial.RENDER, function () {});
 
-					it(FacebookSocial.GET_STATUS, function () {});
+						it(FacebookSocial.LOGIN, function () {});
 
-					it(FacebookSocial.GET_ME, function () {});
+						it(FacebookSocial.LOGOUT, function () {});
 
-					it(FacebookSocial.SET_ACTION, function () {});
+						it(FacebookSocial.GET_STATUS, function () {});
 
-					it(FacebookSocial.HANDLE_ACTION, function () {});
+						it(FacebookSocial.GET_ME, function () {});
 
-					it(FacebookSocial.HANDLE_ME, function () {});
+						it(FacebookSocial.SET_ACTION, function () {});
 
-					it(FacebookSocial.HANDLE_LOGIN, function () {});
+						it(FacebookSocial.HANDLE_ACTION, function () {});
 
-					it(FacebookSocial.HANDLE_LOGOUT, function () {});
+						it(FacebookSocial.HANDLE_ME, function () {});
+
+						it(FacebookSocial.HANDLE_LOGIN, function () {});
+
+						it(FacebookSocial.HANDLE_LOGOUT, function () {});
+
+					});
 
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

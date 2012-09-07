@@ -1,49 +1,54 @@
-define([
-	"OxBlood",
-	"rosy/modules/Module",
-	"ChromeFrame",
-	"Cookies",
-	"$"
-], function (OxBlood, Module, ChromeFrame, Cookies, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/modules/Module",
+		"ChromeFrame",
+		"Cookies",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Module, ChromeFrame, Cookies, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Google Chrome Frame", function () {
+		"use strict";
 
-			describe("ChromeFrame", function () {
+		OxBlood.addModuleTests(function () {
 
-				it("ChromeFrame should be an object", function () {
-					expect(ChromeFrame).to.be.an("object");
+			describe("Module: Google Chrome Frame", function () {
+
+				describe("ChromeFrame", function () {
+
+					it("ChromeFrame should be an object", function () {
+						expect(ChromeFrame).to.be.an("object");
+					});
+
+					it("should be an instance of Module", function () {
+						expect(ChromeFrame).to.be.a(Module);
+					});
+
 				});
 
-				it("should be an instance of Module", function () {
-					expect(ChromeFrame).to.be.a(Module);
+				describe("IE Specific", function () {
+					if (!$.browser.msie) {
+						it("should not report as Internet Explorer", function () {
+							expect($.browser.msie).to.not.be.ok();
+						});
+					} else {
+						it ("should append #chrome-frame to DOM", function () {
+							expect($("#chrome-frame").length).to.be.ok();
+						});
+
+						it("should set a cookie on #cf-decline click", function () {
+							ChromeFrame.vars.no.trigger("click");
+							expect(Cookies.get(ChromeFrame["static"].COOKIE_NAME)).to.be.ok();
+							Cookies.expire(ChromeFrame.COOKIE_NAME);
+						});
+					}
 				});
 
 			});
-
-			describe("IE Specific", function () {
-				if (!$.browser.msie) {
-					it("should not report as Internet Explorer", function () {
-						expect($.browser.msie).to.not.be.ok();
-					});
-				} else {
-					it ("should append #chrome-frame to DOM", function () {
-						expect($("#chrome-frame").length).to.be.ok();
-					});
-
-					it("should set a cookie on #cf-decline click", function () {
-						ChromeFrame.vars.no.trigger("click");
-						expect(Cookies.get(ChromeFrame["static"].COOKIE_NAME)).to.be.ok();
-						Cookies.expire(ChromeFrame.COOKIE_NAME);
-					});
-				}
-			});
-
 		});
-	});
-});
+	}
+);

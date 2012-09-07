@@ -1,124 +1,129 @@
-define([
-	"OxBlood",
-	"./SubClass",
-	"$"
-], function (OxBlood, SubClass, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"./SubClass",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, SubClass, $) {
 
-	OxBlood.addCoreTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Rosy Scope", function () {
-			describe("scope", function () {
-				afterEach(function () {
-					$("body").off();
-				});
+		"use strict";
 
-				it("should report 'this' as Class without .proxy()", function (done) {
-					var TestClass = SubClass.extend({
-						init : function () {
-							this.setupEvents();
-						},
+		OxBlood.addCoreTests(function () {
 
-						setupEvents : function () {
-							var body = $("body");
-
-							body.on({
-								click : this.onClick,
-								scroll : this.onScroll
-							});
-
-							this.setTimeout(function () {
-								this.testScope.call(window);
-								this.testScope.apply(document);
-
-								body.trigger("click");
-								body.trigger("scroll");
-							}, 0);
-						},
-
-						testScope : function () {
-							expect(this).to.eql(testInstance);
-						},
-
-						onClick : function () {
-							expect(this).to.eql(testInstance);
-						},
-
-						onScroll : function () {
-							expect(this).to.eql(testInstance);
-							done();
-						}
+			describe("Rosy Scope", function () {
+				describe("scope", function () {
+					afterEach(function () {
+						$("body").off();
 					});
 
-					var testInstance = new TestClass();
-					expect(testInstance).to.be.a(TestClass);
+					it("should report 'this' as Class without .proxy()", function (done) {
+						var TestClass = SubClass.extend({
+							init : function () {
+								this.setupEvents();
+							},
+
+							setupEvents : function () {
+								var body = $("body");
+
+								body.on({
+									click : this.onClick,
+									scroll : this.onScroll
+								});
+
+								this.setTimeout(function () {
+									this.testScope.call(window);
+									this.testScope.apply(document);
+
+									body.trigger("click");
+									body.trigger("scroll");
+								}, 0);
+							},
+
+							testScope : function () {
+								expect(this).to.eql(testInstance);
+							},
+
+							onClick : function () {
+								expect(this).to.eql(testInstance);
+							},
+
+							onScroll : function () {
+								expect(this).to.eql(testInstance);
+								done();
+							}
+						});
+
+						var testInstance = new TestClass();
+						expect(testInstance).to.be.a(TestClass);
+					});
+
+					it("should respect autoProxy option", function (done) {
+						var TestClass = SubClass.extend({
+							opts : {
+								autoProxy : false
+							},
+
+							init : function () {
+								this.setupEvents();
+							},
+
+							setupEvents : function () {
+								var body = $("body");
+
+								body.on({
+									click : this.onClick,
+									scroll : this.onScroll
+								});
+
+								this.setTimeout(function () {
+									body.trigger("click");
+									body.trigger("scroll");
+								}, 0);
+							},
+
+							onClick : function () {
+								expect(this).to.not.eql(testInstance);
+							},
+
+							onScroll : function () {
+								expect(this).to.not.eql(testInstance);
+								done();
+							}
+						});
+
+						var testInstance = new TestClass();
+						expect(testInstance).to.be.a(TestClass);
+					});
 				});
 
-				it("should respect autoProxy option", function (done) {
+				describe(".proxy()", function () {
 					var TestClass = SubClass.extend({
 						opts : {
 							autoProxy : false
-						},
-
-						init : function () {
-							this.setupEvents();
-						},
-
-						setupEvents : function () {
-							var body = $("body");
-
-							body.on({
-								click : this.onClick,
-								scroll : this.onScroll
-							});
-
-							this.setTimeout(function () {
-								body.trigger("click");
-								body.trigger("scroll");
-							}, 0);
-						},
-
-						onClick : function () {
-							expect(this).to.not.eql(testInstance);
-						},
-
-						onScroll : function () {
-							expect(this).to.not.eql(testInstance);
-							done();
 						}
 					});
 
 					var testInstance = new TestClass();
-					expect(testInstance).to.be.a(TestClass);
-				});
-			});
 
-			describe(".proxy()", function () {
-				var TestClass = SubClass.extend({
-					opts : {
-						autoProxy : false
-					}
-				});
+					it("proxy should be a function", function () {
+						expect(testInstance.proxy).to.be.a("function");
+					});
 
-				var testInstance = new TestClass();
+					it("should report scope as itself", function (done) {
+						testInstance.proxy(function () {
+							expect(this).to.eql(testInstance);
+							done();
+						})();
+					});
 
-				it("proxy should be a function", function () {
-					expect(testInstance.proxy).to.be.a("function");
-				});
-
-				it("should report scope as itself", function (done) {
-					testInstance.proxy(function () {
-						expect(this).to.eql(testInstance);
-						done();
-					})();
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

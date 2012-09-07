@@ -1,48 +1,53 @@
-define([
-	"test/lib/trim",
-	"test/lib/expect",
-	"test/lib/mocha/mocha"
-], function () {
+define(
 
-	/*global mocha */
+	[
+		"test/lib/trim",
+		"test/lib/expect",
+		"test/lib/mocha/mocha"
+	],
 
-	"use strict";
+	function () {
 
-	mocha.setup({
-		ui: "bdd",
-		ignoreLeaks: true
-	});
+		/*global mocha */
 
-	return {
-		tests : {
-			core : [],
-			routing : [],
-			modules : []
-		},
+		"use strict";
 
-		addCoreTests : function (tests) {
-			this.tests.core.push(tests);
-		},
+		mocha.setup({
+			ui: "bdd",
+			ignoreLeaks: true
+		});
 
-		addRoutingTests : function (tests) {
-			this.tests.routing.push(tests);
-		},
+		return {
+			tests : {
+				core : [],
+				routing : [],
+				modules : []
+			},
 
-		addModuleTests : function (tests) {
-			this.tests.modules.push(tests);
-		},
+			addCoreTests : function (tests) {
+				this.tests.core.push(tests);
+			},
 
-		registerTests : function () {
-			var tests = this.tests;
-			var key, test, i, j;
+			addRoutingTests : function (tests) {
+				this.tests.routing.push(tests);
+			},
 
-			for (key in tests) {
-				test = tests[key].sort();
+			addModuleTests : function (tests) {
+				this.tests.modules.push(tests);
+			},
 
-				for (i = 0, j = test.length; i < j; i++) {
-					test[i]();
+			registerTests : function () {
+				var tests = this.tests;
+				var key, test, i, j;
+
+				for (key in tests) {
+					test = tests[key].sort();
+
+					for (i = 0, j = test.length; i < j; i++) {
+						test[i]();
+					}
 				}
 			}
-		}
-	};
-});
+		};
+	}
+);

@@ -1,117 +1,122 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/ticker/Ticker"
-], function (OxBlood, Class, Module, Ticker) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/ticker/Ticker"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, Ticker) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Ticker", function () {
+		"use strict";
 
-			describe("Ticker", function () {
+		OxBlood.addModuleTests(function () {
 
-				var testOptions = {
-					now : new Date(),
-					start : new Date(),
-					end : "Mon Sep 3 11:45:00 2022"
-				};
+			describe("Module: Ticker", function () {
 
-				var testInstance = new Ticker(testOptions);
+				describe("Ticker", function () {
 
-				it("Ticker should be a function", function () {
-					expect(Ticker).to.be.a("function");
-				});
+					var testOptions = {
+						now : new Date(),
+						start : new Date(),
+						end : "Mon Sep 3 11:45:00 2022"
+					};
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					var testInstance = new Ticker(testOptions);
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
-
-				describe("Notifications", function () {
-
-					it(Ticker.START, function (done) {
-
-						var TestClass = Class.extend({
-							vars : {},
-
-							init : function () {
-								this.vars.ticker = new Ticker(testOptions);
-								this.subscribe(Ticker.START, this.onStart);
-							},
-
-							onStart : function () {
-								expect(this.vars.ticker).to.be.a(Ticker);
-								this.destroy();
-
-								done();
-							}
-						});
-
-						var testClassInstance = new TestClass();
-
+					it("Ticker should be a function", function () {
+						expect(Ticker).to.be.a("function");
 					});
 
-					it(Ticker.TICK, function (done) {
-
-						var TestClass = Class.extend({
-							vars : {},
-
-							init : function () {
-								this.vars.ticker = new Ticker(testOptions);
-								this.subscribe(Ticker.TICK, this.onTick);
-							},
-
-							onTick : function () {
-								expect(this.vars.ticker).to.be.a(Ticker);
-								this.destroy();
-
-								done();
-							}
-						});
-
-						var testClassInstance = new TestClass();
-
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
 					});
 
-					it(Ticker.COMPLETE, function (done) {
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-						var TestClass = Class.extend({
-							vars : {},
+					describe("Notifications", function () {
 
-							init : function () {
-								this.vars.ticker = new Ticker({
-									now : new Date(),
-									start : new Date(),
-									end : new Date(new Date().setSeconds(new Date().getSeconds() + 1))
-								});
+						it(Ticker.START, function (done) {
 
-								this.subscribe(Ticker.COMPLETE, this.onComplete);
-							},
+							var TestClass = Class.extend({
+								vars : {},
 
-							onComplete : function () {
-								expect(this.vars.ticker).to.be.a(Ticker);
-								this.destroy();
+								init : function () {
+									this.vars.ticker = new Ticker(testOptions);
+									this.subscribe(Ticker.START, this.onStart);
+								},
 
-								done();
-							}
+								onStart : function () {
+									expect(this.vars.ticker).to.be.a(Ticker);
+									this.destroy();
+
+									done();
+								}
+							});
+
+							var testClassInstance = new TestClass();
+
 						});
 
-						var testClassInstance = new TestClass();
+						it(Ticker.TICK, function (done) {
 
+							var TestClass = Class.extend({
+								vars : {},
+
+								init : function () {
+									this.vars.ticker = new Ticker(testOptions);
+									this.subscribe(Ticker.TICK, this.onTick);
+								},
+
+								onTick : function () {
+									expect(this.vars.ticker).to.be.a(Ticker);
+									this.destroy();
+
+									done();
+								}
+							});
+
+							var testClassInstance = new TestClass();
+
+						});
+
+						it(Ticker.COMPLETE, function (done) {
+
+							var TestClass = Class.extend({
+								vars : {},
+
+								init : function () {
+									this.vars.ticker = new Ticker({
+										now : new Date(),
+										start : new Date(),
+										end : new Date(new Date().setSeconds(new Date().getSeconds() + 1))
+									});
+
+									this.subscribe(Ticker.COMPLETE, this.onComplete);
+								},
+
+								onComplete : function () {
+									expect(this.vars.ticker).to.be.a(Ticker);
+									this.destroy();
+
+									done();
+								}
+							});
+
+							var testClassInstance = new TestClass();
+
+						});
 					});
+
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

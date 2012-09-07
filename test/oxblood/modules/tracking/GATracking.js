@@ -1,68 +1,74 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/tracking/GATracking"
-], function (OxBlood, Class, Module, GATracking) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/tracking/GATracking"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, GATracking) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Google Analytics Tracking", function () {
+		"use strict";
 
-			describe("GATracking", function () {
+		OxBlood.addModuleTests(function () {
 
-				var testInstance;
+			describe("Module: Google Analytics Tracking", function () {
 
-				beforeEach(function () {
-					testInstance = new GATracking();
-				});
+				describe("GATracking", function () {
 
-				afterEach(function () {
-					testInstance.destroy();
-				});
+					var testInstance;
 
-				it("GATracking should be a function", function () {
-					expect(GATracking).to.be.a("function");
-				});
+					beforeEach(function () {
+						testInstance = new GATracking();
+					});
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					afterEach(function () {
+						testInstance.destroy();
+					});
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("GATracking should be a function", function () {
+						expect(GATracking).to.be.a("function");
+					});
 
-				describe("Notifications", function () {
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-					it(GATracking.TRACK, function (done) {
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-						var TestClass = Class.extend({
-							init : function () {
-								this.subscribe(GATracking.TRACK, this.onTrack);
-								this.publish(GATracking.TRACK, {
-									type : "test",
-									category : "test",
-									action : "test",
-									label : "test"
-								});
-							},
+					describe("Notifications", function () {
 
-							onTrack : function (n) {
-								expect(n.data).to.be.ok();
-								expect(n.data).to.be.an("object");
-								expect(n.data).to.have.keys("type", "category", "action", "label");
+						it(GATracking.TRACK, function (done) {
 
-								this.destroy();
-								done();
-							}
+							var TestClass = Class.extend({
+								init : function () {
+									this.subscribe(GATracking.TRACK, this.onTrack);
+									this.publish(GATracking.TRACK, {
+										type : "test",
+										category : "test",
+										action : "test",
+										label : "test"
+									});
+								},
+
+								onTrack : function (n) {
+									expect(n.data).to.be.ok();
+									expect(n.data).to.be.an("object");
+									expect(n.data).to.have.keys("type", "category", "action", "label");
+
+									this.destroy();
+									done();
+								}
+							});
+
+							var testClassInstance = new TestClass();
+
 						});
-
-						var testClassInstance = new TestClass();
 
 					});
 
@@ -71,6 +77,5 @@ define([
 			});
 
 		});
-
-	});
-});
+	}
+);

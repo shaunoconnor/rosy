@@ -1,57 +1,62 @@
-define([
-	"OxBlood",
-	"rosy/modules/Module",
-	"rosy/modules/social/TwitterSocial",
-	"$"
-], function (OxBlood, Module, TwitterSocial, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/modules/Module",
+		"rosy/modules/social/TwitterSocial",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Module, TwitterSocial, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Twitter Social", function () {
+		"use strict";
 
-			describe("TwitterSocial", function () {
+		OxBlood.addModuleTests(function () {
 
-				var testInstance = new TwitterSocial();
+			describe("Module: Twitter Social", function () {
 
-				it("TwitterSocial should be a function", function () {
-					expect(TwitterSocial).to.be.a("function");
-				});
+				describe("TwitterSocial", function () {
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					var testInstance = new TwitterSocial();
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("TwitterSocial should be a function", function () {
+						expect(TwitterSocial).to.be.a("function");
+					});
 
-				describe("Notifications", function () {
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-					it(TwitterSocial.POST, function () {});
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-					it(TwitterSocial.RENDER, function () {});
+					describe("Notifications", function () {
 
-					it(TwitterSocial.LOGIN, function () {});
+						it(TwitterSocial.POST, function () {});
 
-					it(TwitterSocial.LOGOUT, function () {});
+						it(TwitterSocial.RENDER, function () {});
 
-					it(TwitterSocial.HANDLE_LOGIN, function () {});
+						it(TwitterSocial.LOGIN, function () {});
 
-					it(TwitterSocial.HANDLE_LOGOUT, function () {});
+						it(TwitterSocial.LOGOUT, function () {});
 
-					it(TwitterSocial.GET_STATUS, function () {});
+						it(TwitterSocial.HANDLE_LOGIN, function () {});
 
-					it(TwitterSocial.POST_STATUS, function () {});
+						it(TwitterSocial.HANDLE_LOGOUT, function () {});
+
+						it(TwitterSocial.GET_STATUS, function () {});
+
+						it(TwitterSocial.POST_STATUS, function () {});
+
+					});
 
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

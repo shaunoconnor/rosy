@@ -1,231 +1,236 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/base/DOMClass",
-	"./SubClass",
-	"$"
-], function (OxBlood, Class, DOMClass, SubClass, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/base/DOMClass",
+		"./SubClass",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Class, DOMClass, SubClass, $) {
 
-	OxBlood.addCoreTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Rosy Teardown", function () {
+		"use strict";
 
-			describe("Class Destruction", function () {
+		OxBlood.addCoreTests(function () {
 
-				var _getEvents = function (el) {
-					return $._data(el.get(0), "events");
-				};
+			describe("Rosy Teardown", function () {
 
-				it("should teardown the created Class", function (done) {
-					var TestClass = SubClass.extend({
-						vars : {
-							x : 1,
-							y : 2,
-							z : 3
-						},
+				describe("Class Destruction", function () {
 
-						init : function () {
-							this.vars.initialized = true;
-						},
+					var _getEvents = function (el) {
+						return $._data(el.get(0), "events");
+					};
 
-						destroy : function () {
-							for (var key in this.vars) {
-								delete this.vars[key];
-							}
+					it("should teardown the created Class", function (done) {
+						var TestClass = SubClass.extend({
+							vars : {
+								x : 1,
+								y : 2,
+								z : 3
+							},
 
-							expect(this.vars.x).to.not.be.ok();
-							expect(this.vars.y).to.not.be.ok();
-							expect(this.vars.z).to.not.be.ok();
-							expect(this.vars.initialized).to.not.be.ok();
+							init : function () {
+								this.vars.initialized = true;
+							},
 
-							done();
-						}
-					});
-
-					var testInstance = new TestClass();
-
-					expect(testInstance).to.be.a(SubClass);
-					expect(testInstance).to.be.a(Class);
-
-					testInstance.destroy();
-				});
-
-				it("should unsubscribe all notifications", function (done) {
-					var TestClass = SubClass.extend({
-
-						vars : {
-							x : 0
-						},
-
-						init : function () {
-							this.subscribe("test-1", function () {
-								this.vars.x = 1;
-							});
-							this.subscribe("test-2", function () {
-								this.vars.y = 2;
-							});
-							this.subscribe("test-3", function () {
-								this.vars.z = 3;
-							});
-						},
-
-						destroy : function () {
-							this.sup();
-
-							this.publish("test-1");
-							this.publish("test-2");
-							this.publish("test-3");
-
-							expect(this.vars.x).to.not.be.ok();
-							expect(this.vars.y).to.not.be.ok();
-							expect(this.vars.z).to.not.be.ok();
-
-							done();
-						}
-					});
-
-					var testInstance = new TestClass();
-
-					expect(testInstance).to.be.a(SubClass);
-					expect(testInstance).to.be.a(Class);
-
-					testInstance.destroy();
-				});
-
-				it("should unbind all events", function (done) {
-					var TestClass = DOMClass.extend({
-						vars : {},
-
-						init : function () {
-							this.sup();
-
-							var dummy = $('<div></div>').appendTo("body");
-
-							$.extend(this.vars, {
-								body : $("body"),
-								dummy : dummy,
-								foo : {
-									html : $("html")
+							destroy : function () {
+								for (var key in this.vars) {
+									delete this.vars[key];
 								}
-							});
 
-							this.setupEvents();
-						},
+								expect(this.vars.x).to.not.be.ok();
+								expect(this.vars.y).to.not.be.ok();
+								expect(this.vars.z).to.not.be.ok();
+								expect(this.vars.initialized).to.not.be.ok();
 
-						setupEvents : function () {
-							this.vars.body.on("click", "div", this.proxy(this.onClickTwo));
+								done();
+							}
+						});
 
-							this.vars.dummy.on({
-								click : this.proxy(this.onClickTwo),
-								scroll : this.proxy(this.onScrollTwo)
-							});
+						var testInstance = new TestClass();
 
-							this.vars.foo.html.on("click", this.proxy(this.onClickTwo));
-						},
+						expect(testInstance).to.be.a(SubClass);
+						expect(testInstance).to.be.a(Class);
 
-						onClickTwo : function () {},
-
-						onScrollTwo : function () {},
-
-						destroy : function () {
-							var body = this.vars.body;
-							var dummy = this.vars.dummy;
-							var html = this.vars.foo.html;
-
-							expect(_getEvents(body)).to.be.an("object");
-							expect(_getEvents(dummy)).to.be.an("object");
-							expect(_getEvents(html)).to.be.an("object");
-
-							this.sup();
-
-							expect(_getEvents(body)).to.not.be.ok();
-							expect(_getEvents(dummy)).to.not.be.ok();
-							expect(_getEvents(html)).to.not.be.ok();
-
-							done();
-						}
+						testInstance.destroy();
 					});
 
-					var testInstance = new TestClass();
-					expect(testInstance).to.be.a(DOMClass);
-					testInstance.destroy();
-				});
+					it("should unsubscribe all notifications", function (done) {
+						var TestClass = SubClass.extend({
 
-				it("should not unbind sibling class events", function (done) {
-					var TestClass = DOMClass.extend({
-						vars : {},
+							vars : {
+								x : 0
+							},
 
-						init : function () {
-							this.sup();
+							init : function () {
+								this.subscribe("test-1", function () {
+									this.vars.x = 1;
+								});
+								this.subscribe("test-2", function () {
+									this.vars.y = 2;
+								});
+								this.subscribe("test-3", function () {
+									this.vars.z = 3;
+								});
+							},
 
-							this.vars.body = $("body");
+							destroy : function () {
+								this.sup();
 
-							this.setupEvents();
-						},
+								this.publish("test-1");
+								this.publish("test-2");
+								this.publish("test-3");
 
-						setupEvents : function () {
-							this.vars.body.on("click", "div", this.proxy(this.onClick));
-						},
+								expect(this.vars.x).to.not.be.ok();
+								expect(this.vars.y).to.not.be.ok();
+								expect(this.vars.z).to.not.be.ok();
 
-						onClick : function () {}
+								done();
+							}
+						});
+
+						var testInstance = new TestClass();
+
+						expect(testInstance).to.be.a(SubClass);
+						expect(testInstance).to.be.a(Class);
+
+						testInstance.destroy();
 					});
 
-					var TestSiblingClass = DOMClass.extend({
-						vars : {},
+					it("should unbind all events", function (done) {
+						var TestClass = DOMClass.extend({
+							vars : {},
 
-						init : function () {
-							this.sup();
+							init : function () {
+								this.sup();
 
-							this.vars.body = $("body");
+								var dummy = $('<div></div>').appendTo("body");
 
-							this.setupEvents();
-						},
+								$.extend(this.vars, {
+									body : $("body"),
+									dummy : dummy,
+									foo : {
+										html : $("html")
+									}
+								});
 
-						setupEvents : function () {
-							this.vars.body.on("click", "div", this.proxy(this.onClick));
-						},
+								this.setupEvents();
+							},
 
-						onClick : function () {},
+							setupEvents : function () {
+								this.vars.body.on("click", "div", this.proxy(this.onClickTwo));
 
-						destroy : function () {
-							var body = this.vars.body;
+								this.vars.dummy.on({
+									click : this.proxy(this.onClickTwo),
+									scroll : this.proxy(this.onScrollTwo)
+								});
 
-							expect(_getEvents(body)).to.be.an("object");
+								this.vars.foo.html.on("click", this.proxy(this.onClickTwo));
+							},
 
-							this.sup();
+							onClickTwo : function () {},
 
-							var bodyEvents = _getEvents(body);
+							onScrollTwo : function () {},
 
-							expect(bodyEvents).to.be.an("object");
-							expect(bodyEvents).to.have.property("click");
-							expect(bodyEvents.click).to.have.length(1);
+							destroy : function () {
+								var body = this.vars.body;
+								var dummy = this.vars.dummy;
+								var html = this.vars.foo.html;
 
-							var clickEvent = bodyEvents.click[0];
+								expect(_getEvents(body)).to.be.an("object");
+								expect(_getEvents(dummy)).to.be.an("object");
+								expect(_getEvents(html)).to.be.an("object");
 
-							expect(clickEvent).to.be.ok();
-							expect(clickEvent.type).to.equal("click");
-							expect(clickEvent.guid).to.equal(testInstance.onClick.guid);
+								this.sup();
 
-							done();
-						}
+								expect(_getEvents(body)).to.not.be.ok();
+								expect(_getEvents(dummy)).to.not.be.ok();
+								expect(_getEvents(html)).to.not.be.ok();
+
+								done();
+							}
+						});
+
+						var testInstance = new TestClass();
+						expect(testInstance).to.be.a(DOMClass);
+						testInstance.destroy();
 					});
 
-					var testInstance = new TestClass();
-					var testSiblingInstance = new TestSiblingClass();
+					it("should not unbind sibling class events", function (done) {
+						var TestClass = DOMClass.extend({
+							vars : {},
 
-					expect(testInstance).to.be.a(DOMClass);
-					expect(testSiblingInstance).to.be.a(DOMClass);
+							init : function () {
+								this.sup();
 
-					testSiblingInstance.destroy();
+								this.vars.body = $("body");
+
+								this.setupEvents();
+							},
+
+							setupEvents : function () {
+								this.vars.body.on("click", "div", this.proxy(this.onClick));
+							},
+
+							onClick : function () {}
+						});
+
+						var TestSiblingClass = DOMClass.extend({
+							vars : {},
+
+							init : function () {
+								this.sup();
+
+								this.vars.body = $("body");
+
+								this.setupEvents();
+							},
+
+							setupEvents : function () {
+								this.vars.body.on("click", "div", this.proxy(this.onClick));
+							},
+
+							onClick : function () {},
+
+							destroy : function () {
+								var body = this.vars.body;
+
+								expect(_getEvents(body)).to.be.an("object");
+
+								this.sup();
+
+								var bodyEvents = _getEvents(body);
+
+								expect(bodyEvents).to.be.an("object");
+								expect(bodyEvents).to.have.property("click");
+								expect(bodyEvents.click).to.have.length(1);
+
+								var clickEvent = bodyEvents.click[0];
+
+								expect(clickEvent).to.be.ok();
+								expect(clickEvent.type).to.equal("click");
+								expect(clickEvent.guid).to.equal(testInstance.onClick.guid);
+
+								done();
+							}
+						});
+
+						var testInstance = new TestClass();
+						var testSiblingInstance = new TestSiblingClass();
+
+						expect(testInstance).to.be.a(DOMClass);
+						expect(testSiblingInstance).to.be.a(DOMClass);
+
+						testSiblingInstance.destroy();
+					});
+
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

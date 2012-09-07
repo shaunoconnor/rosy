@@ -1,50 +1,55 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/ios-page-control/PageControl",
-	"$"
-], function (OxBlood, Class, Module, PageControl, $) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/ios-page-control/PageControl",
+		"$"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, PageControl, $) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: iOS Page Controller", function () {
+		"use strict";
 
-			var testInstance = new PageControl({
-				parent : $("<div>"),
-				list : $("<div>"),
-				items : $("<div>")
-			});
+		OxBlood.addModuleTests(function () {
 
-			describe("PageControl", function () {
+			describe("Module: iOS Page Controller", function () {
 
-				it("PageControl should be a function", function () {
-					expect(PageControl).to.be.a("function");
+				var testInstance = new PageControl({
+					parent : $("<div>"),
+					list : $("<div>"),
+					items : $("<div>")
 				});
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+				describe("PageControl", function () {
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("PageControl should be a function", function () {
+						expect(PageControl).to.be.a("function");
+					});
 
-				describe("Notifications", function () {
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-					it(PageControl.TOUCHEND, function () {});
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-					it(PageControl.PAGINATE, function () {});
+					describe("Notifications", function () {
+
+						it(PageControl.TOUCHEND, function () {});
+
+						it(PageControl.PAGINATE, function () {});
+
+					});
 
 				});
 
 			});
 
 		});
-
-	});
-});
+	}
+);

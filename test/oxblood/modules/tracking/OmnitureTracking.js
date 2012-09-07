@@ -1,59 +1,65 @@
-define([
-	"OxBlood",
-	"rosy/base/Class",
-	"rosy/modules/Module",
-	"rosy/modules/tracking/OmnitureTracking"
-], function (OxBlood, Class, Module, OmnitureTracking) {
+define(
 
-	/*global describe, expect, it, before, beforeEach, after, afterEach */
+	[
+		"OxBlood",
+		"rosy/base/Class",
+		"rosy/modules/Module",
+		"rosy/modules/tracking/OmnitureTracking"
+	],
 
-	"use strict";
+	function (OxBlood, Class, Module, OmnitureTracking) {
 
-	OxBlood.addModuleTests(function () {
+		/*global describe, expect, it, before, beforeEach, after, afterEach */
 
-		describe("Module: Omniture Tracking", function () {
+		"use strict";
 
-			describe("OmnitureTracking", function () {
+		OxBlood.addModuleTests(function () {
 
-				var testInstance = new OmnitureTracking();
+			describe("Module: Omniture Tracking", function () {
 
-				it("OmnitureTracking should be a function", function () {
-					expect(OmnitureTracking).to.be.a("function");
-				});
+				describe("OmnitureTracking", function () {
 
-				it("should instantiate the class", function () {
-					expect(testInstance).to.be.an("object");
-				});
+					var testInstance = new OmnitureTracking();
 
-				it("should be an instance of Module", function () {
-					expect(testInstance).to.be.a(Module);
-				});
+					it("OmnitureTracking should be a function", function () {
+						expect(OmnitureTracking).to.be.a("function");
+					});
 
-				describe("Notifications", function () {
+					it("should instantiate the class", function () {
+						expect(testInstance).to.be.an("object");
+					});
 
-					it(OmnitureTracking.TRACK, function (done) {
+					it("should be an instance of Module", function () {
+						expect(testInstance).to.be.a(Module);
+					});
 
-						var TestClass = Class.extend({
-							init : function () {
-								this.subscribe(OmnitureTracking.TRACK, this.onTrack);
-								this.publish(OmnitureTracking.TRACK, {
-									type : "test",
-									category : "test",
-									action : "test",
-									label : "test"
-								});
-							},
+					describe("Notifications", function () {
 
-							onTrack : function (n) {
-								expect(n.data).to.be.ok();
-								expect(n.data).to.be.an("object");
-								expect(n.data).to.have.keys("type", "category", "action", "label");
+						it(OmnitureTracking.TRACK, function (done) {
 
-								done();
-							}
+							var TestClass = Class.extend({
+								init : function () {
+									this.subscribe(OmnitureTracking.TRACK, this.onTrack);
+									this.publish(OmnitureTracking.TRACK, {
+										type : "test",
+										category : "test",
+										action : "test",
+										label : "test"
+									});
+								},
+
+								onTrack : function (n) {
+									expect(n.data).to.be.ok();
+									expect(n.data).to.be.an("object");
+									expect(n.data).to.have.keys("type", "category", "action", "label");
+
+									done();
+								}
+							});
+
+							var testClassInstance = new TestClass();
+
 						});
-
-						var testClassInstance = new TestClass();
 
 					});
 
@@ -62,6 +68,5 @@ define([
 			});
 
 		});
-
-	});
-});
+	}
+);
