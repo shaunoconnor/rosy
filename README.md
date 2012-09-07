@@ -6,21 +6,34 @@
 
 Rosy is [verified to work](https://github.com/ff0000/rosy/wiki/Unit-Tests) in the following browsers:
 
-#### Desktop:
+<table>
+	<tr>
+		<td><strong>Desktop</strong></td>
+		<td><strong>iOS</strong></td>
+		<td><strong>Android</strong></td>
+	</tr>
+	<tr>
+		<td>Chrome (latest)</td>
+		<td>Chrome (latest)</td>
+		<td>Chrome (Nexus 7)</td>
+	</tr>
+	<tr>
+		<td>Safari (latest)</td>
+		<td>Safari (latest)</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Firefox (latest)</td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Internet Explorer (7+)</td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
 
-- Chrome (latest)
-- Safari (latest)
-- Firefox (latest)
-- Internet Explorer 7, 8, 9, 10
-
-#### iOS:
-
-- Safari (latest)
-- Chrome (latest)
-
-#### Android:
-
-- Chrome (Nexus 7)
 
 ### Documentation
 
