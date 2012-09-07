@@ -162,6 +162,10 @@ define(
 				this.viewGroup.viewManager.updateTitle(title);
 			},
 
+			closeViewGroup : function () {
+				this.viewGroup.close.apply(null, arguments);
+			},
+
 			/**
 			* Shouldn't have to override the below complete methods.
 			* However, if you do, just make sure to call this.sup()

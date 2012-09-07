@@ -40,6 +40,14 @@ define(
 				this.viewManager.deactivate(this.currentRoute);
 			},
 
+			close : function () {
+
+				var viewGroup = arguments.length > 1 ? arguments[0] : this,
+					cb = arguments.length > 1 ? arguments[1] : arguments[0];
+
+				this.viewManager.closeViewGroup(viewGroup, cb);
+			},
+
 			__updateRoute : function (route) {
 				this.history.push(this.currentRoute);
 				this.currentRoute = route;
