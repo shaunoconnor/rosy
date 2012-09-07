@@ -40,7 +40,7 @@ define(
 				this.viewManager.deactivate(this.currentRoute);
 			},
 
-			changeRoute : function (route) {
+			__updateRoute : function (route) {
 				this.history.push(this.currentRoute);
 				this.currentRoute = route;
 			}

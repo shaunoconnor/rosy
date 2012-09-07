@@ -370,7 +370,7 @@ define(
 
 							if ((!data.viewGroup || viewGroup.id === data.viewGroup)) {
 
-								viewGroup.changeRoute(data.route);
+								viewGroup.__updateRoute(data.route);
 
 								// If a route maps to a View, and that View's ViewGroup has useHistory = true
 								if (viewGroup.config.useHistory && data.updateHistory !== false) {
