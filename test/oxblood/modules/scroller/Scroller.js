@@ -20,7 +20,8 @@ define([
 				var dummyTarget = $("<div><div></div></div>");
 
 				var testInstance = new Scroller({
-					target : dummyTarget
+					target : dummyTarget,
+					doc : doc
 				});
 
 				it("Scroller should be a function", function () {
@@ -35,13 +36,16 @@ define([
 					expect(testInstance).to.be.a(Module);
 				});
 
+				testInstance.destroy();
+
 				describe("Notifications", function () {
 					var TestClass = Class.extend({
 						vars : {},
 
 						init : function () {
 							this.vars.scroller = new Scroller({
-								target : dummyTarget
+								target : dummyTarget,
+								doc: doc
 							});
 
 							this.setupNotifications();
@@ -49,7 +53,7 @@ define([
 						},
 
 						setupNotifications : function () {
-							var scroller = this.vars.scroller;
+
 						},
 
 						testScroller : function () {}
@@ -70,11 +74,10 @@ define([
 								this.unsubscribeAll();
 								this.vars.scroller.destroy();
 
-								this.vars.done();
+								done();
 							},
 
 							testScroller : function () {
-								this.vars.done = done;
 
 								if ("ontouchstart" in window) {
 									var e = $.Event("touchstart", {
@@ -107,17 +110,17 @@ define([
 								this.unsubscribeAll();
 								this.vars.scroller.destroy();
 
-								this.vars.done();
+								done();
 							},
 
 							testScroller : function () {
-								this.vars.done = done;
 
 								if ("ontouchstart" in window) {
 									doc.trigger("touchmove");
 								} else {
 									dummyTarget.trigger("mousedown");
 									doc.trigger("mousemove");
+									doc.trigger("mouseup");
 								}
 
 								this.sup();
@@ -141,11 +144,10 @@ define([
 								this.unsubscribeAll();
 								this.vars.scroller.destroy();
 
-								this.vars.done();
+								done();
 							},
 
 							testScroller : function () {
-								this.vars.done = done;
 
 								if ("ontouchstart" in window) {
 									doc.trigger("touchend");
