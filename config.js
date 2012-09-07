@@ -29,6 +29,7 @@ require.config({
 		"CFInstall" : {
 			exports : "CFInstall"
 		},
+
 		"Handlebars" : {
 			exports : "Handlebars"
 		}
