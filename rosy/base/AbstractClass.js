@@ -8,6 +8,7 @@ define(
 	function (Utils) {
 
 		/*jshint es5:true*/
+		/*global require*/
 
 		"use strict";
 
