@@ -9,7 +9,7 @@ define(
 		"use strict";
 
 		var prefix = module.id.split("/");
-		prefix.splice(prefix.length - 3, 2, "");
+		prefix.splice(prefix.length - 2, 2, "");
 		prefix = prefix.join("/");
 
 		return {
